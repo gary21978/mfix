@@ -150,7 +150,7 @@ namespace {
 #ifdef AMREX_USE_HYPRE
 namespace {
     bool init_hypre = true;
-#if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP)
+#if defined(HYPRE_USING_CUDA)
     bool hypre_spgemm_use_vendor = false;
     bool hypre_spmv_use_vendor = false;
     bool hypre_sptrans_use_vendor = false;
@@ -622,7 +622,7 @@ amrex::Initialize (int& argc, char**& argv, bool build_parm_parse,
 
 #ifdef AMREX_USE_HYPRE
         pp.queryAdd("init_hypre", init_hypre);
-#if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP)
+#if defined(HYPRE_USING_CUDA)
         pp.queryAdd("hypre_spgemm_use_vendor", hypre_spgemm_use_vendor);
         pp.queryAdd("hypre_spmv_use_vendor", hypre_spmv_use_vendor);
         pp.queryAdd("hypre_sptrans_use_vendor", hypre_sptrans_use_vendor);
@@ -668,7 +668,7 @@ amrex::Initialize (int& argc, char**& argv, bool build_parm_parse,
 #ifdef AMREX_USE_HYPRE
     if (init_hypre) {
         HYPRE_Init();
-#if defined(HYPRE_USING_CUDA) || defined(HYPRE_USING_HIP)
+#if defined(HYPRE_USING_CUDA)
 
 #if defined(HYPRE_RELEASE_NUMBER) && (HYPRE_RELEASE_NUMBER >= 22400)
 

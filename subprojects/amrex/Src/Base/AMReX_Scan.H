@@ -11,11 +11,6 @@
 #  ifdef AMREX_CUDA_CCCL_VER_GE_3
 #  include <thrust/iterator/transform_iterator.h>
 #  endif
-#elif defined(AMREX_USE_HIP)
-#  include <rocprim/rocprim.hpp>
-#elif defined(AMREX_USE_SYCL) && defined(AMREX_USE_ONEDPL)
-#  include <oneapi/dpl/execution>
-#  include <oneapi/dpl/numeric>
 #endif
 
 #include <cstdint>
@@ -104,11 +99,7 @@ struct BlockStatus<T, true>
     STVA<T> wait () volatile {
         STVA<T> r;
         do {
-#if defined(AMREX_USE_SYCL)
-            sycl::atomic_fence(sycl::memory_order::acq_rel, sycl::memory_scope::work_group);
-#else
             __threadfence_block();
-#endif
             r = read();
         } while (r.status == 'x');
         return r;
@@ -129,11 +120,7 @@ struct BlockStatus<T, false>
         } else {
             inclusive = a_value;
         }
-#if defined(AMREX_USE_SYCL)
-        sycl::atomic_fence(sycl::memory_order::acq_rel, sycl::memory_scope::device);
-#else
         __threadfence();
-#endif
         status = a_status;
     }
 
@@ -142,27 +129,12 @@ struct BlockStatus<T, false>
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     STVA<T> read () volatile {
-#if defined(AMREX_USE_SYCL)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-#endif
         if (status == 'x') {
             return {'x', 0};
         } else if (status == 'a') {
-#if defined(AMREX_USE_SYCL)
-            sycl::atomic_ref<T,mo,ms,as> ar{const_cast<T&>(aggregate)};
-            return {'a', ar.load()};
-#else
             return {'a', aggregate};
-#endif
         } else {
-#if defined(AMREX_USE_SYCL)
-            sycl::atomic_ref<T,mo,ms,as> ar{const_cast<T&>(inclusive)};
-            return {'p', ar.load()};
-#else
             return {'p', inclusive};
-#endif
         }
     }
 
@@ -174,11 +146,7 @@ struct BlockStatus<T, false>
         STVA<T> r;
         do {
             r = read();
-#if defined(AMREX_USE_SYCL)
-            sycl::atomic_fence(sycl::memory_order::acq_rel, sycl::memory_scope::device);
-#else
             __threadfence();
-#endif
         } while (r.status == 'x');
         return r;
     }

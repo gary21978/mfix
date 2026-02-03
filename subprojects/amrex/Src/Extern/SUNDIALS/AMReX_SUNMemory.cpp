@@ -3,12 +3,8 @@
 #include <AMReX.H>
 #include <AMReX_Gpu.H>
 
-#if defined(AMREX_USE_HIP)
-#include <sunmemory/sunmemory_hip.h>
-#elif defined(AMREX_USE_CUDA)
+#if defined(AMREX_USE_CUDA)
 #include <sunmemory/sunmemory_cuda.h>
-#elif defined(AMREX_USE_SYCL)
-#include <sunmemory/sunmemory_sycl.h>
 #endif
 #include <sundials/sundials_config.h>
 
@@ -115,17 +111,10 @@ namespace {
         helper->ops->alloc       = Alloc;
         helper->ops->dealloc     = Dealloc;
         helper->ops->destroy     = DestroyMemoryHelper;
-#if defined(AMREX_USE_HIP)
-        helper->ops->copy      = SUNMemoryHelper_Copy_Hip;
-        helper->ops->copyasync = SUNMemoryHelper_CopyAsync_Hip;
-#elif defined(AMREX_USE_CUDA)
+#if defined(AMREX_USE_CUDA)
         helper->ops->copy      = SUNMemoryHelper_Copy_Cuda;
         helper->ops->copyasync = SUNMemoryHelper_CopyAsync_Cuda;
-#elif defined(AMREX_USE_SYCL)
-        helper->ops->copy      = SUNMemoryHelper_Copy_Sycl;
-        helper->ops->copyasync = SUNMemoryHelper_CopyAsync_Sycl;
 #endif
-
         return helper;
     }
 

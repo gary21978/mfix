@@ -39,32 +39,6 @@
 #define AMREX_GPU_OR_CPU(a,b) b
 #endif
 
-#ifdef AMREX_USE_SYCL
-#define AMREX_SYCL_ONLY(a) a
-#else
-#define AMREX_SYCL_ONLY(a) ((void)0)
-#endif
-
-#ifdef AMREX_USE_SYCL
-#if (AMREX_SPACEDIM == 1)
-#  define AMREX_SYCL_1D_ONLY(a) a
-#  define AMREX_SYCL_2D_ONLY(a) ((void)0)
-#  define AMREX_SYCL_3D_ONLY(a) ((void)0)
-#elif (AMREX_SPACEDIM == 2)
-#  define AMREX_SYCL_1D_ONLY(a) ((void)0)
-#  define AMREX_SYCL_2D_ONLY(a) a
-#  define AMREX_SYCL_3D_ONLY(a) ((void)0)
-#elif (AMREX_SPACEDIM == 3)
-#  define AMREX_SYCL_1D_ONLY(a) ((void)0)
-#  define AMREX_SYCL_2D_ONLY(a) ((void)0)
-#  define AMREX_SYCL_3D_ONLY(a) a
-#endif
-#else
-#  define AMREX_SYCL_1D_ONLY(a) ((void)0)
-#  define AMREX_SYCL_2D_ONLY(a) ((void)0)
-#  define AMREX_SYCL_3D_ONLY(a) ((void)0)
-#endif
-
 namespace amrex {
     enum struct RunOn { Gpu, Cpu, Device=Gpu, Host=Cpu };
 }
@@ -77,9 +51,7 @@ namespace amrex {
 
 namespace amrex { // NOLINT(modernize-concat-nested-namespaces)
 
-#ifdef AMREX_USE_HIP
-using gpuStream_t = hipStream_t;
-#elif defined(AMREX_USE_CUDA)
+#ifdef AMREX_USE_CUDA
 using gpuStream_t = cudaStream_t;
 #endif
 
