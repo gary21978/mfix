@@ -121,8 +121,8 @@ message( STATUS "   AMReX_PRECISION = ${AMReX_PRECISION}")
 #
 # GPU backends    =============================================================
 #
-set(AMReX_GPU_BACKEND_VALUES NONE SYCL CUDA HIP)
-set(AMReX_GPU_BACKEND NONE CACHE STRING "On-node, accelerated GPU backend: <NONE,SYCL,CUDA,HIP>")
+set(AMReX_GPU_BACKEND_VALUES NONE CUDA)
+set(AMReX_GPU_BACKEND NONE CACHE STRING "On-node, accelerated GPU backend: <NONE,CUDA>")
 set_property(CACHE AMReX_GPU_BACKEND PROPERTY STRINGS ${AMReX_GPU_BACKEND_VALUES})
 if (NOT AMReX_GPU_BACKEND IN_LIST AMReX_GPU_BACKEND_VALUES)
    message(FATAL_ERROR "AMReX_GPU_BACKEND=${AMReX_GPU_BACKEND} is not allowed."
@@ -140,105 +140,13 @@ if (NOT AMReX_GPU_BACKEND STREQUAL NONE)
 endif ()
 
 # Legacy variables for internal use only
-if (AMReX_GPU_BACKEND STREQUAL SYCL)
-   set(AMReX_SYCL  ON )
-   set(AMReX_CUDA  OFF)
-   set(AMReX_HIP   OFF)
-elseif (AMReX_GPU_BACKEND STREQUAL CUDA)
-   set(AMReX_SYCL  OFF)
+if (AMReX_GPU_BACKEND STREQUAL CUDA)
    set(AMReX_CUDA  ON )
-   set(AMReX_HIP   OFF)
-elseif (AMReX_GPU_BACKEND STREQUAL HIP)
-   set(AMReX_SYCL  OFF)
-   set(AMReX_CUDA  OFF)
-   set(AMReX_HIP   ON )
 else ()
-   set(AMReX_SYCL  OFF)
    set(AMReX_CUDA  OFF)
-   set(AMReX_HIP   OFF)
 endif ()
-
-# --- SYCL ---
-if (AMReX_SYCL)
-   set(_valid_sycl_compiler_ids Clang IntelClang IntelDPCPP IntelLLVM)
-   if (NOT (CMAKE_CXX_COMPILER_ID IN_LIST _valid_sycl_compiler_ids) )
-      message(WARNING "\nAMReX_GPU_BACKEND=${AMReX_GPU_BACKEND} is tested with "
-         "Intel oneAPI. Verify '${CMAKE_CXX_COMPILER_ID}' is correct and potentially "
-         "set CMAKE_CXX_COMPILER=icpx.")
-   endif ()
-   unset(_valid_sycl_compiler_ids)
-
-   set(AMReX_SYCL_SUB_GROUP_SIZE_DEFAULT 32)
-   set(AMReX_SYCL_SUB_GROUP_SIZE_VALUES 16 32 64)
-   set(AMReX_SYCL_SUB_GROUP_SIZE ${AMReX_SYCL_SUB_GROUP_SIZE_DEFAULT} CACHE STRING
-       "SYCL sub-group size")
-   if (NOT AMReX_SYCL_SUB_GROUP_SIZE IN_LIST AMReX_SYCL_SUB_GROUP_SIZE_VALUES)
-      message(FATAL_ERROR "AMReX_SYCL_SUB_GROUP_SIZE=${AMReX_SYCL_SUB_GROUP_SIZE} not supported."
-              " Must be one of ${AMReX_SYCL_SUB_GROUP_SIZE_VALUES}")
-   endif()
-   mark_as_advanced(AMReX_SYCL_SUB_GROUP_SIZE)
-endif ()
-
-cmake_dependent_option( AMReX_SYCL_AOT  "Enable SYCL ahead-of-time compilation (WIP)"  OFF
-   "AMReX_GPU_BACKEND STREQUAL SYCL" OFF)
-print_option( AMReX_SYCL_AOT )
-
-cmake_dependent_option( AMReX_SYCL_SPLIT_KERNEL "Enable SYCL kernel splitting"  ON
-   "AMReX_GPU_BACKEND STREQUAL SYCL" OFF)
-print_option(  AMReX_SYCL_SPLIT_KERNEL )
-
-cmake_dependent_option( AMReX_SYCL_ONEDPL "Enable Intel's oneDPL algorithms"  OFF
-   "AMReX_GPU_BACKEND STREQUAL SYCL" OFF)
-print_option(  AMReX_SYCL_ONEDPL )
-
-if (AMReX_SYCL)
-   set(AMReX_INTEL_ARCH_DEFAULT "IGNORE")
-   if (DEFINED ENV{AMREX_INTEL_ARCH})
-      set(AMReX_INTEL_ARCH_DEFAULT "$ENV{AMREX_INTEL_ARCH}")
-   endif()
-
-   set(AMReX_INTEL_ARCH ${AMReX_INTEL_ARCH_DEFAULT} CACHE STRING
-      "INTEL GPU architecture (Must be provided if AMReX_GPU_BACKEND=SYCL and AMReX_SYCL_AOT=ON)")
-
-   if (AMReX_SYCL_AOT AND NOT AMReX_INTEL_ARCH)
-      message(FATAL_ERROR "\nMust specify AMReX_INTEL_ARCH if AMReX_GPU_BACKEND=SYCL and AMReX_SYCL_AOT=ON\n")
-   endif()
-
-   if (AMReX_SYCL_AOT)
-      set(AMReX_SYCL_AOT_GRF_MODE_VALUES Default Large AutoLarge)
-      set(AMReX_SYCL_AOT_GRF_MODE Default CACHE STRING "SYCL AOT General Register File Mode")
-      set_property(CACHE AMReX_SYCL_AOT_GRF_MODE PROPERTY STRINGS ${AMReX_SYCL_AOT_GRF_MODE_VALUES})
-      if (NOT AMReX_SYCL_AOT_GRF_MODE IN_LIST AMReX_SYCL_AOT_GRF_MODE_VALUES)
-         message(FATAL_ERROR "AMReX_SYCL_AOT_GRF_MODE (${AMReX_SYCL_AOT_GRF_MODE}) must be one of ${AMReX_SYCL_AOT_GRF_MODE_VALUES}")
-      endif()
-   endif()
-
-   set(AMReX_PARALLEL_LINK_JOBS_DEFAULT 1)
-   if (DEFINED ENV{AMREX_PARALLEL_LINK_JOBS})
-      set(AMReX_PARALLEL_LINK_JOBS_DEFAULT "$ENV{AMREX_PARALLEL_LINK_JOBS}")
-   endif()
-   set(AMReX_PARALLEL_LINK_JOBS ${AMReX_PARALLEL_LINK_JOBS_DEFAULT}
-       CACHE STRING "SYCL max parallel link jobs")
-   if (NOT AMReX_PARALLEL_LINK_JOBS GREATER_EQUAL 1 OR
-       NOT AMReX_PARALLEL_LINK_JOBS MATCHES "^[1-9][0-9]*$")
-      message(FATAL_ERROR "AMReX_PARALLEL_LINK_JOBS (${AMReX_PARALLEL_LINK_JOBS}) must be a positive integer")
-   endif()
-endif ()
-
-# --- HIP ----
-if (AMReX_HIP)
-   set(AMReX_AMD_ARCH_DEFAULT "IGNORE")
-   if(DEFINED ENV{AMREX_AMD_ARCH})
-      set(AMReX_AMD_ARCH_DEFAULT "$ENV{AMREX_AMD_ARCH}")
-   endif()
-
-   set(AMReX_AMD_ARCH ${AMReX_AMD_ARCH_DEFAULT} CACHE STRING
-      "AMD GPU architecture (Must be provided if AMReX_GPU_BACKEND=HIP)")
-
-   if (NOT AMReX_AMD_ARCH)
-      message(FATAL_ERROR "\nMust specify AMReX_AMD_ARCH if AMReX_GPU_BACKEND=HIP\n")
-   endif ()
-endif ()
+set(AMReX_SYCL OFF)
+set(AMReX_HIP  OFF)
 
 #
 # GPU RDC support
@@ -249,7 +157,7 @@ if(AMReX_CUDA AND DEFINED CMAKE_CUDA_SEPARABLE_COMPILATION)
     set(_GPU_RDC_default "${CMAKE_CUDA_SEPARABLE_COMPILATION}")
 endif()
 cmake_dependent_option( AMReX_GPU_RDC "Enable Relocatable Device Code" ${_GPU_RDC_default}
-   "AMReX_CUDA OR AMReX_HIP" OFF)
+   "AMReX_CUDA" OFF)
 unset(_GPU_RDC_default)
 print_option(AMReX_GPU_RDC)
 
@@ -453,9 +361,6 @@ cmake_dependent_option(AMReX_PROFPARSER "Enable profile parser" OFF
    "AMReX_BASE_PROFILE;AMReX_TRACE_PROFILE;AMReX_AMRDATA" OFF)
 print_option( AMReX_PROFPARSER )
 
-cmake_dependent_option(AMReX_ROCTX  "Enable roctx markup for HIP with ROCm" OFF
-     "AMReX_GPU_BACKEND STREQUAL HIP" OFF)
-print_option( AMReX_ROCTX )
 
 set(AMReX_TP_PROFILE_VALUES IGNORE CRAYPAT FORGE VTUNE)
 set(AMReX_TP_PROFILE IGNORE CACHE STRING "Third-party profiling options: <CRAYPAT,FORGE,VTUNE>")

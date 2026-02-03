@@ -31,8 +31,8 @@ option( HYDRO_OMP    "Enable OpenMP" NO )
 option( HYDRO_MPI    "Enable MPI"   YES )
 
 
-set(HYDRO_GPU_BACKEND_VALUES NONE SYCL CUDA HIP)
-set(HYDRO_GPU_BACKEND NONE CACHE STRING "On-node, accelerated GPU backend: <NONE,SYCL,CUDA,HIP>")
+set(HYDRO_GPU_BACKEND_VALUES NONE CUDA)
+set(HYDRO_GPU_BACKEND NONE CACHE STRING "On-node, accelerated GPU backend: <NONE,CUDA>")
 set_property(CACHE HYDRO_GPU_BACKEND PROPERTY STRINGS ${HYDRO_GPU_BACKEND_VALUES})
 if (NOT HYDRO_GPU_BACKEND IN_LIST HYDRO_GPU_BACKEND_VALUES)
    message(FATAL_ERROR "HYDRO_GPU_BACKEND=${HYDRO_GPU_BACKEND} is not allowed."
@@ -48,13 +48,6 @@ if (HYDRO_GPU_BACKEND STREQUAL "CUDA")
    endif()
 endif ()
 
-if (HYDRO_GPU_BACKEND STREQUAL "HIP")
-  find_package(hip REQUIRED)
-  find_package(rocrand REQUIRED)
-  find_package(rocprim REQUIRED)
-  find_package(hiprand REQUIRED)
-  find_package(rocsparse REQUIRED)
-endif ()
 
 #
 # Find AMReX, check for required components
