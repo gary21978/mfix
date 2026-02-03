@@ -8,11 +8,6 @@
 
 #if defined(AMREX_USE_CUDA)
 #  include <cusparse.h>
-#elif defined(AMREX_USE_HIP)
-#  include <rocsparse/rocsparse.h>
-#elif defined(AMREX_USE_SYCL)
-#  include <mkl_version.h>
-#  include <oneapi/mkl/spblas.hpp>
 #endif
 
 namespace amrex {
@@ -91,101 +86,8 @@ void SpMV (AlgVector<T>& y, SpMatrix<T> const& A, AlgVector<T> const& x)
     cusparseDestroy(handle);
     The_Arena()->free(pbuffer);
 
-#elif defined(AMREX_USE_HIP)
-
-    rocsparse_handle handle;
-    rocsparse_create_handle(&handle);
-    rocsparse_set_stream(handle, Gpu::gpuStream());
-
-    rocsparse_datatype data_type;
-    if constexpr (std::is_same_v<T,float>) {
-        data_type = rocsparse_datatype_f32_r;
-    } else if constexpr (std::is_same_v<T,double>) {
-        data_type = rocsparse_datatype_f64_r;
-    } else if constexpr (std::is_same_v<T,GpuComplex<float>>) {
-        data_type = rocsparse_datatype_f32_c;
-    } else if constexpr (std::is_same_v<T,GpuComplex<double>>) {
-        data_type = rocsparse_datatype_f64_c;
-    } else {
-        amrex::Abort("SpMV: unsupported data type");
-    }
-
-    rocsparse_indextype index_type = rocsparse_indextype_i64;
-
-    rocsparse_spmat_descr mat_descr;
-    rocsparse_create_csr_descr(&mat_descr, nrows, ncols, nnz, (void*)row, (void*)col,
-                               (void*)mat, index_type, index_type,
-                               rocsparse_index_base_zero, data_type);
-
-    rocsparse_dnvec_descr x_descr;
-    rocsparse_create_dnvec_descr(&x_descr, ncols, (void*)px, data_type);
-
-    rocsparse_dnvec_descr y_descr;
-    rocsparse_create_dnvec_descr(&y_descr, nrows, (void*)py, data_type);
-
-    T alpha = T(1.0);
-    T beta = T(0.0);
-
-#if (HIP_VERSION_MAJOR >= 7)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
-    std::size_t buffer_size;
-    rocsparse_spmv(handle, rocsparse_operation_none, &alpha, mat_descr, x_descr,
-                   &beta, y_descr, data_type, rocsparse_spmv_alg_default,
-#if (HIP_VERSION_MAJOR >= 6)
-                   rocsparse_spmv_stage_buffer_size,
-#endif
-                   &buffer_size, nullptr);
-
-    void* pbuffer = (void*)The_Arena()->alloc(buffer_size);
-
-#if (HIP_VERSION_MAJOR >= 6)
-    rocsparse_spmv(handle, rocsparse_operation_none, &alpha, mat_descr, x_descr,
-                   &beta, y_descr, data_type, rocsparse_spmv_alg_default,
-                   rocsparse_spmv_stage_preprocess, &buffer_size, pbuffer);
-#endif
-
-    rocsparse_spmv(handle, rocsparse_operation_none, &alpha, mat_descr, x_descr,
-                   &beta, y_descr, data_type, rocsparse_spmv_alg_default,
-#if (HIP_VERSION_MAJOR >= 6)
-                   rocsparse_spmv_stage_compute,
-#endif
-                   &buffer_size, pbuffer);
-
-#if (HIP_VERSION_MAJOR >= 7)
-// xxxxx HIP TODO: rocsparse_spmv has been deprecated.
-#pragma clang diagnostic pop
-#endif
-
-    Gpu::streamSynchronize();
-
-    rocsparse_destroy_spmat_descr(mat_descr);
-    rocsparse_destroy_dnvec_descr(x_descr);
-    rocsparse_destroy_dnvec_descr(y_descr);
-    rocsparse_destroy_handle(handle);
-    The_Arena()->free(pbuffer);
-
-#elif defined(AMREX_USE_SYCL)
-
-    amrex::ignore_unused(nnz);
-    mkl::sparse::matrix_handle_t handle{};
-    mkl::sparse::init_matrix_handle(&handle);
-
-#if defined(INTEL_MKL_VERSION) && (INTEL_MKL_VERSION < 20250300)
-    mkl::sparse::set_csr_data(Gpu::Device::streamQueue(), handle, nrows, ncols,
-                              mkl::index_base::zero, (Long*)row, (Long*)col, (T*)mat);
 #else
-    mkl::sparse::set_csr_data(Gpu::Device::streamQueue(), handle, nrows, ncols, nnz,
-                              mkl::index_base::zero, (Long*)row, (Long*)col, (T*)mat);
-#endif
-    mkl::sparse::gemv(Gpu::Device::streamQueue(), mkl::transpose::nontrans,
-                      T(1), handle, px, T(0), py);
-
-    auto ev = mkl::sparse::release_matrix_handle(Gpu::Device::streamQueue(), &handle);
-    ev.wait();
-
+    amrex::Abort("SpMV: CUDA backend required for GPU path");
 #endif
 
     AMREX_GPU_ERROR_CHECK();

@@ -737,11 +737,6 @@ void OpenBCSolver::compute_potential (Gpu::DeviceVector<openbc::Moments> const& 
         const auto len = amrex::length(b);
         const auto lenxy = len.x*len.y;
         const auto lenx = len.x;
-#ifdef AMREX_USE_SYCL
-        amrex::ignore_unused(problo,dx,crse_ratio,nblocks,pmom,b,phi_arr,lo,
-                             lenxy,lenx);
-        amrex::Abort("xxxxx SYCL todo: openbc compute_potential");
-#else
         amrex::launch<AMREX_GPU_MAX_THREADS>(b.numPts(), Gpu::gpuStream(),
         [=] AMREX_GPU_DEVICE () noexcept
         {
@@ -764,7 +759,6 @@ void OpenBCSolver::compute_potential (Gpu::DeviceVector<openbc::Moments> const& 
                 phi_arr(i,j,k) = phitot;
             }
         });
-#endif
 #else
         amrex::LoopOnCpu(b, [&] (int i, int j, int k) noexcept
         {

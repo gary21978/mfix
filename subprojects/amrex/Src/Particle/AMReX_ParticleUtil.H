@@ -760,17 +760,10 @@ void PermutationForDeposition (Gpu::DeviceVector<index_type>& perm, index_type n
 {
     BL_PROFILE("PermutationForDeposition()");
 
-#if defined(AMREX_USE_HIP)
-    // MI250X has a small L2 cache and is more tolerant of atomic add contention,
-    // so we use a small block size of 64 and the compressed layout.
-    static constexpr index_type gpu_block_size = 64;
-    static constexpr bool compressed_layout = true;
-#else
     // A100 has a larger L2 cache and is very sensitive to atomic add contention,
     // so we use a large bock size of 1024 and not the compressed layout.
     static constexpr index_type gpu_block_size = 1024;
     static constexpr bool compressed_layout = false;
-#endif
 
     static constexpr index_type gpu_block_size_m1 = gpu_block_size - 1;
     static constexpr index_type llist_guard = std::numeric_limits<index_type>::max();
@@ -794,7 +787,7 @@ void PermutationForDeposition (Gpu::DeviceVector<index_type>& perm, index_type n
         pllist_next[i] = Gpu::Atomic::Exch(pllist_start + f(i), i);
     });
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
     amrex::launch<gpu_block_size>(nbins / gpu_block_size, Gpu::gpuStream(),
         [pllist_start,pllist_next,pperm,pglobal_idx] AMREX_GPU_DEVICE () {
             __shared__ index_type sdata[gpu_block_size];
@@ -862,7 +855,7 @@ void PermutationForDeposition (Gpu::DeviceVector<index_type>& perm, index_type n
         });
 #else
     amrex::ignore_unused(pperm, pglobal_idx, compressed_layout);
-    Abort("PermutationForDeposition only implemented for CUDA and HIP");
+    Abort("PermutationForDeposition only implemented for CUDA");
 #endif
 
     Gpu::Device::streamSynchronize();

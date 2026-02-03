@@ -129,15 +129,11 @@ struct SharedMemory
     }
 };
 
-#ifndef AMREX_USE_SYCL
-// xxxxx SYCL todo: extern __shared__
-
 template <>
 struct SharedMemory<double>
 {
     [[nodiscard]] AMREX_GPU_DEVICE double* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(double,amrex_sm_double);,
-                          extern __shared__  double amrex_sm_double[];)
+        extern __shared__ double amrex_sm_double[];
         return amrex_sm_double;
     }
 };
@@ -146,8 +142,7 @@ template <>
 struct SharedMemory<float>
 {
     [[nodiscard]] AMREX_GPU_DEVICE float* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(float,amrex_sm_float);,
-                          extern __shared__  float amrex_sm_float[];)
+        extern __shared__ float amrex_sm_float[];
         return amrex_sm_float;
     }
 };
@@ -156,8 +151,7 @@ template <>
 struct SharedMemory<long>
 {
     [[nodiscard]] AMREX_GPU_DEVICE long* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(long,amrex_sm_long);,
-                          extern __shared__  long amrex_sm_long[];)
+        extern __shared__ long amrex_sm_long[];
         return amrex_sm_long;
     }
 };
@@ -166,8 +160,7 @@ template <>
 struct SharedMemory<long long>
 {
     [[nodiscard]] AMREX_GPU_DEVICE long long* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(long long,amrex_sm_long_long);,
-                          extern __shared__  long long amrex_sm_long_long[];)
+        extern __shared__ long long amrex_sm_long_long[];
         return amrex_sm_long_long;
     }
 };
@@ -176,8 +169,7 @@ template <>
 struct SharedMemory<int>
 {
     [[nodiscard]] AMREX_GPU_DEVICE int* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(int,amrex_sm_int);,
-                          extern __shared__  int amrex_sm_int[];)
+        extern __shared__ int amrex_sm_int[];
         return amrex_sm_int;
     }
 };
@@ -186,8 +178,7 @@ template <>
 struct SharedMemory<short>
 {
     [[nodiscard]] AMREX_GPU_DEVICE short* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(short,amrex_sm_short);,
-                          extern __shared__  short amrex_sm_short[];)
+        extern __shared__ short amrex_sm_short[];
         return amrex_sm_short;
     }
 };
@@ -196,8 +187,7 @@ template <>
 struct SharedMemory<char>
 {
     [[nodiscard]] AMREX_GPU_DEVICE char* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(char,amrex_sm_char);,
-                          extern __shared__  char amrex_sm_char[];)
+        extern __shared__ char amrex_sm_char[];
         return amrex_sm_char;
     }
 };
@@ -206,8 +196,7 @@ template <>
 struct SharedMemory<unsigned long>
 {
     [[nodiscard]] AMREX_GPU_DEVICE unsigned long* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(unsigned long,amrex_sm_ulong);,
-                          extern __shared__  unsigned long amrex_sm_ulong[];)
+        extern __shared__ unsigned long amrex_sm_ulong[];
         return amrex_sm_ulong;
     }
 };
@@ -216,8 +205,7 @@ template <>
 struct SharedMemory<unsigned long long>
 {
     [[nodiscard]] AMREX_GPU_DEVICE unsigned long long* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(unsigned long long,amrex_sm_ulonglong);,
-                          extern __shared__  unsigned long long amrex_sm_ulonglong[];)
+        extern __shared__ unsigned long long amrex_sm_ulonglong[];
         return amrex_sm_ulonglong;
     }
 };
@@ -226,8 +214,7 @@ template <>
 struct SharedMemory<unsigned int>
 {
     [[nodiscard]] AMREX_GPU_DEVICE unsigned int* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(unsigned int,amrex_sm_uint);,
-                          extern __shared__  unsigned int amrex_sm_uint[];)
+        extern __shared__ unsigned int amrex_sm_uint[];
         return amrex_sm_uint;
     }
 };
@@ -236,8 +223,7 @@ template <>
 struct SharedMemory<unsigned short>
 {
     [[nodiscard]] AMREX_GPU_DEVICE unsigned short* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(unsigned short,amrex_sm_ushort);,
-                          extern __shared__  unsigned short amrex_sm_ushort[];)
+        extern __shared__ unsigned short amrex_sm_ushort[];
         return amrex_sm_ushort;
     }
 };
@@ -246,8 +232,7 @@ template <>
 struct SharedMemory<unsigned char>
 {
     [[nodiscard]] AMREX_GPU_DEVICE unsigned char* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(unsigned char,amrex_sm_uchar);,
-                          extern __shared__  unsigned char amrex_sm_uchar[];)
+        extern __shared__ unsigned char amrex_sm_uchar[];
         return amrex_sm_uchar;
     }
 };
@@ -256,13 +241,10 @@ template <>
 struct SharedMemory<bool>
 {
     [[nodiscard]] AMREX_GPU_DEVICE bool* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(bool,amrex_sm_bool);,
-                          extern __shared__  bool amrex_sm_bool[];)
+        extern __shared__ bool amrex_sm_bool[];
         return amrex_sm_bool;
     }
 };
-
-#endif
 
 #endif
 

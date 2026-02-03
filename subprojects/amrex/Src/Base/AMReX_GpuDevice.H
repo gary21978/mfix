@@ -22,28 +22,7 @@
 
 #ifdef AMREX_USE_GPU
 namespace amrex {
-#ifdef AMREX_USE_HIP
-using gpuDeviceProp_t = hipDeviceProp_t;
-#elif defined(AMREX_USE_CUDA)
 using gpuDeviceProp_t = cudaDeviceProp;
-#elif defined(AMREX_USE_SYCL)
-    struct gpuDeviceProp_t {
-        std::string name;
-        std::string vendor; // SYCL only (inferred for CUDA and HIP)
-        std::size_t totalGlobalMem;
-        std::size_t sharedMemPerBlock;
-        int multiProcessorCount;
-        int maxThreadsPerMultiProcessor;
-        int maxThreadsPerBlock;
-        int maxThreadsDim[3];
-        int maxGridSize[3];
-        int warpSize;
-        Long maxMemAllocSize; // SYCL only
-        int managedMemory;
-        int concurrentManagedAccess;
-        int maxParameterSize;
-    };
-#endif
 }
 #endif
 
@@ -81,10 +60,6 @@ public:
 #ifdef AMREX_USE_CUDA
     /** for backward compatibility */
     static cudaStream_t cudaStream () noexcept { return gpuStream(); }
-#endif
-#ifdef AMREX_USE_SYCL
-    static sycl::queue& streamQueue () noexcept { return *(gpuStream().queue); }
-    static sycl::queue& streamQueue (int i) noexcept { return *(gpu_stream_pool[i].get().queue); }
 #endif
 #endif
 
@@ -169,16 +144,7 @@ public:
 
     static std::string deviceVendor() noexcept
     {
-#if defined(AMREX_USE_HIP) && defined(__HIP_PLATFORM_AMD__)
-        return std::string("AMD");
-#elif defined(AMREX_USE_CUDA) || (defined(AMREX_USE_HIP) && defined(__HIP_PLATFORM_NVIDIA__))
-        // Using HIP on NVIDIA GPUs isn't currently supported by AMReX
         return std::string("NVIDIA");
-#elif defined(AMREX_USE_SYCL)
-        return device_prop.vendor;
-#else
-        return std::string("Unknown");
-#endif
     }
 
     static std::size_t freeMemAvailable ();
@@ -189,21 +155,10 @@ public:
 
     static int memoryPoolsSupported () noexcept { return memory_pools_supported; }
 
-#if defined(AMREX_USE_HIP)
-    static AMREX_EXPORT constexpr int warp_size = AMREX_AMDGCN_WAVEFRONT_SIZE;
-#elif defined(AMREX_USE_SYCL)
-    static AMREX_EXPORT constexpr int warp_size = AMREX_SYCL_SUB_GROUP_SIZE;
-#else
-    static AMREX_EXPORT constexpr int warp_size = AMREX_HIP_OR_CUDA(64,32);
-#endif
+    static AMREX_EXPORT constexpr int warp_size = 32;
 
     static unsigned int maxBlocksPerLaunch () noexcept { return max_blocks_per_launch; }
 
-#ifdef AMREX_USE_SYCL
-    static Long maxMemAllocSize () noexcept { return device_prop.maxMemAllocSize; }
-    static sycl::context& syclContext () { return *sycl_context; }
-    static sycl::device& syclDevice () { return *sycl_device; }
-#endif
 #endif
 
 private:
@@ -227,11 +182,6 @@ private:
     static AMREX_EXPORT gpuDeviceProp_t device_prop;
     static AMREX_EXPORT int memory_pools_supported;
     static AMREX_EXPORT unsigned int max_blocks_per_launch;
-
-#ifdef AMREX_USE_SYCL
-    static AMREX_EXPORT std::unique_ptr<sycl::context> sycl_context;
-    static AMREX_EXPORT std::unique_ptr<sycl::device>  sycl_device;
-#endif
 
     friend StreamManager;
 #endif
@@ -301,42 +251,21 @@ inline void
 htod_memcpy_async (void* p_d, const void* p_h, const std::size_t sz) noexcept
 {
     if (sz == 0) { return; }
-#ifdef AMREX_USE_SYCL
-    auto& q = Device::streamQueue();
-    q.submit([&] (sycl::handler& h) { h.memcpy(p_d, p_h, sz); });
-#else
-    AMREX_HIP_OR_CUDA(
-        AMREX_HIP_SAFE_CALL(hipMemcpyAsync(p_d, p_h, sz, hipMemcpyHostToDevice, gpuStream()));,
-        AMREX_CUDA_SAFE_CALL(cudaMemcpyAsync(p_d, p_h, sz, cudaMemcpyHostToDevice, gpuStream())); )
-#endif
+    AMREX_CUDA_SAFE_CALL(cudaMemcpyAsync(p_d, p_h, sz, cudaMemcpyHostToDevice, gpuStream()));
 }
 
 inline void
 dtoh_memcpy_async (void* p_h, const void* p_d, const std::size_t sz) noexcept
 {
     if (sz == 0) { return; }
-#ifdef AMREX_USE_SYCL
-    auto& q = Device::streamQueue();
-    q.submit([&] (sycl::handler& h) { h.memcpy(p_h, p_d, sz); });
-#else
-    AMREX_HIP_OR_CUDA(
-        AMREX_HIP_SAFE_CALL(hipMemcpyAsync(p_h, p_d, sz, hipMemcpyDeviceToHost, gpuStream()));,
-        AMREX_CUDA_SAFE_CALL(cudaMemcpyAsync(p_h, p_d, sz, cudaMemcpyDeviceToHost, gpuStream())); )
-#endif
+    AMREX_CUDA_SAFE_CALL(cudaMemcpyAsync(p_h, p_d, sz, cudaMemcpyDeviceToHost, gpuStream()));
 }
 
 inline void
 dtod_memcpy_async (void* p_d_dst, const void* p_d_src, const std::size_t sz) noexcept
 {
     if (sz == 0) { return; }
-#ifdef AMREX_USE_SYCL
-    auto& q = Device::streamQueue();
-    q.submit([&] (sycl::handler& h) { h.memcpy(p_d_dst, p_d_src, sz); });
-#else
-    AMREX_HIP_OR_CUDA(
-        AMREX_HIP_SAFE_CALL(hipMemcpyAsync(p_d_dst, p_d_src, sz, hipMemcpyDeviceToDevice, gpuStream()));,
-        AMREX_CUDA_SAFE_CALL(cudaMemcpyAsync(p_d_dst, p_d_src, sz, cudaMemcpyDeviceToDevice, gpuStream())); )
-#endif
+    AMREX_CUDA_SAFE_CALL(cudaMemcpyAsync(p_d_dst, p_d_src, sz, cudaMemcpyDeviceToDevice, gpuStream()));
 }
 
 #else // AMREX_USE_GPU
@@ -403,12 +332,6 @@ void memcpy_from_host_to_device_global_async (T& dg, const void* src,
     AMREX_CUDA_SAFE_CALL(cudaMemcpyToSymbolAsync(dg, src, nbytes, offset,
                                                  cudaMemcpyHostToDevice,
                                                  Device::gpuStream()));
-#elif defined(AMREX_USE_HIP)
-    AMREX_HIP_SAFE_CALL(hipMemcpyToSymbolAsync(dg, src, nbytes, offset,
-                                               hipMemcpyHostToDevice,
-                                               Device::gpuStream()));
-#elif defined(AMREX_USE_SYCL)
-    Device::streamQueue().memcpy(dg, src, nbytes, offset);
 #else
     auto* p = (char*)(&dg);
     std::memcpy(p+offset, src, nbytes);
@@ -426,12 +349,6 @@ void memcpy_from_device_global_to_host_async (void* dst, T const& dg,
     AMREX_CUDA_SAFE_CALL(cudaMemcpyFromSymbolAsync(dst, dg, nbytes, offset,
                                                    cudaMemcpyDeviceToHost,
                                                    Device::gpuStream()));
-#elif defined(AMREX_USE_HIP)
-    AMREX_HIP_SAFE_CALL(hipMemcpyFromSymbolAsync(dst, dg, nbytes, offset,
-                                                  hipMemcpyDeviceToHost,
-                                                  Device::gpuStream()));
-#elif defined(AMREX_USE_SYCL)
-    Device::streamQueue().memcpy(dst, dg, nbytes, offset);
 #else
     auto const* p = (char const*)(&dg);
     std::memcpy(dst, p+offset, nbytes);

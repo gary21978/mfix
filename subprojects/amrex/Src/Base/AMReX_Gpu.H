@@ -2,10 +2,7 @@
 #define AMREX_GPU_H_
 #include <AMReX_Config.H>
 
-#ifdef AMREX_USE_HIP
-#include <hip/hip_runtime.h>
-namespace amrex::Hip {}
-#elif defined(AMREX_USE_CUDA)
+#ifdef AMREX_USE_CUDA
 namespace amrex::Cuda {}
 #endif
 
@@ -33,9 +30,7 @@ namespace amrex::Cuda {}
 #include <AMReX_CudaGraph.H>
 
 namespace amrex::Gpu {
-#ifdef AMREX_USE_HIP
-        using namespace Hip;
-#elif defined(AMREX_USE_CUDA)
+#ifdef AMREX_USE_CUDA
         using namespace Cuda;
 #endif
 }

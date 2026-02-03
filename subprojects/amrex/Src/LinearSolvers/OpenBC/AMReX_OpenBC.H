@@ -32,14 +32,13 @@ namespace openbc {
     std::ostream& operator<< (std::ostream& os, Moments const& mom);
 }
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 template<>
 struct Gpu::SharedMemory<openbc::Moments::array_type>
 {
     AMREX_GPU_DEVICE openbc::Moments::array_type* dataPtr () noexcept {
-        AMREX_HIP_OR_CUDA(HIP_DYNAMIC_SHARED(openbc::Moments::array_type,amrex_openbc_momarray);,
-                          extern __shared__  openbc::Moments::array_type amrex_openbc_momarray[];)
-            return amrex_openbc_momarray;
+        extern __shared__ openbc::Moments::array_type amrex_openbc_momarray[];
+        return amrex_openbc_momarray;
     }
 };
 #endif

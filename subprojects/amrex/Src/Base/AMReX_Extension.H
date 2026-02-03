@@ -46,9 +46,6 @@
 #elif defined(__CUDA_ARCH__) && defined(AMREX_USE_CUDA)
 #define AMREX_PRAGMA_SIMD
 
-#elif defined(__HIP_DEVICE_COMPILE__) && defined(AMREX_USE_HIP)
-#define AMREX_PRAGMA_SIMD
-
 //#elif defined(AMREX_USE_OMP) && defined(_OPENMP) && (_OPENMP >= 201307) && !defined(__PGI)
 //#define AMREX_PRAGMA_SIMD _Pragma("omp simd")
 
@@ -83,9 +80,6 @@
 
 // force inline
 #if defined(__CUDA_ARCH__) && defined(AMREX_USE_CUDA)
-#define AMREX_FORCE_INLINE __forceinline__
-
-#elif defined(__HIP_DEVICE_COMPILE__) && defined(AMREX_USE_HIP)
 #define AMREX_FORCE_INLINE __forceinline__
 
 #elif defined(AMREX_CXX_INTEL)
@@ -130,7 +124,7 @@
 // no inline
 #if defined(_MSC_VER)
 #define AMREX_NO_INLINE __declspec(noinline)
-#elif (defined(__GNUC__) || defined(__clang__) || defined(__CUDACC__) || defined(__HIP__) || defined(__INTEL_CLANG_COMPILER))
+#elif (defined(__GNUC__) || defined(__clang__) || defined(__CUDACC__) || defined(__INTEL_CLANG_COMPILER))
 #define AMREX_NO_INLINE __attribute__((noinline))
 #else
 #define AMREX_NO_INLINE
@@ -155,7 +149,7 @@
 #define AMREX_TO_STRING_HELPER(X)   #X
 #define AMREX_TO_STRING(X)          AMREX_TO_STRING_HELPER(X)
 
-#if defined(__clang__) || defined(__CUDACC__) || defined(__HIP__) || defined(__INTEL_CLANG_COMPILER)
+#if defined(__clang__) || defined(__CUDACC__) || defined(__INTEL_CLANG_COMPILER)
 #define AMREX_UNROLL_LOOP(n)  _Pragma(AMREX_TO_STRING(unroll n))
 #elif defined(__GNUC__)
 #define AMREX_UNROLL_LOOP(n)  _Pragma(AMREX_TO_STRING(GCC unroll n))
