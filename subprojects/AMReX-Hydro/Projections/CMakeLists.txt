@@ -12,9 +12,3 @@ target_sources(
    hydro_NodalProjector.cpp
    hydro_NodalProjector.H
    )
-
-if (HYDRO_FFT)
-    target_sources(amrex_hydro PRIVATE
-        hydro_FFTMacProjector.cpp
-        hydro_FFTMacProjector.H)
-endif()

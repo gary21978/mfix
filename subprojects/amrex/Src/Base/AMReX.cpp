@@ -14,10 +14,6 @@
 #include <AMReX_Geometry.H>
 #include <AMReX_Gpu.H>
 
-#ifdef AMREX_USE_FFT
-#include <AMReX_FFT.H>
-#endif
-
 #ifdef AMREX_USE_HYPRE
 #include <_hypre_utilities.h>
 #ifdef AMREX_USE_CUDA
@@ -700,10 +696,6 @@ amrex::Initialize (int& argc, char**& argv, bool build_parm_parse,
         AsyncOut::Initialize();
     }
     VectorGrowthStrategy::Initialize();
-
-#ifdef AMREX_USE_FFT
-    FFT::Initialize();
-#endif
 
 #ifdef AMREX_USE_EB
     EB2::Initialize();

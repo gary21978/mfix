@@ -185,11 +185,11 @@ namespace {
     bool inverse = false;
 
     PairCompare(const bool a_inverse=false) : inverse(a_inverse) {}
-
+/*
     bool operator() (const BidNp& lhs, const BidNp& rhs)
     {
       return inverse ? lhs.second > rhs.second : lhs.second < rhs.second;
-    }
+    }*/
   };
 
   typedef std::priority_queue<BidNp, Vector<BidNp>, PairCompare> BidNpHeap;

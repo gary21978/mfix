@@ -14,10 +14,6 @@
 #include <AMReX_HypreMLABecLap.H>
 #endif
 
-#ifdef AMREX_USE_FFT
-#include <hydro_FFTMacProjector.H>
-#endif
-
 namespace Hydro {
 
 class MacProjector
