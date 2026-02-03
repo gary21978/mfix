@@ -1,0 +1,14 @@
+CEXE_sources += mfix_eb.cpp
+CEXE_sources += mfix_write_eb_surface.cpp
+CEXE_sources += mfix_eb_box.cpp
+CEXE_sources += mfix_eb_cylinder.cpp
+CEXE_sources += mfix_eb_hopper.cpp
+CEXE_sources += mfix_eb_regular.cpp
+CEXE_sources += mfix_eb_generic.cpp
+CEXE_sources += mfix_eb_stl.cpp
+CEXE_headers += mfix_eb_if.H
+CEXE_headers += mfix_eb.H
+
+ifeq ($(USE_CSG),TRUE)
+	CEXE_sources += mfix_eb_csg.cpp
+endif

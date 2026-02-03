@@ -1,0 +1,160 @@
+amrex.fpe_trap_invalid = 1
+#----------------------------------------------------------------------
+# Run settings
+#----------------------------------------------------------------------
+
+mfix.max_step   = 50
+
+#----------------------------------------------------------------------
+# Solver settings
+#----------------------------------------------------------------------
+
+# Nodal solver
+nodal_proj.verbose        = 0
+nodal_proj.maxiter        = 1000
+nodal_proj.bottom_verbose = 0
+nodal_proj.bottom_maxiter = 1000
+nodal_proj.mg_rtol        = 1.e-8
+
+# MAC solver
+mac_proj.verbose          = 0
+mac_proj.maxiter          = 1000
+mac_proj.bottom_verbose   = 0
+mac_proj.bottom_maxiter   = 1000
+mac_proj.mg_rtol          = 1.e-8
+
+#----------------------------------------------------------------------
+# Fluid solver
+#----------------------------------------------------------------------
+
+mfix.fixed_dt           = 0
+mfix.dt_min             = 1.e-9
+mfix.dt_max             = 1.e-3
+
+mfix.advection_type          = "Godunov"
+mfix.redistribution_type     = "StateRedist"
+mfix.cfl                     = 0.9
+
+mfix.gravity = 0.0  0.0  0.0
+
+mfix.do_initial_proj    = 1
+mfix.initial_iterations = 2
+
+mac_proj.mg_rtol = 1e-12
+nodal_proj.mg_rtol = 1e-12
+
+#_______________________________________________________________________
+# Geometry / grids / tiles
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+# Geometry
+geometry.coord_sys   =  0                  # 0: Cartesian
+geometry.is_periodic =  0     0      0     # Is periodic in each direction?
+geometry.prob_lo     = -1.0  -1.0  -1.0    # lo corner of physical domain
+geometry.prob_hi     =  1.0   1.0   1.0    # hi corner of physical domain
+
+mfix.geometry = "cylinder"
+cylinder.internal_flow = true
+cylinder.radius = 0.172
+cylinder.height = -1.0
+cylinder.rotation = 30
+cylinder.rotation_axis = 2
+
+cylinder.direction =  0
+cylinder.center    =  0.0  0.0  0.0
+
+eb2.small_volfrac = 1.e-6
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell =  32 32 32
+
+#! Grids
+#!-----------------------------------------------------------//
+# Maximum allowable size of each fluid subdomain in the problem domain;
+
+# Fluid
+amr.max_grid_size_x = 16
+amr.max_grid_size_y = 16
+amr.max_grid_size_z = 1024
+
+
+#! Tiles
+#!-----------------------------------------------------------//
+
+# Fluid: Maximum tile size within each grid
+fabarray.mfiter_tile_size = 1024 1024 1024
+
+
+#_______________________________________________________________________
+# IO / Checkpointing
+
+mfix.write_eb_surface = false  # Needed to output eb-surfaces
+mfix.write_ls         = false  # Needed to output level set
+
+mfix.par_ascii_int  = -1
+mfix.par_ascii_file ="vis"
+
+mfix.plot_int       = 50
+mfix.plot_file      ="FLD08"
+
+mfix.check_int      = -1
+mfix.check_file     ="chk"
+
+mfix.plt_p_g     = 1
+mfix.plt_volfrac = 1
+
+#_______________________________________________________________________
+# Fluid model settings
+
+fluid.solve              = fluid
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 2.0e-5
+
+#_______________________________________________________________________
+# DEM model settings
+
+dem.solve = None
+
+# PIC model settings
+#_______________________________________________________________________
+
+pic.solve = None
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+
+mfix.regions = full-domain top bottom
+
+regions.full-domain.lo     = -1.0 -1.0 -1.0
+regions.full-domain.hi     =  1.0  1.0  1.0
+
+regions.top.lo             =  1.0 -1.0 -1.0
+regions.top.hi             =  1.0  1.0  1.0
+
+regions.bottom.lo          = -1.0 -1.0 -1.0
+regions.bottom.hi          = -1.0  1.0  1.0
+
+#_______________________________________________________________________
+# Initial Conditions
+
+ic.regions = full-domain
+ic.full-domain.fluid.volfrac   = 1.0
+ic.full-domain.fluid.density   = 1.0
+ic.full-domain.fluid.velocity  = 0.0  0.0  0.0
+
+#_______________________________________________________________________
+# Boundary Conditions
+#
+
+bc.regions = top bottom
+
+bc.bottom = mi
+bc.bottom.fluid.volfrac  =  1.0
+bc.bottom.fluid.density  =  1.0
+bc.bottom.fluid.velocity =  0.8660254038 0.5  0.
+
+bc.top = po
+bc.top.fluid.pressure = 101325.0
+
+mfix.stop_for_unused_inputs = true

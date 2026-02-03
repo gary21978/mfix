@@ -1,0 +1,38 @@
+===============================================================================
+ MFIx Job Information
+===============================================================================
+number of MPI processes: 2
+
+
+===============================================================================
+ Build Information
+===============================================================================
+build date:    Jan 26 2023 14:35:54
+build machine: Linux n1621 3.10.0-693.el7.x86_64 #1 SMP Tue Aug 22 21:09:27 UTC 2017 x86_64
+build dir:     /.nfs/home/2/porcur/Workspace/mfix-exa/develop/build_debug/src
+AMReX dir:     /.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex
+
+COMP:          GNU
+COMP version:  9.3.0
+
+C++ compiler:  /nfs/apps/Compilers/GNU/9.3.0/bin/c++
+C++ flags:     -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/io -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/convection -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/interpolation -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/deposition -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/des -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/pic -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/diffusion -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/leveldata -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/projection -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/setup -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/util -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/prob -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/eb -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/src/timestepping -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/Base -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/Base/Parser -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/Boundary -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/AmrCore -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/Amr -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/EB -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/LinearSolvers/MLMG -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/LinearSolvers/OpenBC -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/amrex/Src/Particle -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/build_debug/subprojects/amrex -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/Slopes -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/Utils -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/MOL -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/Godunov -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/BDS -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/Projections -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/EBMOL -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/EBGodunov -I/.nfs/home/2/porcur/Workspace/mfix-exa/develop/subprojects/AMReX-Hydro/Redistribution -g  -O0 -ggdb -Wall -Wno-sign-compare -Wno-unused-but-set-variable -Werror=return-type
+
+Link flags:    
+Libraries:     Threads::Threads MPI::MPI_C MPI::MPI_CXX
+MFIX git hash: 22.12-38-g873c185628c8
+AMReX git hash: 23.01-8-g0c3fff43aa68
+
+
+===============================================================================
+ Grid Information
+===============================================================================
+ level: 0
+   number of boxes = 2
+   maximum zones   = 4 8 8 
+
+
+
+===============================================================================
+ Inputs File Parameters
+===============================================================================

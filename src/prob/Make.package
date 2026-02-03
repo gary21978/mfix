@@ -1,0 +1,57 @@
+CEXE_headers += mfix_fix_inputs.H
+CEXE_headers += mfix_eb_parms.H
+
+CEXE_headers += mfix_avg_pc_parms.H
+CEXE_sources += mfix_avg_pc_parms.cpp
+
+CEXE_headers += mfix_regions.H
+CEXE_sources += mfix_regions.cpp
+
+CEXE_headers += mfix_ic.H
+CEXE_sources += mfix_ic.cpp
+
+CEXE_headers += mfix_bc.H
+CEXE_sources += mfix_bc.cpp
+
+CEXE_headers += mfix_fluid_var.H
+CEXE_headers += mfix_fluid.H
+CEXE_sources += mfix_fluid.cpp
+
+CEXE_headers += mfix_load_balance.H
+CEXE_sources += mfix_load_balance.cpp
+
+CEXE_headers += mfix_species.H
+CEXE_sources += mfix_species.cpp
+
+CEXE_headers += mfix_reactions.H
+CEXE_sources += mfix_reactions.cpp
+
+CEXE_headers += mfix_solids.H
+CEXE_sources += mfix_solids.cpp
+
+CEXE_headers += mfix_dem.H
+CEXE_sources += mfix_dem.cpp
+
+CEXE_headers += mfix_pic.H
+CEXE_sources += mfix_pic.cpp
+
+CEXE_headers += mfix_tag.H
+CEXE_sources += mfix_tag.cpp
+
+CEXE_headers += mfix_timer.H
+CEXE_sources += mfix_timer.cpp
+
+CEXE_headers += mfix_porous_media.H
+CEXE_sources += mfix_porous_media.cpp
+
+CEXE_headers += mfix_properties.H
+CEXE_sources += mfix_properties.cpp
+
+CEXE_headers += mfix_prop_molecular_viscosity.H
+CEXE_sources += mfix_prop_molecular_viscosity.cpp
+
+CEXE_headers += mfix_prop_molecular_weight.H
+CEXE_sources += mfix_prop_molecular_weight.cpp
+
+CEXE_headers += mfix_prop_specific_heat.H
+CEXE_sources += mfix_prop_specific_heat.cpp

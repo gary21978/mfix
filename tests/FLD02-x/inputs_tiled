@@ -1,0 +1,149 @@
+#_______________________________________________________________________
+# Solver settings
+
+amrex.fpe_trap_invalid = 1
+
+#! Fluid solver
+#!-----------------------------------------------------------//
+
+mfix.steady_state     = 1
+mfix.steady_state_tol = 1.0e-5
+mfix.steady_state_maxiter =500
+
+mfix.gravity =  0.0   0.0   0.0
+
+amr.blocking_factor = 4
+
+nodal_proj.mg_rtol = 1.e-13
+mac_proj.mg_rtol = 1.e-13
+diffusion.rtol = 1.e-13
+
+#_______________________________________________________________________
+# Geometry / grids / tiles
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+geometry.coord_sys   = 0                    # 0: Cartesian
+geometry.is_periodic = 0      0      0      # Is periodic in each direction?
+geometry.prob_lo     = 0.     0.     0.     # lo corner of physical domain
+geometry.prob_hi     = 0.1    0.02   0.02   # hi corner of physical domain
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell =  80  16  16
+
+#! Grids
+#!-----------------------------------------------------------//
+# Maximum allowable size of each fluid subdomain in the problem domain;
+
+# Fluid
+amr.max_grid_size_x =  1024
+amr.max_grid_size_y =  1024
+amr.max_grid_size_z =  1024
+
+#! Tiles
+#!-----------------------------------------------------------//
+
+# Fluid: Maximum tile size within each grid
+fabarray.mfiter_tile_size = 8  8  8
+
+#_______________________________________________________________________
+# IO / Checkpointing
+
+mfix.par_ascii_int  = -1
+mfix.par_ascii_file ="vis"
+
+mfix.plot_int=1
+mfix.plot_file=FLD02
+
+mfix.check_int      = -1
+mfix.check_file     ="chk"
+
+#! Restart from checkpoint
+#!-----------------------------------------------------------//
+#mfix.restart   ="restart-file"
+
+mfix.plt_vel_g = 1
+mfix.plt_p_g = 1
+
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 1.0e-3
+
+#_______________________________________________________________________
+# DEM model settings
+
+dem.solve = None
+
+
+#_______________________________________________________________________
+# EB model settings
+mfix.levelset__refinement = 1    # levelset resolution (to the particles)
+mfix.write_eb_surface = false    # Needed to output eb-surfaces
+
+# geometry
+mfix.geometry = box
+
+box.Lo = -1.      0.005   0.005
+box.Hi =  1.      0.015   0.015
+
+box.offset = 1.0e-15
+
+eb2.small_volfrac = 1.0e-12
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+
+
+mfix.regions = full-domain  inflow  outflow
+
+regions.full-domain.lo = 0.000  0.000  0.000
+regions.full-domain.hi = 0.100  0.020  0.020
+
+regions.inflow.lo      = 0.000  0.000  0.000
+regions.inflow.hi      = 0.000  0.020  0.020
+
+regions.outflow.lo     = 0.100  0.000  0.000
+regions.outflow.hi     = 0.100  0.020  0.020
+
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+
+ic.regions = full-domain
+
+
+# Background IC covering the full domain with gas.
+#---------------------------------------------------------------------//
+ic.full-domain.fluid.volfrac   =  1.0
+ic.full-domain.fluid.density   =  1.0
+ic.full-domain.fluid.pressure  =  101.325e+3
+ic.full-domain.fluid.velocity  = 10.0  0.0  0.0
+
+
+#_______________________________________________________________________
+# Boundary Conditions
+#
+
+bc.regions = inflow  outflow
+
+bc.inflow = mi
+bc.inflow.fluid.volfrac  =  1.0
+bc.inflow.fluid.velocity = 10.0  0.0  0.0
+bc.inflow.fluid.density  =  1.0
+
+bc.outflow = po
+bc.outflow.fluid.pressure = 101325.0
+
+bc.outflow = po
+bc.outflow.fluid.pressure = 101325.0
+
+mfix.stop_for_unused_inputs = true

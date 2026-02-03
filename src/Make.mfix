@@ -1,0 +1,154 @@
+BL_NO_FORT = TRUE
+
+USE_PARTICLES = TRUE
+USE_MG        = TRUE
+USE_EB        = TRUE
+
+VODE_JACOBIAN_CACHING = FALSE
+
+include $(AMREX_HOME)/Tools/GNUMake/Make.defs
+
+ifeq ($(USE_CSG),TRUE)
+$(info Loading $(TOP)/tools/GNUMake/packages/Make.csgeb...)
+include        $(TOP)/tools/GNUMake/packages/Make.csgeb
+endif
+
+ifeq ($(USE_POLYDISPERSE),TRUE)
+CPPFLAGS += -DMFIX_POLYDISPERSE
+endif
+
+ifeq ($(VODE_JACOBIAN_CACHING),TRUE)
+CPPFLAGS += -DVODE_JACOBIAN_CACHING
+endif
+
+ifeq ($(USE_MPMD), TRUE)
+ifneq ($(USE_MPI), TRUE)
+  $(error USE_MPMD=TRUE is not allowed when USE_MPI=FALSE.)
+endif
+CPPFLAGS += -DMFIX_MPMD
+endif
+
+#These are the directories in mfix/src_cc
+Bdirs	:= src
+Bdirs	+= src/chem
+Bdirs	+= src/chem/stiff_solvers
+Bdirs	+= src/des
+Bdirs	+= src/fluid
+Bdirs	+= src/io
+Bdirs	+= src/io/reports
+Bdirs	+= src/convection
+Bdirs	+= src/diffusion
+Bdirs	+= src/projection
+Bdirs	+= src/regrid
+Bdirs	+= src/setup
+Bdirs	+= src/util
+Bdirs	+= src/prob
+Bdirs	+= src/prob/bc
+Bdirs	+= src/prob/distributions
+Bdirs	+= src/eb
+Bdirs	+= src/usr
+Bdirs	+= src/timestepping
+
+Bdirs	+= src/des/dem
+Bdirs	+= src/des/pic
+Bdirs	+= src/des/deposition
+Bdirs	+= src/des/generator
+Bdirs	+= src/des/interpolation
+Bdirs	+= src/des/coupling
+
+Bpack	+= $(foreach dir, $(Bdirs), $(TOP)/$(dir)/Make.package)
+Blocs	+= $(foreach dir, $(Bdirs), $(TOP)/$(dir))
+
+Bpack += $(AMREX_HYDRO_HOME)/BDS/Make.package
+Blocs += $(AMREX_HYDRO_HOME)/BDS
+
+Bpack += $(AMREX_HYDRO_HOME)/Godunov/Make.package
+Blocs += $(AMREX_HYDRO_HOME)/Godunov
+
+Bpack += $(AMREX_HYDRO_HOME)/MOL/Make.package
+Blocs += $(AMREX_HYDRO_HOME)/MOL
+
+Bpack += $(AMREX_HYDRO_HOME)/Utils/Make.package
+Blocs += $(AMREX_HYDRO_HOME)/Utils
+
+ifeq ($(USE_EB), TRUE)
+Bpack += $(AMREX_HYDRO_HOME)/EBMOL/Make.package
+Blocs += $(AMREX_HYDRO_HOME)/EBMOL
+
+Bpack += $(AMREX_HYDRO_HOME)/EBGodunov/Make.package
+Blocs += $(AMREX_HYDRO_HOME)/EBGodunov
+
+Bpack += $(AMREX_HYDRO_HOME)/Projections/Make.package
+Blocs += $(AMREX_HYDRO_HOME)/Projections
+endif
+
+include $(Bpack)
+INCLUDE_LOCATIONS += $(Blocs)
+VPATH_LOCATIONS   += $(Blocs)
+
+Pdirs   := Base AmrCore Boundary Particle EB
+
+ifeq ($(USE_HYPRE), TRUE)
+Pdirs   += Extern/HYPRE
+endif
+
+Ppack	+= $(foreach dir, $(Pdirs), $(AMREX_HOME)/Src/$(dir)/Make.package)
+Plocs	+= $(foreach dir, $(Pdirs), $(AMREX_HOME)/Src/$(dir))
+
+include $(Ppack)
+INCLUDE_LOCATIONS += $(Plocs)
+VPATH_LOCATIONS   += $(Plocs)
+
+include $(AMREX_HOME)/Src/LinearSolvers/MLMG/Make.package
+INCLUDE_LOCATIONS += $(AMREX_HOME)/Src/LinearSolvers/MLMG
+VPATH_LOCATIONS   += $(AMREX_HOME)/Src/LinearSolvers/MLMG
+
+#These are the directories in AMReX
+
+all: $(executable)
+	$(SILENT) $(RM) AMReX_buildInfo.cpp
+	@echo SUCCESS
+
+# job_info support
+CEXE_sources += AMReX_buildInfo.cpp
+CEXE_headers += $(AMREX_HOME)/Tools/C_scripts/AMReX_buildInfo.H
+INCLUDE_LOCATIONS +=  $(AMREX_HOME)/Tools/C_scripts
+
+AMReX_buildInfo.cpp:
+	$(AMREX_HOME)/Tools/C_scripts/makebuildinfo_C.py \
+	--amrex_home "$(AMREX_HOME)" \
+	--COMP "$(COMP)" --COMP_VERSION "$(COMP_VERSION)" \
+	--CXX_comp_name "$(CXX)" --CXX_flags "$(CXXFLAGS) $(CPPFLAGS) $(includes)" \
+	--F_comp_name "$(F90)" --F_flags "$(F90FLAGS)" \
+	--link_flags "$(LDFLAGS)" --libraries "$(libraries)" \
+	--GIT "$(TOP) $(AMREX_HOME)"
+
+
+HYDRO_GIT_VERSION := $(shell cd $(AMREX_HYDRO_HOME); git rev-parse HEAD)
+
+ifndef CSGEB_GIT_HASH
+  CSGEB_GIT_HASH = CSG NOT ENABLED
+endif
+
+CPPFLAGS += -I$(AMREX_INSTALL_DIR)
+$(TOP)/src/main.cpp: $(AMREX_INSTALL_DIR)/build_info.H
+$(AMREX_INSTALL_DIR)/build_info.H: $(TOP)/tools/CMake/build_info.H.in
+	mkdir -p $(AMREX_INSTALL_DIR)
+	cat $< \
+	| sed 's/@HYDRO_GIT_HASH@/$(HYDRO_GIT_VERSION)/g' \
+	| sed 's/@CSGEB_GIT_HASH@/$(CSGEB_GIT_HASH)/g' \
+	> $@
+
+vpath %.c   . $(VPATH_LOCATIONS)
+vpath %.cpp . $(VPATH_LOCATIONS)
+vpath %.h   . $(VPATH_LOCATIONS)
+vpath %.H   . $(VPATH_LOCATIONS)
+vpath %.F   . $(VPATH_LOCATIONS)
+vpath %.f90 . $(VPATH_LOCATIONS)
+vpath %.f   . $(VPATH_LOCATIONS)
+vpath %.fi  . $(VPATH_LOCATIONS)
+
+include $(AMREX_HOME)/Tools/GNUMake/Make.rules
+
+clean::
+	$(SILENT) $(RM) AMReX_buildInfo.cpp

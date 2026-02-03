@@ -1,0 +1,10 @@
+CEXE_headers += pm_reporter.H
+
+CEXE_sources += pm_pc_deposition.cpp
+CEXE_sources += pm_field_ops.cpp
+
+CEXE_headers += pm_diffusion.H
+CEXE_sources += pm_diffusion.cpp
+
+CEXE_headers += pm_plotfile.H
+CEXE_sources += pm_plotfile.cpp

@@ -1,0 +1,5 @@
+CEXE_headers += mfix_des_coll_K.H
+CEXE_headers += mfix_des_cond_K.H
+CEXE_headers += mfix_pc_interactions_K.H
+CEXE_sources += mfix_evolve_particles.cpp
+CEXE_sources += mfix_pc_init_collision_params.cpp

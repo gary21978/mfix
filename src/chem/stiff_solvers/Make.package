@@ -1,0 +1,5 @@
+CEXE_headers += integrator.H
+CEXE_headers += linear_algebra.H
+CEXE_headers += fe_integrator.H
+CEXE_headers += be_integrator.H
+CEXE_headers += vode_integrator.H

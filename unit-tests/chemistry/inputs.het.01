@@ -1,0 +1,171 @@
+amrex.fpe_trap_invalid = 1
+amrex.the_arena_init_size = 1073741824
+
+mfix.stop_time = 1.0
+#mfix.stop_time = 0.001
+#mfix.max_step = 1
+mfix.fixed_dt = 0.0002
+
+# Number of grid cells in each direction at the coarsest level
+#amr.n_cell = 32 32 32
+amr.n_cell = 1  1  1
+
+amr.blocking_factor = 1
+
+# Maximum allowable size of each subdomain in the problem domain;
+#    this is used to decompose the domain for parallel calculations.
+amr.max_grid_size_x = 16
+amr.max_grid_size_y = 16
+amr.max_grid_size_z = 16
+
+# Maximum tile size within each grid
+fabarray.mfiter_tile_size = 16 16 16
+
+# Maximum particle tile size
+particles.tile_size = 16 16 16
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level  = 0
+
+# Geometry
+geometry.coord_sys   = 0                      # 0: Cartesian
+geometry.is_periodic = 1       1      1       # Is periodic in each direction?
+geometry.prob_lo     = 0.      0.     0.      # lo corner of physical domain
+geometry.prob_hi     = 0.0025  0.0025 0.0025  # hi corner of physical domain
+
+mfix.advect_density  = 1
+mfix.advect_enthalpy = 1
+mfix.solve_species   = 1
+#mfix.constraint = IdealGasOpenSystem
+mfix.constraint = IdealGasClosedSystem
+#mfix.constraint = IncompressibleFluid
+
+
+#_______________________________________________________________________
+# Species model settings
+#
+species.solve  =  A  B
+
+species.diffusivity = constant
+species.diffusivity.constant  = 0
+
+species.specific_heat = constant
+species.A.specific_heat.constant  = 1000
+species.B.specific_heat.constant  = 1000
+
+species.A.enthalpy_of_formation = 0.
+species.B.enthalpy_of_formation = 0.
+
+#species.A.molecular_weight = 41.02868304e-3
+#species.B.molecular_weight = 41.02868304e-3
+
+species.A.molecular_weight = 82.0573660809597e-3
+species.B.molecular_weight = 82.0573660809597e-3
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity          = constant
+fluid.viscosity.constant = 2.0e-5
+
+fluid.reference_temperature = 298.15
+fluid.thermodynamic_pressure = 60795
+
+fluid.specific_heat      = mixture
+
+fluid.thermal_conductivity          = constant
+fluid.thermal_conductivity.constant = 0.024
+
+fluid.species  =  A B
+
+#_______________________________________________________________________
+# Solids properties
+#
+#solids.types = None
+solids.types = solid0
+
+solids.reference_temperature = 298.15
+
+solids.species = A  B
+
+solids.specific_heat = mixture
+
+mfix.particles.update_mass = 1
+mfix.particles.update_momentum = 1
+mfix.particles.update_enthalpy = 1
+
+mfix.particle_init_type = "Auto"
+
+
+#_______________________________________________________________________
+# DEM model settings
+#
+#dem.solve = None
+dem.solve = solid0
+
+dem.friction_coeff.pp     =     0.0
+dem.friction_coeff.pw     =     0.0
+
+dem.spring_const.pp       =    10.0
+dem.spring_const.pw       =    10.0
+
+dem.restitution_coeff.solid0.solid0  =     0.8
+dem.restitution_coeff.solid0.wall    =     1.0
+
+dem.spring_tang_fac.pp    =     0.285714285
+dem.spring_tang_fac.pw    =     0.285714285
+
+dem.damping_tang_fac.pp   =     0.5
+dem.damping_tang_fac.pw   =     0.5
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+mfix.regions = full-domain
+
+regions.full-domain.lo = 0.0000  0.0000  0.0000
+regions.full-domain.hi = 0.0025  0.0025  0.0025
+
+
+#_______________________________________________________________________
+## CHEMICAL reactions
+#
+chemistry.solve = AtoA
+
+chemistry.AtoA.reaction = A(g) --> A(s)
+
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+ic.regions = full-domain
+
+ic.full-domain.fluid.volfrac     =  0.8
+ic.full-domain.fluid.velocity    =  0.0  0.0  0.0
+ic.full-domain.fluid.temperature =  300
+ic.full-domain.fluid.species.A   =  1.0
+
+ic.full-domain.solids = solid0
+#ic.full-domain.packing = pseudo_random
+ic.full-domain.packing = 1-cube
+ic.full-domain.solid0.volfrac = 0.2
+
+ic.full-domain.solid0.diameter = constant
+ic.full-domain.solid0.diameter.constant = 1000.e-6
+
+ic.full-domain.solid0.density  = constant
+ic.full-domain.solid0.density.constant  = 2.e3
+
+ic.full-domain.solid0.velocity =  0.0  0.0  0.0
+ic.full-domain.solid0.temperature =  300
+ic.full-domain.solid0.species.A   =  1.0
+
+
+#mfix.integrator = ForwardEuler
+
+#mfix.integrator = StiffSolver::ForwardEuler
+#mfix.integrator = StiffSolver::BackwardEuler
+#mfix.integrator = StiffSolver::VODE

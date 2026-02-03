@@ -1,0 +1,33 @@
+include $(AMREX_HOME)/Tools/GNUMake/Make.defs
+
+Bdirs := source
+
+Bdirs += $(MFIX)/src/prob
+Bdirs += $(MFIX)/src/prob/distributions
+Bdirs += $(MFIX)/src/des
+Bdirs += $(MFIX)/src/des/generator
+Bdirs += $(MFIX)/src/des/dem
+Bdirs += $(MFIX)/src/util
+
+Bpack += $(foreach dir, $(Bdirs), $(TOP)/$(dir)/Make.package)
+Blocs += $(foreach dir, $(Bdirs), $(TOP)/$(dir))
+
+include $(Bpack)
+
+include $(Bpack)
+INCLUDE_LOCATIONS += $(Blocs)
+VPATH_LOCATIONS   += $(Blocs)
+
+Pdirs := Base AmrCore Boundary Particle EB
+Ppack += $(foreach dir, $(Pdirs), $(AMREX_HOME)/Src/$(dir)/Make.package)
+Plocs += $(foreach dir, $(Pdirs), $(AMREX_HOME)/Src/$(dir))
+
+include $(Ppack)
+INCLUDE_LOCATIONS += $(Plocs)
+VPATH_LOCATIONS   += $(Plocs)
+
+
+all: $(executable)
+	@echo SUCCESS
+
+include $(AMREX_HOME)/Tools/GNUMake/Make.rules

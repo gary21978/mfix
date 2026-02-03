@@ -1,0 +1,190 @@
+amrex.fpe_trap_invalid = 1
+amrex.the_arena_init_size = 1073741824
+
+#mfix.stop_time = 0.001
+#mfix.max_step = 1
+mfix.fixed_dt =  0.0002
+mfix.stop_time = 0.0010
+
+# Number of grid cells in each direction at the coarsest level
+#amr.n_cell = 32 32 32
+amr.n_cell = 1  1  1
+
+amr.blocking_factor = 1
+
+# Maximum allowable size of each subdomain in the problem domain;
+#    this is used to decompose the domain for parallel calculations.
+amr.max_grid_size_x = 16
+amr.max_grid_size_y = 16
+amr.max_grid_size_z = 16
+
+# Maximum tile size within each grid
+fabarray.mfiter_tile_size = 16 16 16
+
+# Maximum particle tile size
+particles.tile_size = 16 16 16
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level  = 0
+
+# Geometry
+geometry.coord_sys   = 0                      # 0: Cartesian
+geometry.is_periodic = 1       1      1       # Is periodic in each direction?
+geometry.prob_lo     = 0.      0.     0.      # lo corner of physical domain
+geometry.prob_hi     = 0.0025  0.0025 0.0025  # hi corner of physical domain
+
+mfix.advect_density  = 1
+mfix.advect_enthalpy = 1
+mfix.solve_species   = 1
+#mfix.constraint = IdealGasOpenSystem
+mfix.constraint = IdealGasClosedSystem
+#mfix.constraint = IncompressibleFluid
+
+
+#_______________________________________________________________________
+# Species model settings
+#
+species.solve  =  Air  Vapor  Liquid
+
+species.diffusivity = constant
+species.diffusivity.constant = 2.31e-5
+
+species.specific_heat = NASA7-Poly
+
+species.ignore_discontinuities = 1
+
+# Air
+species.Air.molecular_weight = 0.02897
+species.Air.specific_heat.NASA7.a0 =  3.56839620e+00    3.08792717e+00
+species.Air.specific_heat.NASA7.a1 = -6.78729429e-04    1.24597184e-03
+species.Air.specific_heat.NASA7.a2 =  1.55371476e-06   -4.23718945e-07
+species.Air.specific_heat.NASA7.a3 = -3.29937060e-12    6.74774789e-11
+species.Air.specific_heat.NASA7.a4 = -4.66395387e-13   -3.97076972e-15
+species.Air.specific_heat.NASA7.a5 = -1.06234659e+03   -9.95262755e+02
+
+# H2O vapor
+species.Vapor.molecular_weight = 0.01802  # kg / mol
+species.Vapor.specific_heat.NASA7.a0 =  0.41986352e+01    0.26770389e+01
+species.Vapor.specific_heat.NASA7.a1 = -0.20364017e-02    0.29731816e-02
+species.Vapor.specific_heat.NASA7.a2 =  0.65203416e-05   -0.77376889e-06
+species.Vapor.specific_heat.NASA7.a3 = -0.54879269e-08    0.94433514e-10
+species.Vapor.specific_heat.NASA7.a4 =  0.17719680e-11   -0.42689991e-14
+species.Vapor.specific_heat.NASA7.a5 = -0.30293726e+05   -0.29885894e+05
+
+# H2O liquid
+species.Liquid.molecular_weight = 0.01802
+species.Liquid.specific_heat.NASA7.a0 =  7.25575005e+01   0.00000000e+00
+species.Liquid.specific_heat.NASA7.a1 = -6.62445402e-01   0.00000000e+00
+species.Liquid.specific_heat.NASA7.a2 =  2.56198746e-03   0.00000000e+00
+species.Liquid.specific_heat.NASA7.a3 = -4.36591923e-06   0.00000000e+00
+species.Liquid.specific_heat.NASA7.a4 =  2.78178981e-09   0.00000000e+00
+species.Liquid.specific_heat.NASA7.a5 = -4.18865499e+04   0.00000000e+00
+
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular = constant
+fluid.viscosity.molecular.constant = 2.0e-5
+
+fluid.reference_temperature = 298.15
+fluid.thermodynamic_pressure = 101325.
+
+fluid.specific_heat      = mixture
+
+fluid.thermal_conductivity          = constant
+fluid.thermal_conductivity.constant = 0.024
+
+fluid.species  =  Air Vapor
+
+#_______________________________________________________________________
+# Solids properties
+#
+#solids.types = None
+solids.types = solid0
+
+solids.reference_temperature = 298.15
+
+solids.species = Liquid
+
+solids.specific_heat = mixture
+
+mfix.particles.update_mass = 1
+mfix.particles.update_momentum = 1
+mfix.particles.update_enthalpy = 1
+
+mfix.particle_init_type = "Auto"
+
+
+#_______________________________________________________________________
+# DEM model settings
+#
+#dem.solve = None
+dem.solve = solid0
+
+dem.friction_coeff.pp     =     0.0
+dem.friction_coeff.pw     =     0.0
+
+dem.spring_const.pp       =    10.0
+dem.spring_const.pw       =    10.0
+
+dem.restitution_coeff.solid0.solid0  =     0.8
+dem.restitution_coeff.solid0.wall    =     1.0
+
+dem.spring_tang_fac.pp    =     0.285714285
+dem.spring_tang_fac.pw    =     0.285714285
+
+dem.damping_tang_fac.pp   =     0.5
+dem.damping_tang_fac.pw   =     0.5
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+mfix.regions = full-domain
+
+regions.full-domain.lo = 0.0000  0.0000  0.0000
+regions.full-domain.hi = 0.0025  0.0025  0.0025
+
+
+#_______________________________________________________________________
+## CHEMICAL reactions
+#
+chemistry.solve = AtoA
+
+chemistry.AtoA.reaction = Vapor(g) --> Liquid(s)
+
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+ic.regions = full-domain
+
+ic.full-domain.fluid.volfrac     =  0.8
+ic.full-domain.fluid.velocity    =  0.0  0.0  0.0
+ic.full-domain.fluid.temperature =  303.15
+ic.full-domain.fluid.species.Air =  1.0
+
+ic.full-domain.solids = solid0
+#ic.full-domain.packing = pseudo_random
+ic.full-domain.packing = 1-cube
+ic.full-domain.solid0.volfrac = 0.2
+
+ic.full-domain.solid0.diameter = constant
+ic.full-domain.solid0.diameter.constant = 1000.e-6
+
+ic.full-domain.solid0.density  = constant
+ic.full-domain.solid0.density.constant = 958.6
+
+ic.full-domain.solid0.velocity =  0.0  0.0  0.0
+ic.full-domain.solid0.temperature =  303.15
+ic.full-domain.solid0.species.Liquid =  1.0
+
+
+#mfix.integrator = ForwardEuler
+
+#mfix.integrator = StiffSolver::ForwardEuler
+#mfix.integrator = StiffSolver::BackwardEuler
+#mfix.integrator = StiffSolver::VODE

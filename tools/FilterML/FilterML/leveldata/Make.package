@@ -1,0 +1,10 @@
+CEXE_headers += fml_derived.H
+CEXE_headers += fml_fluid.H
+CEXE_headers += fml_particles.H
+CEXE_headers += fml_solids.H
+
+
+CEXE_sources += fml_derived.cpp
+CEXE_sources += fml_fluid.cpp
+CEXE_sources += fml_particles.cpp
+CEXE_sources += fml_solids.cpp

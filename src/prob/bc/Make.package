@@ -1,0 +1,12 @@
+CEXE_sources += mfix_calc_bc_areas.cpp
+CEXE_sources += mfix_set_bcs.cpp
+CEXE_sources += mfix_set_bc_list.cpp
+CEXE_sources += mfix_set_bc_type.cpp
+CEXE_sources += mfix_set_bc_values.cpp
+CEXE_sources += mfix_set_eb_scalar_bcs.cpp
+CEXE_sources += mfix_set_eb_temperature_bcs.cpp
+CEXE_sources += mfix_set_eb_velocity_bcs.cpp
+CEXE_sources += mfix_set_gradp_bcs.cpp
+CEXE_headers += mfix_bc_fillpatch_K.H
+CEXE_sources += mfix_bc_fillpatch.cpp
+CEXE_sources += mfix_bc_fillcoarsepatch.cpp

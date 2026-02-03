@@ -1,0 +1,76 @@
+# Time stepping
+mfix.stop_time = 1.0
+mfix.gravity =  0.0  0.0   0.0
+
+mfix.fixed_dt = 0.5
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell = 64 64 64
+
+# Maximum allowable size of each subdomain in the problem domain;
+#    this is used to decompose the domain for parallel calculations.
+amr.max_grid_size = 1024
+
+# Maximum tile size within each grid
+fabarray.mfiter_tile_size = 1024 1024 1024
+
+# Maximum particle tile size
+#particles_tile_size = 20 20 20
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+mfix.plot_int   = 10
+#mfix.plot_file  = DEM06_plt
+
+vortices_plane=1
+
+# Geometry
+geometry.coord_sys   = 0                  # 0: Cartesian
+geometry.is_periodic = 1     1     1      # Is periodic in each direction?
+geometry.prob_lo     = 0.    0.    0.       # lo corner of physical domain
+geometry.prob_hi     = 1.    1.    1.     # hi corner of physical domain
+
+mfix.plt_regtest = 1
+mfix.geometry = None
+
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 0.0
+
+
+#_______________________________________________________________________
+# DEM model settings
+
+dem.solve = None
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+
+mfix.regions = full-domain
+
+regions.full-domain.lo = 0.000  0.000  0.000
+regions.full-domain.hi = 1.000  1.000  1.000
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+
+ic.regions = full-domain
+
+
+# Background IC covering the full domain with gas.
+#---------------------------------------------------------------------//
+ic.full-domain.fluid.volfrac   = 1.0
+ic.full-domain.fluid.density   = 1.0
+ic.full-domain.fluid.velocity  = 0.0  0.0  0.0
+
+
+mfix.stop_for_unused_inputs = true

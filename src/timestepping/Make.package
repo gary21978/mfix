@@ -1,0 +1,12 @@
+CEXE_sources += mfix_apply_predictor.cpp
+CEXE_sources += mfix_apply_corrector.cpp
+CEXE_sources += mfix_compute_dt.cpp
+CEXE_sources += mfix_deposit_to_grid.cpp
+CEXE_sources += mfix_evolve.cpp
+CEXE_sources += mfix_evolve_Godunov.cpp
+CEXE_sources += mfix_evolve_MOL.cpp
+CEXE_sources += mfix_evolve_fluid.cpp
+CEXE_sources += mfix_evolve_steady_state.cpp
+CEXE_sources += mfix_evolve_solids.cpp
+CEXE_sources += mfix_fluid_implicit_updates.cpp
+CEXE_sources += mfix_fluid_startup.cpp

@@ -1,0 +1,6 @@
+CEXE_sources += mfix_apply_nodal_projection.cpp
+CEXE_sources += mfix_proj_redistribution.cpp
+CEXE_sources += mfix_constraints.cpp
+
+CEXE_headers += mfix_mlmg_options.H
+CEXE_sources += mfix_mlmg_options.cpp

@@ -1,0 +1,10 @@
+CEXE_headers += mfix_diffop_velocity_K.H
+
+CEXE_sources += mfix_diffusion_op.cpp
+CEXE_headers += mfix_diffusion_op.H
+
+CEXE_sources += mfix_diffop_energy.cpp
+CEXE_sources += mfix_diffop_scalar.cpp
+CEXE_sources += mfix_diffop_species.cpp
+CEXE_sources += mfix_diffop_tracer.cpp
+CEXE_sources += mfix_diffop_velocity.cpp

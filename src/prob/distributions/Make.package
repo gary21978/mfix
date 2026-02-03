@@ -1,0 +1,7 @@
+CEXE_headers += mfix_distributions_normal.H
+CEXE_headers += mfix_distributions_log_normal.H
+CEXE_headers += mfix_distributions_uniform.H
+CEXE_headers += mfix_distributions_custom.H
+CEXE_headers += mfix_distributions.H
+
+CEXE_sources += mfix_distributions.cpp

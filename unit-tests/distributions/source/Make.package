@@ -1,0 +1,14 @@
+CEXE_headers += test_dist.H
+CEXE_headers += test_constant_dist.H
+CEXE_headers += test_normal_dist.H
+CEXE_headers += test_log_normal_dist.H
+CEXE_headers += test_uniform_dist.H
+CEXE_headers += test_custom_dist.H
+
+CEXE_sources += main.cpp
+CEXE_sources += test_dist.cpp
+CEXE_sources += test_constant_dist.cpp
+CEXE_sources += test_normal_dist.cpp
+CEXE_sources += test_log_normal_dist.cpp
+CEXE_sources += test_uniform_dist.cpp
+CEXE_sources += test_custom_dist.cpp

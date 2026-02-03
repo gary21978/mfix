@@ -1,0 +1,15 @@
+CEXE_sources += main.cpp
+CEXE_sources += mfix_pc_usr.cpp
+
+CEXE_headers += dem_test_check.H
+CEXE_sources += dem_test_check.cpp
+
+CEXE_headers += dem_test_eb.H
+CEXE_sources += dem_test_eb.cpp
+
+CEXE_headers += dem_test_prob.H
+CEXE_sources += dem_test_prob.cpp
+
+CEXE_headers += dem_test.H
+CEXE_sources += dem_test.cpp
+

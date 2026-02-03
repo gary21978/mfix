@@ -1,0 +1,14 @@
+CEXE_headers += mfix_leveldata.H
+CEXE_sources += mfix_leveldata.cpp
+
+CEXE_headers += mfix_stepdata.H
+CEXE_sources += mfix_stepdata.cpp
+
+CEXE_headers += mfix_fluid_update.H
+
+CEXE_sources += mfix_fluid_update.cpp
+CEXE_sources += mfix_fluid_update_density.cpp
+CEXE_sources += mfix_fluid_update_species.cpp
+CEXE_sources += mfix_fluid_update_energy.cpp
+CEXE_sources += mfix_fluid_update_tracers.cpp
+CEXE_sources += mfix_fluid_update_velocity.cpp

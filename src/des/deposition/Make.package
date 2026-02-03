@@ -1,0 +1,9 @@
+CEXE_headers += mfix_deposition_K.H
+CEXE_headers += mfix_deposition_op.H
+CEXE_sources += mfix_deposition_op.cpp
+
+
+CEXE_sources += mfix_depop_bcs.cpp
+CEXE_sources += mfix_depop_txfr.cpp
+CEXE_sources += mfix_depop_volavg.cpp
+CEXE_sources += mfix_depop_redist.cpp

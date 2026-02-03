@@ -1,0 +1,153 @@
+#_______________________________________________________________________
+# Solver settings
+
+amrex.fpe_trap_invalid = 1
+
+mfix.stop_time = 0.35
+
+mfix.fixed_dt = 1.e-3
+
+mfix.gravity = 0.0  -9.80665  0.0
+mfix.drag.model = "UserDrag"
+
+#! Fluid solver
+#!-----------------------------------------------------------//
+
+amr.blocking_factor = 1
+
+#_______________________________________________________________________
+# Geometry / grids / tiles
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+geometry.coord_sys   = 0                  # 0: Cartesian
+geometry.is_periodic = 1     0     1      # Is periodic in each direction?
+geometry.prob_lo     = 0.    0.    0.       # lo corner of physical domain
+geometry.prob_hi     = 0.01  0.1   0.01     # hi corner of physical domain
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell = 5 50 5
+
+mfix.geometry = None
+
+#! Grids
+#!-----------------------------------------------------------//
+# Maximum allowable size of each fluid subdomain in the problem domain;
+
+# Fluid
+amr.max_grid_size_x =  10
+amr.max_grid_size_y =  10
+amr.max_grid_size_z =  10
+
+
+# Particles (not with KDTree)
+#particles.max_grid_size_x =   1024
+#particles.max_grid_size_y =   1024
+#particles.max_grid_size_z =   1024
+
+
+#! Tiles
+#!-----------------------------------------------------------//
+
+# Fluid: Maximum tile size within each grid
+fabarray.mfiter_tile_size = 5  5  5
+
+# Particles: Maximum particle title size
+particles.tile_size = 5  5  5
+
+
+#_______________________________________________________________________
+# IO / Checkpointing
+
+mfix.plot_int   = -1
+mfix.plot_file  = DEM06_plt
+
+mfix.check_int  = 50
+mfix.check_file = DEM06_chk
+
+mfix.par_ascii_int  = 10
+mfix.par_ascii_file = DEM06_par
+mfix.plt_regtest = 1
+
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 1.8e-5
+
+#_______________________________________________________________________
+# Solids model settings
+#
+solids.types = solid0
+
+
+#_______________________________________________________________________
+# DEM model settings
+
+dem.solve = solid0
+
+dem.friction_coeff.pp     =     0.0
+dem.friction_coeff.pw     =     0.0
+
+dem.spring_const.pp       =     0.1
+dem.spring_const.pw       =     0.1
+
+dem.restitution_coeff.solid0.solid0  =     1.0
+dem.restitution_coeff.solid0.wall  =     1.0
+
+dem.spring_tang_fac.pp    =     0.285714285
+dem.spring_tang_fac.pw    =     0.285714285
+
+dem.damping_tang_fac.pp   =     0.5
+dem.damping_tang_fac.pw   =     0.5
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+
+mfix.regions = full-domain  inflow  outflow
+
+regions.full-domain.lo = 0.00  0.00  0.00
+regions.full-domain.hi = 0.01  0.10  0.01
+
+regions.inflow.lo      = 0.00  0.00  0.00
+regions.inflow.hi      = 0.01  0.00  0.01
+
+regions.outflow.lo     = 0.00  0.10  0.00
+regions.outflow.hi     = 0.01  0.10  0.01
+
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+
+ic.regions = full-domain
+
+
+# Background IC covering the full domain with gas.
+#---------------------------------------------------------------------//
+ic.full-domain.fluid.volfrac   = 1.0
+ic.full-domain.fluid.density   = 1.2
+ic.full-domain.fluid.velocity  = 0.0  0.4  0.0
+
+
+#_______________________________________________________________________
+# Boundary Conditions
+#
+
+bc.regions = inflow  outflow
+
+bc.inflow = mi
+bc.inflow.fluid.volfrac  =  1.0
+bc.inflow.fluid.density  =  1.2
+bc.inflow.fluid.velocity =  0.0  0.4  0.0
+
+bc.outflow = po
+bc.outflow.fluid.pressure = 0.0
+
+mfix.stop_for_unused_inputs = true

@@ -1,0 +1,17 @@
+CEXE_sources += mfix_io.cpp
+CEXE_sources += mfix_build_info.cpp
+CEXE_sources += mfix_chk.cpp
+CEXE_sources += mfix_catalyst.cpp
+CEXE_sources += mfix_plt.cpp
+CEXE_sources += mfix_ascent.cpp
+
+CEXE_headers += mfix_rw.H
+CEXE_sources += mfix_rw.cpp
+CEXE_sources += mfix_compute_vorticity.cpp
+
+CEXE_headers += mfix_monitors.H
+CEXE_sources += mfix_monitors.cpp
+
+ifeq ($(USE_MPMD),TRUE)
+  CEXE_sources += mfix_mpmd.cpp
+endif

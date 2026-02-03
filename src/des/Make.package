@@ -1,0 +1,10 @@
+CEXE_headers += mfix_des_K.H
+CEXE_headers += mfix_pc.H
+
+CEXE_headers += mfix_pc_updates_K.H
+
+CEXE_sources += mfix_pc.cpp
+CEXE_sources += mfix_pc_inflow.cpp
+CEXE_sources += mfix_pc_remove_out_of_range.cpp
+CEXE_sources += mfix_pc_replicate.cpp
+CEXE_sources += mfix_pc_impose_mean.cpp

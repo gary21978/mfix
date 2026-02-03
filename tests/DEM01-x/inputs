@@ -1,0 +1,71 @@
+amrex.fpe_trap_invalid = 1
+mfix.stop_time = 0.5
+
+mfix.fixed_dt = 5.e-3
+mfix.gravity = -9.80665 0.0  0.0
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell = 4 4 4
+
+# Maximum allowable size of each subdomain in the problem domain;
+#    this is used to decompose the domain for parallel calculations.
+amr.max_grid_size = 1024
+
+amr.blocking_factor = 4
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+# Geometry
+geometry.coord_sys   = 0                  # 0: Cartesian
+geometry.is_periodic = 0     0     0      # Is periodic in each direction?
+geometry.prob_lo     = 0.    0.    0.       # lo corner of physical domain
+geometry.prob_hi     = 1.0   1.0   1.0      # hi corner of physical domain
+
+mfix.geometry = box
+
+mfix.plot_int   = -1
+mfix.plot_file  = DEM01_plt
+
+mfix.check_int  = -1
+mfix.check_file = DEM01_chk
+
+mfix.par_ascii_int  = 1
+mfix.par_ascii_file = DEM01_par
+
+mfix.plt_regtest = 1
+
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = None
+
+
+#_______________________________________________________________________
+# Solids model settings
+#
+solids.types = solid0
+
+
+#_______________________________________________________________________
+# DEM model settings
+#
+dem.solve = solid0
+
+dem.friction_coeff.pp     =     0.0
+dem.friction_coeff.pw     =     0.0
+                              
+dem.spring_const.pp       = 50000.0
+dem.spring_const.pw       = 50000.0
+                              
+dem.restitution_coeff.solid0.solid0  =     0.8
+dem.restitution_coeff.solid0.wall  =     0.8
+                              
+dem.spring_tang_fac.pp    =     0.285714285
+dem.spring_tang_fac.pw    =     0.285714285
+                              
+dem.damping_tang_fac.pp   =     0.5
+dem.damping_tang_fac.pw   =     0.5
+
+mfix.stop_for_unused_inputs = true

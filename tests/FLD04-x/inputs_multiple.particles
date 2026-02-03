@@ -1,0 +1,187 @@
+#_______________________________________________________________________
+# Testing tracer conservation
+
+mfix.advect_tracer            = 1
+mfix.test_tracer_conservation = true
+mfix.particles.update_momentum = 0
+
+mfix.gravity = -9.81  0.0  0.0
+
+#_______________________________________________________________________
+# Debugging settings
+
+amrex.fpe_trap_invalid = 1
+
+#! Fluid solver
+#!-----------------------------------------------------------//
+
+mfix.cfl = 0.5
+
+mfix.stop_time = 0.20
+mfix.max_step  = 10
+
+mfix.plt_regtest = 1
+
+mfix.particle_init_type = "AsciiFile"
+
+mfix.verbose  = 1
+
+amr.blocking_factor = 1
+
+#_______________________________________________________________________
+# Geometry / grids / tiles
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+geometry.coord_sys   = 0                       # 0: Cartesian
+geometry.is_periodic = 1       0       0       # Is periodic in each direction?
+
+geometry.prob_lo     = 0.      0.      0.      # lo corner of physical domain
+geometry.prob_hi     = 1.      4.      4.      # hi corner of physical domain
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell =  8  32   32
+
+
+#! Grids
+#!-----------------------------------------------------------//
+# Maximum allowable size of each fluid subdomain in the problem domain;
+
+# Fluid
+amr.max_grid_size_x = 32
+amr.max_grid_size_y = 16
+amr.max_grid_size_z = 16
+
+
+#! Tiles
+#!-----------------------------------------------------------//
+
+# Fluid: Maximum tile size within each grid
+fabarray.mfiter_tile_size = 1024 1024 1024
+
+# Particles: Maximum particle title size
+particles.tile_size = 1024 1024 1024
+
+
+#! EB settings
+#!-----------------------------------------------------------//
+
+# Level-set refinement and padding
+mfix.levelset__refinement    = 4 # levelset resolution
+
+mfix.write_eb_surface = false  # Needed to output eb-surfaces
+
+#! EB geometry
+#!-----------------------------------------------------------//
+
+mfix.geometry = "cylinder"
+
+cylinder.internal_flow = true
+
+cylinder.radius = 0.49
+cylinder.height = -1.0
+
+cylinder.direction = 0
+cylinder.center    =  0.5  2.0   2.0
+
+
+#_______________________________________________________________________
+# Load balancing
+#
+mfix.regrid_int = 25
+
+mfix.load_balance = SingleGrid
+#mfix.load_balance = DualGrid
+
+mfix.load_balance.strategy = KnapSack # default
+#mfix.load_balance.strategy = SFC
+
+#mfix.load_balance.weighting = ParticleRunTime # default
+#mfix.load_balance.weighting = ParticleCount
+
+
+#_______________________________________________________________________
+# IO / Checkpointing
+
+mfix.par_ascii_int  = -1
+mfix.par_ascii_file ="vis"
+
+mfix.plot_int       = -1
+mfix.plot_file      ="plt"
+
+mfix.check_int      = -1
+mfix.check_file     ="chk"
+
+#! Restart from checkpoint
+#!-----------------------------------------------------------//
+#mfix.restart   ="chk00100"
+
+mfix.drag.model = "BVK2"
+
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 2.0e-2
+
+#_______________________________________________________________________
+# Solids model settings
+#
+solids.types = solid0
+
+
+#_______________________________________________________________________
+# DEM model settings
+
+dem.solve = solid0
+
+dem.friction_coeff.pp     =     0.0
+dem.friction_coeff.pw     =     0.0
+
+dem.spring_const.pp       =    10.0
+dem.spring_const.pw       =    10.0
+
+dem.restitution_coeff.solid0.solid0  =     0.8
+dem.restitution_coeff.solid0.wall  =     1.0
+
+dem.spring_tang_fac.pp    =     0.285714285
+dem.spring_tang_fac.pw    =     0.285714285
+
+dem.damping_tang_fac.pp   =     0.5
+dem.damping_tang_fac.pw   =     0.5
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+
+mfix.regions = full-domain
+
+regions.full-domain.lo = 0.000  0.000  0.000
+regions.full-domain.hi = 1.000  4.000  4.000
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+
+ic.regions = full-domain
+
+
+# Background IC covering the full domain with gas.
+#---------------------------------------------------------------------//
+ic.full-domain.fluid.volfrac   = 1.0
+ic.full-domain.fluid.density   = 1.0
+ic.full-domain.fluid.pressure  = 0.0
+ic.full-domain.fluid.velocity  = 0.0  0.0  0.0
+
+
+# Boundary conditions
+#---------------------------------------------------------------------//
+bc.delp     = 1000.
+bc.delp_dir =    0
+
+mfix.stop_for_unused_inputs = true

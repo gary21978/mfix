@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "rtl2"
+version = "0.1.0"
+description = ""
+authors = ["Mark Meredith <mark.meredith@netl.doe.gov>"]
+
+[tool.poetry.dependencies]
+python = "^3.6.14"
+bokeh = "^2"
+ninja = "^1"
+matplotlib = "^3"
+
+[tool.poetry.dev-dependencies]
+black = "^21.7b0"
+pylint = "^2"
+pytest-cov = "^2"
+pytest-mypy = "^0"
+
+[tool.black]
+skip-string-normalization = true
+line-length = 100
+
+[tool.mypy]
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+warn_return_any = true
+warn_unused_configs = true
+# check_untyped_defs = true
+disallow_incomplete_defs = true
+# disallow_untyped_calls = true
+# disallow_untyped_defs = true
+no_implicit_optional = true
+
+[[tool.mypy.overrides]]
+module = [
+    "bokeh",
+    "bokeh.models",
+    "bokeh.plotting",
+    "bokeh.resources",
+    "matplotlib",
+    "matplotlib.pyplot",
+    "numpy"
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra --junit-xml=report.xml --cov=. --mypy --rootdir=tools/Python"
+testpaths = [
+    "tools/Python/tests",
+]
+
+[tool.pylint.master]
+disable = [
+    "attribute-defined-outside-init",
+    "bare-except",
+    "consider-using-f-string",
+    "consider-using-with",
+    "duplicate-code",
+    "import-error",
+    "invalid-name",
+    "missing-docstring",
+    "no-member",
+    "protected-access",
+    "too-many-arguments",
+    "too-many-branches",
+    "too-many-instance-attributes",
+    "too-many-lines",
+    "too-many-locals",
+    "too-many-public-methods",
+    "too-many-statements",
+    "unspecified-encoding"
+]
+jobs=0
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

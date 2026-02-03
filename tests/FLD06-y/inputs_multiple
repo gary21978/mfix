@@ -1,0 +1,135 @@
+
+#_______________________________________________________________________
+# Solver settings
+
+#amrex.fpe_trap_invalid = 1
+
+#! Fluid solver
+#!-----------------------------------------------------------//
+
+#mfix.cfl      = 0.4
+mfix.fixed_dt = 3.e-6
+mfix.overstep_end_time = 1
+
+mfix.initial_iterations = 2
+mfix.max_step = 100
+
+mfix.gravity = 0.0  0.0  0.0
+
+mfix.verbose = 1
+mac_proj.verbose   = 1
+nodal_proj.verbose = 0
+
+mac_proj.mg_rtol = 1e-12
+nodal_proj.mg_rtol = 1e-12
+
+amr.blocking_factor = 8
+
+#_______________________________________________________________________
+# Geometry / grids / tiles
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+geometry.coord_sys    =  0                       # 0: Cartesian
+geometry.is_periodic  =  1       0       1       # Periodicity x y z (0/1)
+geometry.prob_lo      = -0.005  -0.015  -0.02    # Lo corner coordinates
+geometry.prob_hi      =  0.005   0.025   0.02    # Hi corner coordinates
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell =  16  64  64
+
+#! Grids
+#!-----------------------------------------------------------//
+# Maximum allowable size of each fluid subdomain in the problem domain;
+
+# Fluid
+amr.max_grid_size_x =   32
+amr.max_grid_size_y =   32
+amr.max_grid_size_z = 1024
+
+#! Tiles
+#!-----------------------------------------------------------//
+
+# Fluid: Maximum tile size within each grid
+fabarray.mfiter_tile_size = 1024 1024 1024
+
+#_______________________________________________________________________
+# IO / Checkpointing
+
+mfix.par_ascii_int  = -1
+mfix.par_ascii_file ="vis"
+
+mfix.plot_int       = 100
+mfix.plot_file      ="FLD06"
+
+mfix.check_int      = -1
+mfix.check_file     ="chk"
+
+mfix.plt_p_g = 1
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 0.0
+
+#_______________________________________________________________________
+# DEM model settings
+#
+dem.solve = None
+
+#_______________________________________________________________________
+# EB geometry
+
+mfix.geometry = "cylinder"
+
+cylinder.internal_flow = false
+
+cylinder.radius =  0.004
+cylinder.height = -1.0
+
+cylinder.direction = 0
+cylinder.center    = 0.0  0.0  0.0 
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+mfix.regions = full-domain  inflow  outflow
+
+regions.full-domain.lo = -0.005 -0.015  -0.02
+regions.full-domain.hi =  0.005  0.025   0.02 
+                                           
+regions.inflow.lo      = -0.005 -0.015  -0.02
+regions.inflow.hi      =  0.005 -0.015   0.02 
+                                           
+regions.outflow.lo     = -0.005  0.025  -0.02 
+regions.outflow.hi     =  0.005  0.025   0.02
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+ic.regions = full-domain
+
+ic.full-domain.fluid.volfrac   = 1.0
+ic.full-domain.fluid.velocity  = 0.0  0.0  0.0
+ic.full-domain.fluid.density   = 1.0
+
+
+#_______________________________________________________________________
+# Boundary Conditions
+#
+bc.regions = inflow  outflow
+
+bc.inflow = mi
+bc.inflow.fluid.volfrac  =  1.0
+bc.inflow.fluid.velocity =  0.0  10.0  0.0 
+bc.inflow.fluid.density  =  1.0
+
+bc.outflow = po
+bc.outflow.fluid.pressure =  0.0
+
+mfix.stop_for_unused_inputs = true

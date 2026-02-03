@@ -1,0 +1,20 @@
+CEXE_headers += mfix_utils.H
+CEXE_headers += mfix_utils_harmonic_avg_K.H
+
+CEXE_headers += mfix_indexes_aux.H
+CEXE_headers += mfix_random.H
+CEXE_headers += mfix_reporter.H
+CEXE_headers += mfix_run_on.H
+CEXE_headers += mfix_solvers.H
+CEXE_headers += mfix_compute_cell_grads.H
+CEXE_headers += mfix_versions.H
+CEXE_headers += mfix_least_squares_K.H
+
+CEXE_headers += mfix_filcc.H
+CEXE_sources += mfix_filcc.cpp
+
+CEXE_headers += mfix_mf_helpers.H
+CEXE_sources += mfix_mf_helpers.cpp
+
+CEXE_headers += mfix_calc_cell.H
+CEXE_sources += mfix_calc_cell.cpp

@@ -1,0 +1,9 @@
+CEXE_headers += mfix_actual_rhs.H
+CEXE_sources += mfix_calc_particles_within_cells.cpp
+CEXE_headers += mfix_chem_data_structs.H
+CEXE_headers += mfix_chem_memory_handler.H
+CEXE_headers += mfix_chem_memory_structs.H
+CEXE_sources += mfix_cmi.cpp
+CEXE_headers += mfix_cmi.H
+CEXE_headers += mfix_integrator.H
+CEXE_headers += mfix_material_interface.H

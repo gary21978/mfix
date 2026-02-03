@@ -1,0 +1,9 @@
+CEXE_headers += mfix_init_fluid.H
+CEXE_sources += mfix_init_fluid.cpp
+
+CEXE_headers += mfix_restart.H
+
+CEXE_sources += mfix_init.cpp
+CEXE_sources += mfix_init_redistribution.cpp
+CEXE_sources += mfix_set_gp0.cpp
+CEXE_sources += mfix_restart.cpp

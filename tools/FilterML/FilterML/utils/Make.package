@@ -1,0 +1,9 @@
+CEXE_headers += fml_reporter.H
+
+CEXE_sources += fml_pc_deposition.cpp
+
+CEXE_headers += fml_diffusion.H
+CEXE_sources += fml_diffusion.cpp
+
+CEXE_headers += fml_plotfile.H
+CEXE_sources += fml_plotfile.cpp

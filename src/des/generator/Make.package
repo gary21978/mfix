@@ -1,0 +1,9 @@
+CEXE_headers += mfix_pc_hex_close_pack_K.H
+CEXE_headers += mfix_pc_n-cube_per_fill_K.H
+CEXE_headers += mfix_pc_random_fill_dem_K.H
+CEXE_headers += mfix_pc_random_fill_pic_K.H
+
+CEXE_headers += mfix_pc_generator.H
+CEXE_sources += mfix_pc_generator.cpp
+
+CEXE_sources += mfix_pc_init.cpp

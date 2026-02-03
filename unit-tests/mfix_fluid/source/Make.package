@@ -1,0 +1,16 @@
+CEXE_sources += main.cpp
+
+CEXE_headers += test_fluid_incompressible.H
+CEXE_sources += test_fluid_incompressible.cpp
+
+CEXE_headers += test_fluid_molecular_viscosity.H
+CEXE_sources += test_fluid_molecular_viscosity.cpp
+
+CEXE_headers += test_fluid_suspension_viscosity.H
+CEXE_sources += test_fluid_suspension_viscosity.cpp
+
+CEXE_headers += test_fluid_eddy_viscosity.H
+CEXE_sources += test_fluid_eddy_viscosity.cpp
+
+CEXE_headers += test_fluid_porous_media.H
+CEXE_sources += test_fluid_porous_media.cpp

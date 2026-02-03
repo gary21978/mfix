@@ -1,0 +1,3 @@
+CEXE_sources += mfix_pc_usr.cpp
+CEXE_sources += mfix_usr_drag.cpp
+CEXE_headers += mfix_usr_reactions_rates_K.H

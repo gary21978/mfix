@@ -1,0 +1,11 @@
+CEXE_headers += mfix_des_txfr_coeff.H
+
+CEXE_headers += mfix_des_drag_K.H
+CEXE_headers += mfix_des_added_mass_coeff_K.H
+CEXE_headers += mfix_des_conv_coeff_K.H
+
+CEXE_sources += mfix_coupling.cpp
+CEXE_headers += mfix_coupling.H
+
+CEXE_sources += mfix_calc_transfer_coeffs.cpp
+CEXE_sources += mfix_txfr_to_particle.cpp

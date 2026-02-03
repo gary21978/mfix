@@ -1,0 +1,204 @@
+# Calculate adiabatic flame temperature to test chemistry integrators
+#
+# Smith, J. M., et al. Introduction to Chemical Engineering Thermodynamics.
+# 8th ed., McGraw-Hill Education, 2018. [Example 4.7; p. 152]
+#
+# What is the maximum temperature that can be reached by the combustion
+# of methane with 20% excess air? Both the methane and the air enter
+# the burner at 25°C.
+#
+#  +-----+--------------+-------------+
+#  |     |  Initial     |   Final     |
+#  +-----+--------------+-------------+
+#  | CH4 |  0.046290939 | 0.          |
+#  | O2  |  0.222196505 | 0.037032751 |
+#  | CO2 |  0.          | 0.127300081 |
+#  | H2O |  0.          | 0.104154612 |
+#  | N2  |  0.731512556 | 0.731512556 |
+#  +-----+--------------+-------------+
+#  | Tf  |  298. K      |  2066. K    |
+#  +-----+--------------+-------------+
+#
+# The thermochemical data in MFIX-Exa is different from that used
+# by Smith and Van Ness. So the match may not be exact.
+#
+#
+#_______________________________________________________________________
+# Additional test flags
+#
+amrex.fpe_trap_invalid = 0  # Only enable for debug builds
+
+test.verbose=1
+
+#_______________________________________________________________________
+# Time marching
+#
+mfix.fixed_dt =  1.0e-3
+
+#mfix.max_step = 25
+mfix.stop_time = 2.5e-2
+
+#_______________________________________________________________________
+# Chemistry solver settings:
+#
+chemistry.integrator = ForwardEuler
+
+#chemistry.integrator = StiffSolver::ForwardEuler
+#chemistry.integrator = StiffSolver::BackwardEuler
+#chemistry.integrator = StiffSolver::VODE
+
+
+#_______________________________________________________________________
+# Domain and geometry:
+#
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell = 1  1  1
+
+amr.blocking_factor = 1
+
+# Maximum allowable size of each subdomain in the problem domain;
+#    this is used to decompose the domain for parallel calculations.
+amr.max_grid_size_x = 16
+amr.max_grid_size_y = 16
+amr.max_grid_size_z = 16
+
+# Maximum tile size within each grid
+fabarray.mfiter_tile_size = 16 16 16
+
+# Maximum particle tile size
+particles.tile_size = 16 16 16
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level  = 0
+
+# Geometry
+geometry.coord_sys   =  0               # 0: Cartesian
+geometry.is_periodic =  1     1     1   # Is periodic in each direction?
+geometry.prob_lo     =  0.0   0.0   0.0 # lo corner of physical domain
+geometry.prob_hi     =  0.1   0.1   0.1 # hi corner of physical domain
+
+mfix.advect_density  = 1
+mfix.advect_enthalpy = 1
+mfix.solve_species   = 1
+
+#mfix.constraint = IdealGasOpenSystem
+mfix.constraint = IdealGasClosedSystem
+#mfix.constraint = IncompressibleFluid
+
+
+#_______________________________________________________________________
+# Species model settings
+#
+species.solve  =  CH4  O2  CO2  H2O  N2
+
+species.diffusivity = constant
+species.diffusivity.constant = 2.31e-5
+
+species.specific_heat = NASA7-Poly
+
+species.ignore_discontinuities = 0
+
+# Methane
+species.CH4.molecular_weight  = 16.04276e-3
+species.CH4.specific_heat.NASA7.a0 =  5.14911468E+00    1.65326226E+00
+species.CH4.specific_heat.NASA7.a1 = -1.36622009E-02    1.00263099E-02
+species.CH4.specific_heat.NASA7.a2 =  4.91453921E-05   -3.31661238E-06
+species.CH4.specific_heat.NASA7.a3 = -4.84246767E-08    5.36483138E-10
+species.CH4.specific_heat.NASA7.a4 =  1.66603441E-11   -3.14696758E-14
+species.CH4.specific_heat.NASA7.a5 = -1.02465983E+04   -1.00095936E+04
+
+# Oxygen
+species.O2.molecular_weight = 31.99880e-3
+species.O2.specific_heat.NASA7.a0 =  3.78245636E+00    3.66096065E+00
+species.O2.specific_heat.NASA7.a1 = -2.99673416E-03    6.56365811E-04
+species.O2.specific_heat.NASA7.a2 =  9.84730201E-06   -1.41149627E-07
+species.O2.specific_heat.NASA7.a3 = -9.68129509E-09    2.05797935E-11
+species.O2.specific_heat.NASA7.a4 =  3.24372837E-12   -1.29913436E-15
+species.O2.specific_heat.NASA7.a5 = -1.06394356E+03   -1.21597718E+03
+
+# Carbon dioxide
+species.CO2.molecular_weight = 44.00980e-3
+species.CO2.specific_heat.NASA7.a0 =  2.35681300E+00    4.63651110E+00
+species.CO2.specific_heat.NASA7.a1 =  8.98412990E-03    2.74145690E-03
+species.CO2.specific_heat.NASA7.a2 = -7.12206320E-06   -9.95897590E-07
+species.CO2.specific_heat.NASA7.a3 =  2.45730080E-09    1.60386660E-10
+species.CO2.specific_heat.NASA7.a4 = -1.42885480E-13   -9.16198570E-15
+species.CO2.specific_heat.NASA7.a5 = -4.83719710E+04   -4.90249040E+04
+
+# Water vapor
+species.H2O.molecular_weight = 18.01528e-3
+species.H2O.specific_heat.NASA7.a0 =  0.41986352E+01    0.26770389E+01
+species.H2O.specific_heat.NASA7.a1 = -0.20364017E-02    0.29731816E-02
+species.H2O.specific_heat.NASA7.a2 =  0.65203416E-05   -0.77376889E-06
+species.H2O.specific_heat.NASA7.a3 = -0.54879269E-08    0.94433514E-10
+species.H2O.specific_heat.NASA7.a4 =  0.17719680E-11   -0.42689991E-14
+species.H2O.specific_heat.NASA7.a5 = -0.30293726E+05   -0.29885894E+05
+
+# Nitrogen
+species.N2.molecular_weight = 28.01340e-3
+species.N2.specific_heat.NASA7.a0 =  3.53100528E+00    2.95257637E+00
+species.N2.specific_heat.NASA7.a1 = -1.23660988E-04    1.39690040E-03
+species.N2.specific_heat.NASA7.a2 = -5.02999433E-07   -4.92631603E-07
+species.N2.specific_heat.NASA7.a3 =  2.43530612E-09    7.86010195E-11
+species.N2.specific_heat.NASA7.a4 = -1.40881235E-12   -4.60755204E-15
+species.N2.specific_heat.NASA7.a5 = -1.04697628E+03   -9.23948688E+02
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular = constant
+fluid.viscosity.molecular.constant = 1.0e-5
+
+fluid.thermodynamic_pressure = 101000.
+
+fluid.specific_heat      = mixture
+
+fluid.thermal_conductivity          = constant
+fluid.thermal_conductivity.constant = 0.024
+
+fluid.species = CH4 O2 CO2 H2O N2
+
+#_______________________________________________________________________
+# Solids properties
+#
+solids.types = None
+
+
+#_______________________________________________________________________
+# DEM model settings
+#
+dem.solve = None
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+mfix.regions = full-domain
+
+regions.full-domain.lo = 0.0  0.0  0.0
+regions.full-domain.hi = 0.1  0.1  0.1
+
+
+#_______________________________________________________________________
+## CHEMICAL reactions
+#
+chemistry.solve = AdiabaticFlame
+
+chemistry.AdiabaticFlame.reaction = CH4(g) + 2O2(g) --> CO2(g) + 2H2O(g)
+
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+ic.regions = full-domain
+
+ic.full-domain.fluid.volfrac     =  1.0
+ic.full-domain.fluid.velocity    =  0.0  0.0  0.0
+ic.full-domain.fluid.temperature =  298.15
+
+ic.full-domain.fluid.species.CH4 = 0.046290939
+ic.full-domain.fluid.species.O2  = 0.222196505
+ic.full-domain.fluid.species.N2  = 0.731512556

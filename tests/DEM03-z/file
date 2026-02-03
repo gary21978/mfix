@@ -1,0 +1,19 @@
+Z: 
+
+                                  zlength)
+      SUBROUTINE WRITE_DES_Out(lTime, max_pip, des_pos_new, des_vel_new, zlength)
+         CALL RK4_V4(RK4_DT_LAST, gz1, gy1, gz2, gy2, zlength)
+
+Y:
+                                  ylength)
+      SUBROUTINE WRITE_DES_Out(lTime, max_pip, des_pos_new, des_vel_new, ylength)
+      real(c_real), intent(in   ) :: ltime, ylength
+         CALL RK4_V4(RK4_DT_LAST, gY1, gX1, gY2, gX2, ylength)
+
+X:
+                                  xlength)
+      subroutine write_des_out(lTime, max_pip, des_pos_new, des_vel_new, xlength)
+      real(c_real), intent(in   ) :: ltime, xlength
+         CALL rk4_V4(rk4_DT_LAST, gx1, gz1, gx2, gz2, xlength)
+manda:~/GitCode/MFIX_EXA/mfix/tests/DEM03-z (develop) > 
+

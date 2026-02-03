@@ -1,0 +1,435 @@
+#_______________________________________________________________________
+# Solver settings
+
+amrex.fpe_trap_invalid = 1
+
+
+#! Fluid solver
+#!-----------------------------------------------------------//
+
+mfix.cfl = 0.5
+
+mfix.max_step = 10
+
+mfix.particle_init_type = "Auto"
+
+mfix.gravity = -9.81  0.0  0.0
+
+mfix.advect_enthalpy = 1
+mfix.solve_species   = 1
+mfix.constraint = IncompressibleFluid
+
+amr.blocking_factor = 2
+
+mac_proj.verbose = 1
+diffusion.verbose = 0
+
+nodal_proj.verbose = 1
+nodal_proj.bottom_verbose = 0
+
+
+#_______________________________________________________________________
+# Geometry / grids / tiles
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level = 0
+
+geometry.coord_sys   = 0                       # 0: Cartesian
+geometry.is_periodic = 0       0       0       # Is periodic in each direction?
+geometry.prob_lo     = 0.      0.      0.      # lo corner of physical domain
+geometry.prob_hi     = 0.008   0.002   0.002   # hi corner of physical domain
+
+# Number of grid cells in each direction at the coarsest level
+amr.n_cell =  40   10   10
+
+#! Grids
+#!-----------------------------------------------------------//
+# Maximum allowable size of each fluid subdomain in the problem domain;
+
+# Fluid
+amr.max_grid_size_x = 40
+amr.max_grid_size_y = 10
+amr.max_grid_size_z = 10
+
+# Particles (not with KDTree)
+#particles.max_grid_size_x =   32
+#particles.max_grid_size_y =   32
+#particles.max_grid_size_z =   32
+
+#! Tiles
+#!-----------------------------------------------------------//
+
+# Fluid: Maximum tile size within each grid
+fabarray.mfiter_tile_size = 1024 1024 1024
+
+# Particles: Maximum particle tile size
+particles.tile_size = 1024 1024 1024
+
+
+#! EB settings
+#!-----------------------------------------------------------//
+
+# Level-set refinement and padding
+mfix.levelset__refinement    = 4 # levelset resolution
+
+mfix.write_eb_surface = false  # Needed to output eb-surfaces
+
+
+#_______________________________________________________________________
+# Load balancing
+#
+mfix.regrid_int = 0
+
+mfix.load_balance = SingleGrid
+#mfix.load_balance = DualGrid
+
+#mfix.load_balance.strategy = KnapSack # default
+#mfix.load_balance.strategy = SFC
+
+#mfix.load_balance.weighting = ParticleRunTime # default
+#mfix.load_balance.weighting = ParticleCount
+
+
+#_______________________________________________________________________
+# IO / Checkpointing
+
+mfix.par_ascii_int  = -1
+mfix.par_ascii_file ="vis"
+
+mfix.plot_int       = -1
+mfix.plot_file      ="plt"
+
+mfix.check_int      = -1
+mfix.check_file     ="chk"
+
+mfix.plt_regtest = 0
+
+
+#! Restart from checkpoint
+#!-----------------------------------------------------------//
+mfix.drag.model = "BVK2"
+
+
+#_______________________________________________________________________
+# Species model settings
+#
+species.solve  =  H2O  He
+
+species.diffusivity = constant
+species.diffusivity.constant = 2.4e-5
+
+species.specific_heat = constant
+species.H2O.specific_heat.constant = 918
+species.He.specific_heat.constant  = 918
+
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 2.0e-5
+
+fluid.specific_heat = mixture
+
+fluid.thermal_conductivity          = constant
+fluid.thermal_conductivity.constant = 0.024
+
+fluid.species  =  H2O  He
+
+
+fluid.reference_temperature = 0.
+
+#_______________________________________________________________________
+# Solids properties
+#
+solids.types = solid0
+
+solids.specific_heat = constant
+solids.specific_heat.constant = 385 ## Copper
+
+solids.reference_temperature = 0.
+
+#_______________________________________________________________________
+# DEM model settings
+#
+dem.solve = solid0
+
+dem.friction_coeff.pp     =     0.0
+dem.friction_coeff.pw     =     0.0
+
+dem.spring_const.pp       =    10.0
+dem.spring_const.pw       =    10.0
+
+dem.restitution_coeff.solid0.solid0  =     0.8
+dem.restitution_coeff.solid0.wall    =     1.0
+
+dem.spring_tang_fac.pp    =     0.285714285
+dem.spring_tang_fac.pw    =     0.285714285
+
+dem.damping_tang_fac.pp   =     0.5
+dem.damping_tang_fac.pw   =     0.5
+
+
+#_______________________________________________________________________
+# EB geometry
+#
+mfix.geometry = "cylinder"
+
+cylinder.internal_flow = true
+
+cylinder.radius = 0.0009
+cylinder.height = -1.0
+
+cylinder.direction = 0
+cylinder.center    = 0.004   0.001   0.001
+
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+mfix.regions = full  inflow  outflow  half  lower upper  slice1  slice2  pointP
+
+regions.full.lo = 0.0000  0.0000  0.0000
+regions.full.hi = 0.0080  0.0020  0.0020
+
+regions.inflow.lo = 0.0000  0.0000  0.0000
+regions.inflow.hi = 0.0000  0.0020  0.0020
+
+regions.outflow.lo = 0.0080  0.0000  0.0000
+regions.outflow.hi = 0.0080  0.0020  0.0020
+
+regions.half.lo = 0.0000  0.0000  0.0000
+regions.half.hi = 0.0080  0.0010  0.0020
+
+regions.lower.lo = 0.0000  0.0000  0.0000
+regions.lower.hi = 0.0020  0.0020  0.0020
+
+regions.upper.lo = 0.0060  0.0000  0.0000
+regions.upper.hi = 0.0080  0.0020  0.0020
+
+regions.slice1.lo = 0.0050  0.0000  0.0000
+regions.slice1.hi = 0.0050  0.0020  0.0020
+
+regions.slice2.lo = 0.0015  0.0000  0.0000
+regions.slice2.hi = 0.0015  0.0020  0.0020
+
+regions.pointP.lo = 0.005  0.0012  0.0007
+regions.pointP.hi = 0.005  0.0012  0.0007
+
+
+#_______________________________________________________________________
+# Monitors
+#
+mfix.monitors = fm1 fm2 fm3 fm4 fm5 fm6 fm7 fm8 fm9 fm10 fm11 pm1 pm2 pm3 pm4 pm5 pm6
+
+mfix.monitors.fm1 = Eulerian::PointRegion::Value
+mfix.monitors.fm1.region = pointP
+mfix.monitors.fm1.variables =  ep_g  p_g  ro_g  h_g
+mfix.monitors.fm1.plot_file = fm1
+mfix.monitors.fm1.plot_int = 2
+mfix.monitors.fm1.output.format = scientific
+mfix.monitors.fm1.output.openmode = "trunc"
+
+mfix.monitors.fm2 = Eulerian::AreaRegion::StandardDeviation
+mfix.monitors.fm2.region = slice1
+mfix.monitors.fm2.variables =  ro_g  vel_g  T_g
+mfix.monitors.fm2.plot_file = fm2
+mfix.monitors.fm2.plot_int = 1
+mfix.monitors.fm2.output.format = scientific
+mfix.monitors.fm2.output.openmode = "trunc"
+
+mfix.monitors.fm3 = Eulerian::AreaRegion::Min
+mfix.monitors.fm3.region =  slice2
+mfix.monitors.fm3.variables =  ep_g  ro_g  T_g  txfr_beta  txfr_gamma
+mfix.monitors.fm3.plot_file = fm3
+mfix.monitors.fm3.plot_int = 2
+mfix.monitors.fm3.output.setw = 12
+mfix.monitors.fm3.output.setfill = " "
+mfix.monitors.fm3.output.format = scientific
+mfix.monitors.fm3.output.openmode = "trunc"
+
+mfix.monitors.fm4 = Eulerian::VolumeRegion::Max
+mfix.monitors.fm4.region =  lower
+mfix.monitors.fm4.variables =  ep_g  vel_g_x  gp_x  T_g  X_gk
+mfix.monitors.fm4.plot_file = fm4
+mfix.monitors.fm4.plot_per_approx = 1.e-5
+mfix.monitors.fm4.output.setw = 12
+mfix.monitors.fm4.output.setfill = " "
+mfix.monitors.fm4.output.setprecision = 6
+mfix.monitors.fm4.output.format = fixed
+mfix.monitors.fm4.output.openmode = "trunc"
+
+mfix.monitors.fm5 = Eulerian::VolumeRegion::Average
+mfix.monitors.fm5.region =  full
+mfix.monitors.fm5.variables =  ep_g  ro_g  p_g  vel_g  T_g  X_gk
+mfix.monitors.fm5.plot_file = fm5
+mfix.monitors.fm5.plot_per_approx = 1.e-5
+mfix.monitors.fm5.output.setw = 12
+mfix.monitors.fm5.output.setfill = " "
+mfix.monitors.fm5.output.setprecision = 6
+mfix.monitors.fm5.output.format = fixed
+mfix.monitors.fm5.output.openmode = "trunc"
+
+mfix.monitors.fm6 = Eulerian::SurfaceIntegral::Area
+mfix.monitors.fm6.region = slice1
+mfix.monitors.fm6.variables = "None"
+mfix.monitors.fm6.plot_file = fm6
+mfix.monitors.fm6.plot_int = 10
+mfix.monitors.fm6.output.format = scientific
+mfix.monitors.fm6.output.openmode = "trunc"
+
+mfix.monitors.fm7 = Eulerian::SurfaceIntegral::FlowRate
+mfix.monitors.fm7.region = slice1
+mfix.monitors.fm7.variables = vort  txfr_velocity
+mfix.monitors.fm7.plot_file = fm7
+mfix.monitors.fm7.plot_int = 2
+mfix.monitors.fm7.output.format = scientific
+mfix.monitors.fm7.output.openmode = "trunc"
+
+mfix.monitors.fm8 = Eulerian::SurfaceIntegral::MassWeightedAverage
+mfix.monitors.fm8.region = slice2
+mfix.monitors.fm8.variables = vel_g  T_g  txfr_velocity
+mfix.monitors.fm8.plot_file = fm8
+mfix.monitors.fm8.plot_int = 2
+mfix.monitors.fm8.output.setw = 8
+mfix.monitors.fm8.output.setfill = " "
+mfix.monitors.fm8.output.setprecision = 3
+mfix.monitors.fm8.output.format = scientific
+mfix.monitors.fm8.output.openmode = "trunc"
+
+mfix.monitors.fm9 = Eulerian::VolumeIntegral::Volume
+mfix.monitors.fm9.region = full
+mfix.monitors.fm9.variables = "None"
+mfix.monitors.fm9.plot_file = fm9
+mfix.monitors.fm9.plot_int = 10
+mfix.monitors.fm9.output.setw = 10
+mfix.monitors.fm9.output.setfill = " "
+mfix.monitors.fm9.output.setprecision = 4
+mfix.monitors.fm9.output.format = scientific
+mfix.monitors.fm9.output.openmode = "trunc"
+
+mfix.monitors.fm10 = Eulerian::VolumeIntegral::VolumeWeightedAverage
+mfix.monitors.fm10.region = upper
+mfix.monitors.fm10.variables = p_g  vel_g  gp  T_g  X_gk_H2O
+mfix.monitors.fm10.plot_file = fm10
+mfix.monitors.fm10.plot_int = 2
+mfix.monitors.fm10.output.setw = 10
+mfix.monitors.fm10.output.setfill = " "
+mfix.monitors.fm10.output.setprecision = 2
+mfix.monitors.fm10.output.format = scientific
+mfix.monitors.fm10.output.openmode = "trunc"
+
+mfix.monitors.fm11 = Eulerian::VolumeIntegral::MassWeightedAverage
+mfix.monitors.fm11.region = upper
+mfix.monitors.fm11.variables = p_g  vel_g  gp  T_g  X_gk_H2O
+mfix.monitors.fm11.plot_file = fm11
+mfix.monitors.fm11.plot_int = 2
+mfix.monitors.fm11.output.setw = 10
+mfix.monitors.fm11.output.setfill = " "
+mfix.monitors.fm11.output.setprecision = 2
+mfix.monitors.fm11.output.format = scientific
+mfix.monitors.fm11.output.openmode = "trunc"
+
+mfix.monitors.pm1 = Lagrangian::GeneralProperty::Max
+mfix.monitors.pm1.region = lower
+mfix.monitors.pm1.variables = velocity  drag  T_s
+mfix.monitors.pm1.plot_file = pm1
+mfix.monitors.pm1.plot_per_approx = 5.e-6
+mfix.monitors.pm1.output.setw = 10
+mfix.monitors.pm1.output.format = scientific
+mfix.monitors.pm1.output.openmode = "trunc"
+
+mfix.monitors.pm2 = Lagrangian::GeneralProperty::Sum
+mfix.monitors.pm2.region = lower
+mfix.monitors.pm2.variables = velocity  drag  T_s
+mfix.monitors.pm2.plot_file = pm2
+mfix.monitors.pm2.plot_per_approx = 5.e-6
+mfix.monitors.pm2.output.setw = 10
+mfix.monitors.pm2.output.format = scientific
+mfix.monitors.pm2.output.openmode = "trunc"
+
+mfix.monitors.pm3 = Lagrangian::AveragedProperty::StandardDeviation
+mfix.monitors.pm3.region = half
+mfix.monitors.pm3.variables = position  mass  vel_x  omega_y  T_s
+mfix.monitors.pm3.plot_file = pm3
+mfix.monitors.pm3.plot_int = 2
+mfix.monitors.pm3.output.setw = 10
+mfix.monitors.pm3.output.setfill = " "
+mfix.monitors.pm3.output.setprecision = 7
+mfix.monitors.pm3.output.format = fixed
+mfix.monitors.pm3.output.openmode = "trunc"
+
+mfix.monitors.pm4 = Lagrangian::AveragedProperty::VolumeWeightedAverage
+mfix.monitors.pm4.region = full
+mfix.monitors.pm4.variables = position  radius  dragcoeff  omega
+mfix.monitors.pm4.plot_file = pm4
+mfix.monitors.pm4.plot_int = 2
+mfix.monitors.pm4.output.format = scientific
+mfix.monitors.pm4.output.openmode = "trunc"
+
+mfix.monitors.pm5 = Lagrangian::FlowRate::FlowRate
+mfix.monitors.pm5.region = full
+mfix.monitors.pm5.plane = slice2
+mfix.monitors.pm5.variables = velocity  omega  drag
+mfix.monitors.pm5.plot_file = pm5
+mfix.monitors.pm5.plot_int = 2
+mfix.monitors.pm5.output.format = scientific
+mfix.monitors.pm5.output.openmode = "trunc"
+
+mfix.monitors.pm6 = Lagrangian::FlowRate::MassWeightedFlowRate
+mfix.monitors.pm6.region = full
+mfix.monitors.pm6.plane = slice1
+mfix.monitors.pm6.variables = velocity  omega  drag
+mfix.monitors.pm6.plot_file = pm6
+mfix.monitors.pm6.plot_int = 2
+mfix.monitors.pm6.output.format = scientific
+mfix.monitors.pm6.output.openmode = "trunc"
+
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+ic.regions = full
+
+ic.full.fluid.volfrac     = 0.833
+ic.full.fluid.pressure    = 0.0
+ic.full.fluid.density     = 1.0
+ic.full.fluid.velocity    = 0.015  0.00  0.00
+ic.full.fluid.temperature = 300
+ic.full.fluid.species.H2O = 0.25
+ic.full.fluid.species.He  = 0.75
+
+ic.full.solids  = solid0
+ic.full.packing = pseudo_random
+
+ic.full.solid0.temperature = 400
+
+ic.full.solid0.volfrac  =  0.167
+ic.full.solid0.velocity =  -0.0005  0.0002  -0.0001
+
+ic.full.solid0.diameter = constant
+ic.full.solid0.density  = constant
+
+ic.full.solid0.diameter.constant =  100.0e-6
+ic.full.solid0.density.constant  = 2000.0
+
+
+#_______________________________________________________________________
+# Boundary Conditions
+#
+bc.regions = inflow  outflow
+
+bc.inflow = mi
+bc.inflow.fluid.volfrac     =  1.0
+bc.inflow.fluid.velocity    =  0.015  0.0  0.0
+bc.inflow.fluid.density     =  1.0
+bc.inflow.fluid.temperature =  300
+bc.inflow.fluid.species.H2O =  0.25
+bc.inflow.fluid.species.He  =  0.75
+
+bc.outflow = po
+bc.outflow.fluid.pressure =  0.0
+
+mfix.stop_for_unused_inputs = false

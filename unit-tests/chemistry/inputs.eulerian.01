@@ -1,0 +1,120 @@
+amrex.fpe_trap_invalid = 1
+amrex.the_arena_init_size = 1073741824
+
+test.verbose = 0
+test.abs_tol = 1.e-3
+test.print_L1norm = 0
+
+mfix.stop_time = 1.0
+#mfix.stop_time = 0.001
+#mfix.max_step = 1
+mfix.fixed_dt = 0.0002
+
+# Number of grid cells in each direction at the coarsest level
+#amr.n_cell = 32 32 32
+amr.n_cell = 1  1  1
+
+amr.blocking_factor = 1
+
+# Maximum allowable size of each subdomain in the problem domain;
+#    this is used to decompose the domain for parallel calculations.
+amr.max_grid_size_x = 16
+amr.max_grid_size_y = 16
+amr.max_grid_size_z = 16
+
+# Maximum tile size within each grid
+fabarray.mfiter_tile_size = 16 16 16
+
+# Maximum particle tile size
+particles.tile_size = 16 16 16
+
+# Maximum level in hierarchy (for now must be 0, i.e., one level in total)
+amr.max_level  = 0
+
+# Geometry
+geometry.coord_sys   = 0                      # 0: Cartesian
+geometry.is_periodic = 1       1      1       # Is periodic in each direction?
+geometry.prob_lo     = 0.      0.     0.      # lo corner of physical domain
+geometry.prob_hi     = 0.0025  0.0025 0.0025  # hi corner of physical domain
+
+mfix.advect_density  = 1
+mfix.advect_enthalpy = 1
+mfix.solve_species   = 1
+#mfix.constraint = IdealGasOpenSystem
+mfix.constraint = IdealGasClosedSystem
+#mfix.constraint = IncompressibleFluid
+
+
+#_______________________________________________________________________
+# Species model settings
+#
+species.solve  =  A  B
+
+species.diffusivity = constant
+species.diffusivity.constant  = 0
+
+species.specific_heat = constant
+species.A.specific_heat.constant  = 1000
+species.B.specific_heat.constant  = 1000
+
+species.A.enthalpy_of_formation = 0.
+species.B.enthalpy_of_formation = 0.
+
+species.A.molecular_weight = 82.0573660809597e-3
+species.B.molecular_weight = 82.0573660809597e-3
+
+#_______________________________________________________________________
+# Fluid model settings
+#
+fluid.solve = fluid
+
+fluid.viscosity.molecular          = constant
+fluid.viscosity.molecular.constant = 2.0e-5
+
+fluid.reference_temperature = 298.15
+fluid.thermodynamic_pressure = 60795
+
+fluid.specific_heat = mixture
+
+fluid.thermal_conductivity = constant
+fluid.thermal_conductivity.constant = 0.024
+
+fluid.species  =  A  B
+
+#_______________________________________________________________________
+# Solids properties
+#
+solids.types = None
+
+#_______________________________________________________________________
+# DEM model settings
+#
+dem.solve = None
+
+#_______________________________________________________________________
+# Regions for defining ICs and BCs
+#
+mfix.regions = full-domain
+
+regions.full-domain.lo = 0.0000  0.0000  0.0000
+regions.full-domain.hi = 0.0025  0.0025  0.0025
+
+
+#_______________________________________________________________________
+## CHEMICAL reactions
+#
+chemistry.solve  = AtoB
+
+chemistry.AtoB.reaction = A(g)-->B(g)
+
+
+#_______________________________________________________________________
+# Initial Conditions
+#
+ic.regions = full-domain
+
+ic.full-domain.fluid.volfrac     =  1.0
+ic.full-domain.fluid.velocity    =  0.0  0.0  0.0
+ic.full-domain.fluid.temperature =  300
+ic.full-domain.fluid.species.A   =  0.5
+ic.full-domain.fluid.species.B   =  0.5

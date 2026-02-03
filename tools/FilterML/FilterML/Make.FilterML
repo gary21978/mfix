@@ -1,0 +1,25 @@
+include $(AMREX_HOME)/Tools/GNUMake/Make.defs
+
+Bdirs := FilterML
+Bdirs += FilterML/leveldata
+Bdirs += FilterML/utils
+
+Bpack += $(foreach dir, $(Bdirs), $(TOP)/$(dir)/Make.package)
+Blocs += $(foreach dir, $(Bdirs), $(TOP)/$(dir))
+
+include $(Bpack)
+
+INCLUDE_LOCATIONS += $(Blocs)
+VPATH_LOCATIONS   += $(Blocs)
+
+Pdirs := Base LinearSolvers/MLMG Boundary Particle
+
+Ppack += $(foreach dir, $(Pdirs), $(AMREX_HOME)/Src/$(dir)/Make.package)
+
+include $(Ppack)
+
+all: $(executable)
+	@echo SUCCESS
+
+include $(AMREX_HOME)/Tools/GNUMake/Make.rules
+

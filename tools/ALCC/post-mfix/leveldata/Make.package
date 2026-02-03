@@ -1,0 +1,10 @@
+CEXE_headers += pm_derived.H
+CEXE_headers += pm_fluid.H
+CEXE_headers += pm_particles.H
+CEXE_headers += pm_solids.H
+
+
+CEXE_sources += pm_derived.cpp
+CEXE_sources += pm_fluid.cpp
+CEXE_sources += pm_particles.cpp
+CEXE_sources += pm_solids.cpp

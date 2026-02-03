@@ -1,0 +1,6 @@
+namespace {
+
+const char* HydroGitHash() { return "@HYDRO_GIT_HASH@"; }
+[[maybe_unused]] const char* CsgEbGitHash() { return "@CSGEB_GIT_HASH@"; }
+
+}
