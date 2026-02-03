@@ -1,0 +1,122 @@
+name: 🔎 CodeQL
+
+on:
+  workflow_call:
+  schedule:
+    - cron: "27 3 * * 0"
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.head_ref }}-codeql
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ python, cpp ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clean Out
+        run: |
+          .github/workflows/dependencies/ubuntu_free_disk_space.sh
+
+      - name: Install Packages (C++)
+        if: ${{ matrix.language == 'cpp' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake openmpi-bin libopenmpi-dev libhdf5-openmpi-dev
+
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade wheel
+          python -m pip install --upgrade cmake
+          export CMAKE="$HOME/.local/bin/cmake" && echo "CMAKE=$CMAKE" >> $GITHUB_ENV
+          python -m pip install --upgrade numpy
+          python -m pip install --upgrade mpi4py
+          python -m pip install --upgrade pytest
+          python -m pip cache purge
+
+          .github/workflows/dependencies/dependencies_ccache.sh
+          sudo ln -s /usr/local/bin/ccache /usr/local/bin/g++
+
+      - name: Set Up Cache
+        if: ${{ matrix.language == 'cpp' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-${{ github.workflow }}-${{ github.job }}-git-${{ github.sha }}
+          restore-keys: |
+               ccache-${{ github.workflow }}-${{ github.job }}-git-
+
+      - name: Configure (C++)
+        if: ${{ matrix.language == 'cpp' }}
+        run: |
+          $CMAKE -S . -B build -DAMReX_SPACEDIM="1;2;3" \
+                 -DCMAKE_CXX_COMPILER="/usr/local/bin/g++"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: +security-and-quality
+
+      - name: Build (py)
+        uses: github/codeql-action/autobuild@v3
+        if: ${{ matrix.language == 'python' }}
+
+      - name: Build (C++)
+        if: ${{ matrix.language == 'cpp' }}
+        run: |
+          export CCACHE_COMPRESS=1
+          export CCACHE_COMPRESSLEVEL=10
+          export CCACHE_MAXSIZE=400M
+          ccache -z
+
+          $CMAKE --build build -j 4
+
+          ccache -s
+          du -hs ~/.cache/ccache
+
+          # Make sure CodeQL has something to do
+          touch src/pyAMReX.cpp
+          export CCACHE_DISABLE=1
+          $CMAKE --build build -j 4
+
+          # claim back disk space
+          rm -rf build
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+          upload: False
+          output: sarif-results
+
+      - name: filter-sarif
+        uses: advanced-security/filter-sarif@v1
+        with:
+          patterns: |
+            -build/_deps/*/*
+            -build/_deps/*/*/*
+            -build/_deps/*/*/*/*
+            -build/_deps/*/*/*/*/*
+            -build/_deps/*/*/*/*/*/*
+            -build/_deps/*/*/*/*/*/*/*
+            -build/_deps/*/*/*/*/*/*/*/*
+          input: sarif-results/${{ matrix.language }}.sarif
+          output: sarif-results/${{ matrix.language }}.sarif
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sarif-results/${{ matrix.language }}.sarif

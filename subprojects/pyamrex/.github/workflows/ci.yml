@@ -1,0 +1,49 @@
+name: 👑 CI
+
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.head_ref }}-ci
+  cancel-in-progress: true
+
+jobs:
+  stubs:
+    # Pushes should only run on mainline branch "development"
+    name: 🔄 Update Stub Files
+    secrets:
+      PYAMREX_PUSH_TOKEN: ${{ secrets.PYAMREX_PUSH_TOKEN }}
+    uses: ./.github/workflows/stubs.yml
+
+  ubuntu:
+    name: 🐧 Ubuntu
+    needs: [stubs]
+    uses: ./.github/workflows/ubuntu.yml
+
+  intel:
+    name: 🐧 Intel
+    needs: [ubuntu]
+    uses: ./.github/workflows/intel.yml
+
+  hip:
+    name: 🐧 HIP
+    needs: [ubuntu]
+    uses: ./.github/workflows/hip.yml
+
+  macos:
+    name: 🍏 macOS
+    needs: [ubuntu]
+    uses: ./.github/workflows/macos.yml
+
+  windows:
+    name: 🪟 Windows
+    needs: [ubuntu]
+    uses: ./.github/workflows/windows.yml
+
+  codeql:
+    name: 🔎 CodeQL
+    needs: [ubuntu]
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    uses: ./.github/workflows/codeql.yml
