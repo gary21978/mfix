@@ -186,9 +186,6 @@ namespace amrex
             if (rank == AllProcs || rank == my_proc) {
                 int my_proc_global = ParallelDescriptor::MyProc();
                 std::string proc_file_name = file_name + "." + std::to_string(my_proc_global);
-#ifdef AMREX_USE_OMP
-                proc_file_name += "." + std::to_string(omp_get_thread_num());
-#endif
                 ofs.open(proc_file_name, std::ios_base::app);
                 if (!ofs.is_open()) {
                     amrex::Error("Could not open file for appending in amrex::Print()");

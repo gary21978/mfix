@@ -4,9 +4,6 @@
 #include <AMReX_EBFArrayBox.H>
 #include <AMReX_MultiFabUtil.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #ifdef BL_NO_FORT
 namespace {
@@ -46,8 +43,6 @@ EBFluxRegister::defineExtra (const BoxArray& fba, const DistributionMapping& fdm
     BoxArray cfba = fba;
     cfba.coarsen(m_ratio);
     m_cfp_inside_mask.define(cfba, fdm, 1, 0, MFInfo(),DefaultFabFactory<IArrayBox>());
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(m_cfp_inside_mask); mfi.isValid(); ++mfi)
     {
         const Box& ifabbox = mfi.fabbox();
@@ -308,8 +303,6 @@ EBFluxRegister::Reflux (MultiFab& crse_state, const amrex::MultiFab& crse_vfrac,
 
     if (!m_cfp_mask.empty())
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(m_cfpatch); mfi.isValid(); ++mfi)
         {
             Array4<Real> const& cfa = m_cfpatch.array(mfi);
@@ -339,8 +332,6 @@ EBFluxRegister::Reflux (MultiFab& crse_state, const amrex::MultiFab& crse_vfrac,
 
         MFItInfo info;
         if (Gpu::notInLaunchRegion()) { info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(m_crse_data, info); mfi.isValid(); ++mfi)
         {
             if (m_crse_fab_flag[mfi.LocalIndex()] == fine_cell) // fab has crse/fine cells
@@ -390,8 +381,6 @@ EBFluxRegister::Reflux (MultiFab& crse_state, const amrex::MultiFab& crse_vfrac,
 
         Dim3 ratio = m_ratio.dim3();
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(cf,TilingIfNotGPU()); mfi.isValid(); ++mfi) {
             const Box& cbx = mfi.tilebox();
             const Box& fbx = amrex::refine(cbx, m_ratio);

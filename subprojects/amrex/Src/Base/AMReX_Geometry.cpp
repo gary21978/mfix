@@ -237,8 +237,6 @@ Geometry::GetVolume (MultiFab& vol) const
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(vol,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 CoordSys::SetVolume(vol[mfi], mfi.growntilebox());
@@ -282,8 +280,6 @@ Geometry::GetDLogA (MultiFab&       dloga,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dloga,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             CoordSys::SetDLogA(dloga[mfi], mfi.growntilebox(), dir);
@@ -341,8 +337,6 @@ Geometry::GetFaceArea (MultiFab&       area,
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(area,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 CoordSys::SetFaceArea(area[mfi],mfi.growntilebox(),dir);

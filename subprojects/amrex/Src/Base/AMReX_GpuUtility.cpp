@@ -1,9 +1,6 @@
 
 #include <AMReX_GpuUtility.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex { // NOLINT(modernize-concat-nested-namespaces)
 
@@ -39,8 +36,6 @@ StreamIter::init () noexcept // NOLINT
     amrex::ignore_unused(m_sync);
 #if defined(AMREX_USE_GPU)
     if (m_sync) {
-#ifdef AMREX_USE_OMP
-#endif
         Gpu::streamSynchronize();
     }
     Gpu::Device::setStreamIndex(m_i);

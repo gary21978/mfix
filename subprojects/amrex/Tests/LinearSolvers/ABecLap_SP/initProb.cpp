@@ -11,8 +11,6 @@ MyTest::initProbPoisson ()
     {
         const auto prob_lo = geom[ilev].ProbLoArray();
         const auto dx      = geom[ilev].CellSizeArray();
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -40,8 +38,6 @@ MyTest::initProbABecLaplacian ()
         const Box& domain  = geom[ilev].Domain();
         auto a = ascalar;
         auto b = bscalar;
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();

@@ -1071,8 +1071,6 @@ FillPatchIterator::Initialize (int  boxGrow,
                                                         NComp,
                                                         desc.interp(SComp));
 
-#ifdef AMREX_USE_OMP
-#endif
                 for (MFIter mfi(m_fabs); mfi.isValid(); ++mfi)
                 {
                     fph->fill(m_fabs[mfi],DComp,mfi.index());
@@ -1655,8 +1653,6 @@ AmrLevel::derive (const std::string& name, Real time, int ngrow)
 
         if (rec->derFuncFab() != nullptr)
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(*mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 const Box& bx = mfi.growntilebox(ngrow);
@@ -1671,8 +1667,6 @@ AmrLevel::derive (const std::string& name, Real time, int ngrow)
         }
         else
         {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*mf,true); mfi.isValid(); ++mfi)
         {
             int         grid_no = mfi.index();
@@ -1768,8 +1762,6 @@ AmrLevel::derive (const std::string& name, Real time, MultiFab& mf, int dcomp)
 
         if (rec->derFuncFab() != nullptr)
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 const Box& bx = mfi.growntilebox();
@@ -1786,8 +1778,6 @@ AmrLevel::derive (const std::string& name, Real time, MultiFab& mf, int dcomp)
         }
         else
         {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mf,true); mfi.isValid(); ++mfi)
         {
             int         idx     = mfi.index();

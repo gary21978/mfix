@@ -6,9 +6,6 @@
 #include <algorithm>
 #include <fstream>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 using namespace amrex;
 

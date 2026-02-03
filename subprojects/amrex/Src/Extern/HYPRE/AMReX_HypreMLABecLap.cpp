@@ -1144,8 +1144,6 @@ void HypreMLABecLap::commBCoefs (int flev, Array<MultiFab const*,AMREX_SPACEDIM>
         rrface[idim] = 1;
         int const nfaces = AMREX_D_TERM(rrface[0],*rrface[1],*rrface[2]);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(offset_bcoefs[idim]); mfi.isValid(); ++mfi) {
             auto const& offset_a = offset_bcoefs[idim].array(mfi);
             auto const& fmask_a = m_fine_masks[clev].const_array(mfi);

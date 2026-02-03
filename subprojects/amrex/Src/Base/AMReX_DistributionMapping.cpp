@@ -1703,8 +1703,6 @@ gather_weights (const MultiFab& weight)
 {
 #ifdef AMREX_USE_MPI
     LayoutData<Real> costld(weight.boxArray(),weight.DistributionMap());
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(weight); mfi.isValid(); ++mfi) {
         costld[mfi] = weight[mfi].sum<RunOn::Device>(mfi.validbox(),0);
     }

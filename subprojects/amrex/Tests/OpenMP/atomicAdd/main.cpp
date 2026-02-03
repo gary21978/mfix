@@ -8,8 +8,6 @@ using namespace amrex;
 void test_atomicAdd (MultiFab& mf)
 {
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox tmp;
         for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
@@ -24,8 +22,6 @@ void test_atomicAdd (MultiFab& mf)
 void test_lockAdd (MultiFab& mf)
 {
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox tmp;
         for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {

@@ -58,8 +58,6 @@ ChkptFileLevel::define_fine_chkpt_file (ChkptFile const& chkpt_file,
     MFInfo mf_info;
     m_cellflag.define(m_grids, m_dmap, 1, ng, mf_info);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(m_mgf); mfi.isValid(); ++mfi)
     {
         auto& gfab = m_mgf[mfi];
@@ -85,8 +83,6 @@ void
 ChkptFileLevel::finalize_cell_flags ()
 {
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         EBCellFlagFab cellflagtmp;
         for (MFIter mfi(m_mgf); mfi.isValid(); ++mfi)

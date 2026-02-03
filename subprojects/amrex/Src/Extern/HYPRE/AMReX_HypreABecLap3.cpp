@@ -168,8 +168,6 @@ HypreABecLap3::prepareSolver ()
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(cell_id); mfi.isValid(); ++mfi)
             {
                 const Box& bx = mfi.validbox();
@@ -229,8 +227,6 @@ HypreABecLap3::prepareSolver ()
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(cell_id,TilingIfNotGPU()); mfi.isValid(); ++mfi) {
                 const Box& tbx = mfi.growntilebox();
                 const Box& vbx = mfi.validbox();
@@ -282,8 +278,6 @@ HypreABecLap3::prepareSolver ()
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(cell_id,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.tilebox();
@@ -557,8 +551,6 @@ HypreABecLap3::loadVectors (MultiFab& soln, const MultiFab& rhs)
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(rhs_diag,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 const Box& reg = mfi.validbox();
@@ -626,8 +618,6 @@ HypreABecLap3::loadVectors (MultiFab& soln, const MultiFab& rhs)
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(rhs_diag,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 const Box& tbx = mfi.tilebox();

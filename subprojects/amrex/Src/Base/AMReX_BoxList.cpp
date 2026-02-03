@@ -5,9 +5,6 @@
 #include <AMReX_BLProfiler.H>
 #include <AMReX_ParallelDescriptor.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <algorithm>
 #include <iostream>
@@ -352,32 +349,11 @@ BoxList::complementIn (const Box& b, const BoxArray& ba)
         bl_mesh.maxSize(block_size);
         const int N = static_cast<int>(bl_mesh.size());
 
-#ifdef AMREX_USE_OMP
-        bool start_omp_parallel = !omp_in_parallel();
-        const int nthreads = omp_get_max_threads();
-#else
         bool start_omp_parallel = false;
-#endif
 
         if (start_omp_parallel)
         {
-#ifdef AMREX_USE_OMP
-            Vector<BoxList> bl_priv(nthreads, BoxList(mytyp));
-            {
-                BoxList bl_tmp(mytyp);
-                auto& vbox = bl_priv[omp_get_thread_num()].m_lbox;
-                for (int i = 0; i < N; ++i)
-                {
-                    ba.complementIn(bl_tmp, bl_mesh.m_lbox[i]);
-                    vbox.insert(std::end(vbox), std::begin(bl_tmp), std::end(bl_tmp));
-                }
-            }
-            for (auto& bl : bl_priv) {
-                m_lbox.insert(std::end(m_lbox), std::begin(bl), std::end(bl));
-            }
-#else
             amrex::Abort("BoxList::complementIn: how did this happen");
-#endif
         }
         else
         {
@@ -448,35 +424,11 @@ BoxList::parallelComplementIn (const Box& b, BoxArray const& ba)
 
         Vector<Box> local_boxes;
 
-#ifdef AMREX_USE_OMP
-        bool start_omp_parallel = !omp_in_parallel();
-        const int nthreads = omp_get_max_threads();
-#else
         bool start_omp_parallel = false;
-#endif
 
         if (start_omp_parallel)
         {
-#ifdef AMREX_USE_OMP
-            Vector<BoxList> bl_priv(nthreads, BoxList(mytyp));
-            int ntot = 0;
-            {
-                BoxList bl_tmp(mytyp);
-                auto& vbox = bl_priv[omp_get_thread_num()].m_lbox;
-                for (int i = ilo; i <= ihi; ++i)
-                {
-                    ba.complementIn(bl_tmp, bl_mesh.m_lbox[i]);
-                    vbox.insert(std::end(vbox), std::begin(bl_tmp), std::end(bl_tmp));
-                }
-                ntot += static_cast<int>(bl_tmp.size());
-            }
-            local_boxes.reserve(ntot);
-            for (auto& bl : bl_priv) {
-                local_boxes.insert(std::end(local_boxes), std::begin(bl), std::end(bl));
-            }
-#else
             amrex::Abort("BoxList::complementIn: how did this happen");
-#endif
         }
         else
         {

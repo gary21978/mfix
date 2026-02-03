@@ -324,8 +324,6 @@ setLOBndryConds (const Geometry& geom, const Real* dx,
 {
     const Box& domain = geom.Domain();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(bcloc); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.validbox();
@@ -616,8 +614,6 @@ MLCellLinOpT<MF>::setLevelBC (int amrlev, const MF* a_levelbcdata, const MF* rob
         const Box& domain = this->m_geom[amrlev][0].Domain();
         MFItInfo mfi_info;
         if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*(this->m_robin_bcval[amrlev]), mfi_info); mfi.isValid(); ++mfi) {
             Box const& vbx = mfi.validbox();
             Array4<RT const> const& ra = robinbc_a->const_array(mfi);
@@ -806,8 +802,6 @@ MLCellLinOpT<MF>::applyBC (int amrlev, int mglev, MF& in, BCMode bc_mode, StateM
 #endif
     if (cross || tensorop)
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(in, mfi_info); mfi.isValid(); ++mfi)
         {
             const Box& vbx   = mfi.validbox();
@@ -865,8 +859,6 @@ MLCellLinOpT<MF>::applyBC (int amrlev, int mglev, MF& in, BCMode bc_mode, StateM
         amrex::Abort("amrex_mllinop_apply_bc not available when BL_NO_FORT=TRUE");
 #else
         if constexpr (std::is_same_v<Real,RT>) {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(in, mfi_info); mfi.isValid(); ++mfi)
             {
                 const Box& vbx   = mfi.validbox();
@@ -991,8 +983,6 @@ MLCellLinOpT<MF>::interpolation (int amrlev, int fmglev, MF& fine, const MF& crs
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(fine,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx    = mfi.tilebox();
@@ -1047,8 +1037,6 @@ MLCellLinOpT<MF>::interpAssign (int amrlev, int fmglev, MF& fine, MF& crse) cons
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fine, mfi_info); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -1116,8 +1104,6 @@ MLCellLinOpT<MF>::interpolationAmr (int famrlev, MF& fine, const MF& crse,
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fine, mfi_info); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -1305,8 +1291,6 @@ MLCellLinOpT<MF>::reflux (int crse_amrlev, MF& res, const MF& crse_sol, const MF
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         Array<FAB,AMREX_SPACEDIM> flux;
         Array<FAB*,AMREX_SPACEDIM> pflux {{ AMREX_D_DECL(flux.data(), flux.data()+1, flux.data()+2) }};
@@ -1325,8 +1309,6 @@ MLCellLinOpT<MF>::reflux (int crse_amrlev, MF& res, const MF& crse_sol, const MF
             }
         }
 
-#ifdef AMREX_USE_OMP
-#endif
 
         for (MFIter mfi(fine_sol, mfi_info);  mfi.isValid(); ++mfi)
         {
@@ -1361,8 +1343,6 @@ MLCellLinOpT<MF>::compFlux (int amrlev, const Array<MF*,AMREX_SPACEDIM>& fluxes,
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         Array<FAB,AMREX_SPACEDIM> flux;
         Array<FAB*,AMREX_SPACEDIM> pflux {{ AMREX_D_DECL(flux.data(), flux.data()+1, flux.data()+2) }};
@@ -1406,8 +1386,6 @@ MLCellLinOpT<MF>::compGrad (int amrlev, const Array<MF*,AMREX_SPACEDIM>& grad,
     AMREX_D_TERM(const RT dxi = static_cast<RT>(this->m_geom[amrlev][mglev].InvCellSize(0));,
                  const RT dyi = static_cast<RT>(this->m_geom[amrlev][mglev].InvCellSize(1));,
                  const RT dzi = static_cast<RT>(this->m_geom[amrlev][mglev].InvCellSize(2)););
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(sol, TilingIfNotGPU());  mfi.isValid(); ++mfi)
     {
         AMREX_D_TERM(const Box& xbx = mfi.nodaltilebox(0);,
@@ -1455,8 +1433,6 @@ MLCellLinOpT<MF>::applyMetricTerm (int amrlev, int mglev, MF& rhs) const
     const RT dx = static_cast<RT>(geom.CellSize(0));
     const RT probxlo = static_cast<RT>(geom.ProbLo(0));
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(rhs,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& tbx = mfi.tilebox();
@@ -1510,8 +1486,6 @@ MLCellLinOpT<MF>::unapplyMetricTerm (int amrlev, int mglev, MF& rhs) const
     const RT dx = static_cast<RT>(geom.CellSize(0));
     const RT probxlo = static_cast<RT>(geom.ProbLo(0));
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(rhs,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& tbx = mfi.tilebox();
@@ -1832,8 +1806,6 @@ MLCellLinOpT<MF>::prepareForSolve ()
             } else
 #endif
             {
-#ifdef AMREX_USE_OMP
-#endif
                 for (MFIter mfi(foo, MFItInfo{}.SetDynamic(true)); mfi.isValid(); ++mfi)
                 {
                     const Box& vbx = mfi.validbox();
@@ -2065,8 +2037,6 @@ MLCellLinOpT<MF>::normInf (int amrlev, MF const& mf, bool local) const -> RT
                 } else
 #endif
                 {
-#ifdef AMREX_USE_OMP
-#endif
                     for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
                         Box const& bx = mfi.tilebox();
                         auto const& fab = mf.const_array(mfi);
@@ -2098,8 +2068,6 @@ MLCellLinOpT<MF>::normInf (int amrlev, MF const& mf, bool local) const -> RT
                 } else
 #endif
                 {
-#ifdef AMREX_USE_OMP
-#endif
                     for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
                         Box const& bx = mfi.tilebox();
                         auto const& fab = mf.const_array(mfi);

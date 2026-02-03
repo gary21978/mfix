@@ -5,9 +5,6 @@
 #include <AMReX_AmrParGDB.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <algorithm>
 #include <utility>
@@ -167,8 +164,6 @@ AmrCore::printGridSummary (std::ostream& os, int min_lev, int max_lev) const noe
 
             int imax = std::numeric_limits<int>::lowest();
             int imin = std::numeric_limits<int>::lowest();
-#ifdef AMREX_USE_OMP
-#endif
             {
                 Long vmin_this = std::numeric_limits<Long>::max();
                 Long vmax_this = -1;
@@ -176,8 +171,6 @@ AmrCore::printGridSummary (std::ostream& os, int min_lev, int max_lev) const noe
                 int smin_this = std::numeric_limits<int>::max();
                 int imax_this = std::numeric_limits<int>::lowest();
                 int imin_this = std::numeric_limits<int>::lowest();
-#ifdef AMREX_USE_OMP
-#endif
                 for (int k = 0; k < numgrid; k++) {
                     const Box& bx = bs[k];
                     Long v = bx.volume();
@@ -194,8 +187,6 @@ AmrCore::printGridSummary (std::ostream& os, int min_lev, int max_lev) const noe
                         imax_this = k;
                     }
                 }
-#ifdef AMREX_USE_OMP
-#endif
                 {
                     if (vmin_this < vmin || (vmin_this == vmin && smin_this < smin)) {
                         vmin = vmin_this; // NOLINT

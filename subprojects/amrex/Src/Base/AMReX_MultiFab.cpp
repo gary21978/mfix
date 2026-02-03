@@ -65,8 +65,6 @@ MultiFab::Dot (const MultiFab& x, int xcomp, int numcomp, int nghost, bool local
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.growntilebox(nghost);
@@ -121,8 +119,6 @@ MultiFab::Dot (const iMultiFab& mask,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.growntilebox(nghost);
@@ -349,8 +345,6 @@ MultiFab::AddProduct (MultiFab& dst,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -539,8 +533,6 @@ MultiFab::define (const BoxArray&            bxs,
 void
 MultiFab::initVal ()
 {
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(*this); mfi.isValid(); ++mfi)
     {
         FArrayBox& fab = (*this)[mfi];
@@ -580,8 +572,6 @@ MultiFab::is_finite (int scomp, int ncomp, const IntVect& ngrow, bool local) con
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid() && !r; ++mfi)
         {
             Box const& bx = mfi.growntilebox(ngrow);
@@ -634,8 +624,6 @@ MultiFab::contains_nan (int scomp, int ncomp, const IntVect& ngrow, bool local) 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid() && !r; ++mfi)
         {
             Box const& bx = mfi.growntilebox(ngrow);
@@ -682,8 +670,6 @@ MultiFab::contains_inf (int scomp, int ncomp, IntVect const& ngrow, bool local) 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid() && !r; ++mfi)
         {
             Box const& bx = mfi.growntilebox(ngrow);
@@ -744,8 +730,6 @@ MultiFab::min (int comp, int nghost, bool local) const
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
                 if (flags[mfi].getType(bx) != FabType::covered) {
@@ -775,8 +759,6 @@ MultiFab::min (int comp, int nghost, bool local) const
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
                 auto const& a = this->const_array(mfi);
@@ -819,8 +801,6 @@ MultiFab::min (const Box& region, int comp, int nghost, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
             if (bx.ok()) {
@@ -870,8 +850,6 @@ MultiFab::max (int comp, int nghost, bool local) const
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
                 if (flags[mfi].getType(bx) != FabType::covered) {
@@ -901,8 +879,6 @@ MultiFab::max (int comp, int nghost, bool local) const
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
                 auto const& a = this->const_array(mfi);
@@ -943,8 +919,6 @@ MultiFab::max (const Box& region, int comp, int nghost, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
             if (bx.ok()) {
@@ -1090,8 +1064,6 @@ MultiFab::norm2 (int comp, const Periodicity& period) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.tilebox();
@@ -1165,8 +1137,6 @@ MultiFab::norm1 (int comp, int ngrow, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(ngrow);
             auto const& a = this->const_array(mfi);
@@ -1228,8 +1198,6 @@ MultiFab::sum (Box const& region, int comp, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.tilebox() & region;
             if (bx.ok()) {
@@ -1280,8 +1248,6 @@ MultiFab::sum_unique (int comp,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.tilebox();
@@ -1331,8 +1297,6 @@ MultiFab::sum_unique (Box const& region, int comp, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.tilebox() & region;
@@ -1469,8 +1433,6 @@ MultiFab::OverlapMask (const Periodicity& period) const
 
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu, tags);
-#ifdef AMREX_USE_OMP
-#endif
     {
         std::vector< std::pair<int,Box> > isects;
 

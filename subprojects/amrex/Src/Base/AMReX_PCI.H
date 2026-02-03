@@ -12,8 +12,6 @@ FabArray<FAB>::PC_local_cpu (const CPC& thecpc, FabArray<FAB> const& src,
 
     if (is_thread_safe)
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N_locs; ++i)
         {
             const CopyComTag& tag = (*thecpc.m_LocTags)[i];
@@ -44,8 +42,6 @@ FabArray<FAB>::PC_local_cpu (const CPC& thecpc, FabArray<FAB> const& src,
             }
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this); mfi.isValid(); ++mfi)
         {
             const auto& tags = loc_copy_tags[mfi];

@@ -224,8 +224,6 @@ void transposeCtoF (T const* pi, T* po, int nx, int ny, int nz)
     std::size_t nxy = std::size_t(nx) * ny;
     std::size_t nyz = std::size_t(ny) * nz;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (int j = 0; j < ny; ++j) {
         for (int k0 = 0; k0 < nz; k0 += bz) {
             for (int i0 = 0; i0 < nx; i0 += bx) {

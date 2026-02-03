@@ -7,9 +7,6 @@
 #include <AMReX_MultiFabUtil.H>
 #include <AMReX_MultiFabUtil_C.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 using namespace amrex;
 
@@ -167,8 +164,6 @@ extern "C" {
     {
         const auto n = static_cast<int>(leaves->size());
 
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < n; ++i) {
             a_copy[i] = (*leaves)[i];
         }
@@ -196,8 +191,6 @@ extern "C" {
             fgeom.GetVolume(fvolume, lba, ldm, 0);
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(lmf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();

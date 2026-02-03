@@ -31,8 +31,6 @@ MyTest::initProb ()
 
     amrex::ignore_unused(cid,ndhi);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(rhs[0], TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& gbx = mfi.tilebox(IntVect(1),IntVect(1));

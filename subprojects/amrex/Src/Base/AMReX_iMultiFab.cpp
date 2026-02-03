@@ -302,8 +302,6 @@ iMultiFab::min (int comp, int nghost, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost);
             auto const& a = this->const_array(mfi);
@@ -345,8 +343,6 @@ iMultiFab::min (const Box& region, int comp, int nghost, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
             auto const& a = this->const_array(mfi);
@@ -384,8 +380,6 @@ iMultiFab::max (int comp, int nghost, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost);
             auto const& a = this->const_array(mfi);
@@ -427,8 +421,6 @@ iMultiFab::max (const Box& region, int comp, int nghost, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
             auto const& a = this->const_array(mfi);
@@ -468,8 +460,6 @@ iMultiFab::sum (int comp, int nghost, bool local) const
     else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -508,8 +498,6 @@ iMultiFab::sum (Box const& region, int comp, bool local) const
     else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox() & region;
@@ -707,8 +695,6 @@ OwnerMask (FabArrayBase const& mf, const Periodicity& period, const IntVect& ngr
 
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu, tags);
-#ifdef AMREX_USE_OMP
-#endif
     {
         std::vector< std::pair<int,Box> > isects;
 

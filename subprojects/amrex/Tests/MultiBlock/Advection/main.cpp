@@ -44,8 +44,6 @@ class AdvectionAmrCore : public AmrCore {
     void InitData() {
         const auto problo = Geom(0).ProbLoArray();
         const auto dx = Geom(0).CellSizeArray();
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mass,TilingIfNotGPU()); mfi.isValid(); ++mfi) {
             Array4<Real> m = mass.array(mfi);
             Array4<Real> vx = mass.array(mfi, 1);
@@ -74,8 +72,6 @@ class AdvectionAmrCore : public AmrCore {
         const double dx = Geom(0).CellSize(0);
         const double a_dt_over_dx = dt / dx * (velocity == dir);
         if (dir == Direction::x) {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(mass); mfi.isValid(); ++mfi) {
                 Array4<Real> m = mass.array(mfi);
                 Array4<Real> next = mass_next.array(mfi);
@@ -87,8 +83,6 @@ class AdvectionAmrCore : public AmrCore {
             std::swap(mass, mass_next);
         }
         else if (dir == Direction::y) {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(mass); mfi.isValid(); ++mfi) {
                 Array4<Real> m = mass.array(mfi);
                 Array4<Real> next = mass_next.array(mfi);

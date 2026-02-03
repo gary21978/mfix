@@ -290,8 +290,6 @@ AmrLevelAdv::advance (Real time,
       Umac[i].define(ba, dmap, 1, iteration);
     }
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox fluxfab[AMREX_SPACEDIM], velfab[AMREX_SPACEDIM];
         FArrayBox* flux[AMREX_SPACEDIM];
@@ -416,8 +414,6 @@ AmrLevelAdv::estTimeStep (Real)
         pred_time += 0.5_rt*parent->dtLevel(level);
     }
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox uface[BL_SPACEDIM];
 
@@ -703,8 +699,6 @@ AmrLevelAdv::errorEst (TagBoxArray& tags,
     const char   tagval = TagBox::SET;
     // const char clearval = TagBox::CLEAR;
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         for (MFIter mfi(phi,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

@@ -59,8 +59,6 @@ MLEBABecLap::Fapply (int amrlev, int mglev, MultiFab& out, const MultiFab& in) c
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(out, mfi_info); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -209,8 +207,6 @@ MLEBABecLap::Fsmooth (int amrlev, int mglev, MultiFab& sol, const MultiFab& rhs,
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(sol, mfi_info);  mfi.isValid(); ++mfi)
     {
         const auto& m0 = mm0.array(mfi);

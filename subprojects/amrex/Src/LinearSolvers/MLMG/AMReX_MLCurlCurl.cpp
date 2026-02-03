@@ -138,8 +138,6 @@ void MLCurlCurl::setDirichletNodesToZero (int amrlev, int mglev, MF& a_mf) const
         auto const idxtype = mf.ixType();
         Box const domain = amrex::convert(m_geom[amrlev][mglev].Domain(), idxtype);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mf,mfi_info); mfi.isValid(); ++mfi) {
             auto const& vbx = mfi.validbox();
             auto const& a = mf.array(mfi);
@@ -267,8 +265,6 @@ MLCurlCurl::apply (int amrlev, int mglev, MF& out, MF& in, BCMode /*bc_mode*/,
     auto coord = m_coord;
     amrex::ignore_unused(coord);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(out[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         Box const& xbx = mfi.tilebox(out[0].ixType().toIntVect());
@@ -519,8 +515,6 @@ void MLCurlCurl::compresid (int amrlev, int mglev, MF& resid, MF const& b) const
 {
     auto dinfo = getDirichletInfo(amrlev,mglev);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(resid[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         Box const& xbx = mfi.tilebox(resid[0].ixType().toIntVect());
@@ -798,8 +792,6 @@ void MLCurlCurl::applyPhysBC (int amrlev, int mglev, MultiFab& mf, CurlCurlState
     mfi_info.DisableDeviceSync();
 #endif
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(mf,mfi_info); mfi.isValid(); ++mfi) {
         auto const& vbx = mfi.validbox();
         auto const& a = mf.array(mfi);
@@ -854,8 +846,6 @@ void MLCurlCurl::applyPhysBC (int amrlev, int mglev, MultiFab& mf, CurlCurlState
         Vector<Array4BoxOffsetTag<RT>> tags2;
 #endif
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mf,mfi_info); mfi.isValid(); ++mfi) {
             auto const& vbx = mfi.validbox();
             auto const& a = mf.array(mfi);

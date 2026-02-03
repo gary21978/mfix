@@ -88,8 +88,6 @@ CNS::initData ()
     Parm const* lparm = d_parm;
     ProbParm const* lprobparm = d_prob_parm;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(S_new); mfi.isValid(); ++mfi)
     {
         const Box& box = mfi.validbox();
@@ -314,8 +312,6 @@ CNS::errorEst (TagBoxArray& tags, int, int, Real /*time*/, int, int)
 //        const char clearval = TagBox::CLEAR;
         const Real dengrad_threshold = refine_dengrad;
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rho,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -458,8 +454,6 @@ CNS::computeTemp (MultiFab& State, int ng)
     Parm const* lparm = d_parm;
 
     // This will reset Eint and compute Temperature
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(State,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(ng);

@@ -7,9 +7,6 @@
 #include <AMReX_Geometry.H>
 #include <AMReX_YAFluxRegister_K.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex {
 
@@ -166,8 +163,6 @@ YAFluxRegisterT<MF>::define (const BoxArray& fba, const BoxArray& cba,
         const FabArrayBase::CPC& cpc0 = m_crse_flag.getCPC(IntVect(1), foo, IntVect(0), cperiod);
         m_crse_flag.setVal(fine_cell, cpc0, 0, 1);
         auto recv_layout_mask = m_crse_flag.RecvLayoutMask(cpc0);
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(m_crse_flag); mfi.isValid(); ++mfi) {
             if (recv_layout_mask[mfi]) {
                 m_crse_fab_flag[mfi.LocalIndex()] = fine_cell;
@@ -182,56 +177,6 @@ YAFluxRegisterT<MF>::define (const BoxArray& fba, const BoxArray& cba,
     const auto n_cfba = static_cast<int>(cfba.size());
     cfba.uniqify();
 
-#ifdef AMREX_USE_OMP
-
-    const int nthreads = omp_get_max_threads();
-    Vector<BoxList> bl_priv(nthreads, BoxList());
-    Vector<Vector<int> > procmap_priv(nthreads);
-    Vector<Vector<int> > localindex_priv(nthreads);
-    {
-        BoxList bl_tmp;
-        const int tid = omp_get_thread_num();
-        BoxList& bl = bl_priv[tid];
-        Vector<int>& pmp = procmap_priv[tid];
-        Vector<int>& lid = localindex_priv[tid];
-        for (int i = 0; i < n_cfba; ++i)
-        {
-            Box bx = amrex::grow(cfba[i], 1);
-            bx &= cdomain;
-
-            cfba.complementIn(bl_tmp, bx);
-            const auto ntmp = static_cast<int>(bl_tmp.size());
-            bl.join(bl_tmp);
-
-            int proc = fdm[i];
-            for (int j = 0; j < ntmp; ++j) {
-                pmp.push_back(proc);
-            }
-
-            if (proc == myproc) {
-                lid.push_back(ntmp);
-            }
-        }
-    }
-
-    for (auto const& bl : bl_priv) {
-        cfp_bl.join(bl);
-    }
-
-    for (auto const& pmp : procmap_priv) {
-        cfp_procmap.insert(std::end(cfp_procmap), std::begin(pmp), std::end(pmp));
-    }
-
-    for (auto& lid : localindex_priv) {
-        for (int nl : lid) {
-            for (int j = 0; j < nl; ++j) {
-                m_cfp_localindex.push_back(nlocal);
-            }
-            ++nlocal;
-        }
-    }
-
-#else
 
     BoxList bl_tmp;
     for (int i = 0; i < n_cfba; ++i)
@@ -256,7 +201,6 @@ YAFluxRegisterT<MF>::define (const BoxArray& fba, const BoxArray& cba,
         }
     }
 
-#endif
 
     // It's safe even if cfp_bl is empty.
 
@@ -285,8 +229,6 @@ YAFluxRegisterT<MF>::define (const BoxArray& fba, const BoxArray& cba,
 
         const Box& domainbox = m_crse_geom.Domain();
 
-#ifdef AMREX_USE_OMP
-#endif
         {
             std::vector< std::pair<int,Box> > isects;
 
@@ -525,8 +467,6 @@ YAFluxRegisterT<MF>::Reflux (MF& state, int srccomp, int destcomp, int numcomp)
     //
     if (!m_cfp_mask.empty())
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(m_cfpatch); mfi.isValid(); ++mfi)
         {
             const Box& bx = m_cfpatch[mfi].box();

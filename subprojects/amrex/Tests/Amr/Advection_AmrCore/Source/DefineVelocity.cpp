@@ -18,8 +18,6 @@ AmrCoreAdv::DefineVelocityAtLevel (int lev, Real time)
 {
     const auto dx = geom[lev].CellSizeArray();
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         for (MFIter mfi(phi_new[lev],TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

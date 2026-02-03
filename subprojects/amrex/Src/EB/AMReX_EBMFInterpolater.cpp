@@ -50,8 +50,6 @@ EBMFCellConsLinInterp::interp (MultiFab const& crsemf, int ccomp, MultiFab& fine
 #endif
     {
         auto const& fflags = ffact->getMultiEBCellFlagFab();
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(finemf); mfi.isValid(); ++mfi) {
             Box const target_fine_region = amrex::grow(mfi.validbox(),ng) & dest_domain;
             Box const& crse_bx = CoarseBox(target_fine_region, ratio);

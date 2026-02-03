@@ -32,8 +32,6 @@ compute_integrals (MultiFab& intgmf, IntVect nghost)
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(intgmf,mfi_info); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -222,8 +220,6 @@ compute_surface_integrals (MultiFab& sintgmf, IntVect nghost)
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(sintgmf,mfi_info); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);

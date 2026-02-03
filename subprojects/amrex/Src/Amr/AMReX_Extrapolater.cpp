@@ -3,9 +3,6 @@
 #include <AMReX_extrapolater_K.H>
 #include <AMReX_iMultiFab.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex::Extrapolater
 {
@@ -28,8 +25,6 @@ namespace amrex::Extrapolater
 
         // Do the extrap. on successive layers of ghost cells
         for (int layer = 0; layer < ngrow; layer++) {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(mf); mfi.isValid(); ++mfi)
             {
                 const Box& bx        = mfi.validbox();

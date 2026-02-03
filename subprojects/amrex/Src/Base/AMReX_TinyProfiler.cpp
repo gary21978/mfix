@@ -12,9 +12,6 @@
 #include <AMReX_Print.H>
 #include <AMReX_IOFormat.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #ifdef AMREX_USE_CUDA
 #if __has_include(<nvtx3/nvtx3.hpp>)
@@ -39,9 +36,6 @@
 namespace amrex {
 
 std::deque<const TinyProfiler*> TinyProfiler::mem_stack;
-#ifdef AMREX_USE_OMP
-std::vector<TinyProfiler::aligned_deque> TinyProfiler::mem_stack_thread_private;
-#endif
 std::vector<std::map<std::string, MemStat>*> TinyProfiler::all_memstats;
 std::vector<std::string> TinyProfiler::all_memnames;
 
@@ -100,14 +94,10 @@ TinyProfiler::start () noexcept
 
     memory_start();
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         AMREX_ALWAYS_ASSERT_WITH_MESSAGE(stats.empty(), "TinyProfiler cannot be started twice");
     }
 
-#ifdef AMREX_USE_OMP
-#endif
     if (!regionstack.empty()) {
 
 #ifdef AMREX_USE_GPU
@@ -120,11 +110,7 @@ TinyProfiler::start () noexcept
 
         ttstack.emplace_back(t, 0.0, &fname);
         global_depth = static_cast<int>(ttstack.size());
-#ifdef AMREX_USE_OMP
-        in_parallel_region = omp_in_parallel();
-#else
         in_parallel_region = false;
-#endif
 
 #ifdef AMREX_USE_CUDA
         nvtxRangePush(fname.c_str());
@@ -159,8 +145,6 @@ TinyProfiler::stop () noexcept
 
     memory_stop();
 
-#ifdef AMREX_USE_OMP
-#endif
     if (!stats.empty()) {
 
 #ifdef AMREX_USE_GPU
@@ -173,10 +157,6 @@ TinyProfiler::stop () noexcept
 
         AMREX_ALWAYS_ASSERT_WITH_MESSAGE(static_cast<int>(ttstack.size()) == global_depth,
             "TinyProfiler sections must be nested with respect to each other");
-#ifdef AMREX_USE_OMP
-        AMREX_ALWAYS_ASSERT_WITH_MESSAGE(in_parallel_region == omp_in_parallel(),
-            "TinyProfiler sections must be nested with respect to parallel regions");
-#endif
 
         {
             const std::tuple<double,double,std::string*>& tt = ttstack.back();
@@ -231,11 +211,6 @@ TinyProfiler::memory_start () const noexcept
 
     // multiple omp threads may share the same TinyProfiler object so this function must be const
     // it is NOT allowed to double start a section
-#ifdef AMREX_USE_OMP
-    if (omp_in_parallel()) {
-        mem_stack_thread_private[omp_get_thread_num()].deque.push_back(this);
-    } else
-#endif
     {
         mem_stack.push_back(this);
     }
@@ -248,14 +223,6 @@ TinyProfiler::memory_stop () const noexcept
 
     // multiple omp threads may share the same TinyProfiler object so this function must be const
     // it IS allowed to double stop a section
-#ifdef AMREX_USE_OMP
-    if (omp_in_parallel()) {
-        if (!mem_stack_thread_private[omp_get_thread_num()].deque.empty() &&
-            mem_stack_thread_private[omp_get_thread_num()].deque.back() == this) {
-            mem_stack_thread_private[omp_get_thread_num()].deque.pop_back();
-        }
-    } else
-#endif
     {
         if (!mem_stack.empty() && mem_stack.back() == this) {
             mem_stack.pop_back();
@@ -271,13 +238,6 @@ TinyProfiler::memory_alloc (std::size_t nbytes, std::map<std::string, MemStat>& 
     // this function is not thread safe for the same memstats
     // the caller of this function (CArena::alloc) has a mutex
     MemStat* stat = nullptr;
-#ifdef AMREX_USE_OMP
-    if (omp_in_parallel() && !mem_stack_thread_private[omp_get_thread_num()].deque.empty()) {
-        stat = &memstats[
-            mem_stack_thread_private[omp_get_thread_num()].deque.back()->fname
-        ];
-    } else
-#endif
     if (!mem_stack.empty()) {
         stat = &memstats[mem_stack.back()->fname];
     } else {
@@ -343,9 +303,6 @@ TinyProfiler::MemoryInitialize ()
 
     if (!memprof_enabled) { return; }
 
-#ifdef AMREX_USE_OMP
-    mem_stack_thread_private.resize(omp_get_max_threads());
-#endif
 
     t_memory_init = amrex::second();
 

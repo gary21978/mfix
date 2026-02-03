@@ -35,8 +35,6 @@ namespace amrex {
             }
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         for(MFIter mfi(mf); mfi.isValid(); ++ mfi) {
             gshop.fillFab(mf[mfi], geom, RunOn::Gpu, bounding_box);
         }

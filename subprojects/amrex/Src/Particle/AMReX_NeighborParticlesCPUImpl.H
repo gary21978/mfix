@@ -293,8 +293,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
             for (int j = 0; j < num_threads; ++j) {
                 auto& tags = buffer_tag_cache[lev][src_index][j];
                 int num_tags = tags.size();
-#ifdef AMREX_USE_OMP
-#endif
                 for (int i = 0; i < num_tags; ++i) {
                     const NeighborCopyTag& tag = tags[i];
                     const int global_who = this->ParticleDistributionMap(tag.level)[tag.grid];
@@ -384,8 +382,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
             }
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi = this->MakeMFIter(lev); mfi.isValid(); ++mfi) {
             const int grid = mfi.index();
             const int tile = mfi.LocalTileIndex();

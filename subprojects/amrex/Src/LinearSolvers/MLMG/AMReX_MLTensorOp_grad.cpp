@@ -30,8 +30,6 @@ MLTensorOp::compFlux (int amrlev, const Array<MultiFab*,AMREX_SPACEDIM>& fluxes,
     Array<MultiFab,AMREX_SPACEDIM> const& kapmf = m_kappa[amrlev][mglev];
     Real bscalar = m_b_scalar;
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         Array<FArrayBox,AMREX_SPACEDIM> fluxfab_tmp;
 
@@ -147,8 +145,6 @@ MLTensorOp::compVelGrad (int amrlev, const Array<MultiFab*,AMREX_SPACEDIM>& flux
     const auto dlo = amrex::lbound(domain);
     const auto dhi = amrex::ubound(domain);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(sol, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         Array4<Real const> const vfab = sol.const_array(mfi);

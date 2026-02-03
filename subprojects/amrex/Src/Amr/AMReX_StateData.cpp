@@ -5,9 +5,6 @@
 #include <AMReX_ParallelDescriptor.H>
 #include <AMReX_Utility.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <iostream>
 #include <limits>
@@ -883,8 +880,6 @@ StateDataPhysBCFunct::operator() (MultiFab& mf, int dest_comp, int num_comp, Int
     bool run_on_gpu = statedata->desc->RunOnGPU() && Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu);
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox tmp;
 

@@ -214,8 +214,6 @@ public:
             }
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         {
             Vector<BCRec> bcrs(ncomp);
             for (MFIter mfi(mf); mfi.isValid(); ++mfi)

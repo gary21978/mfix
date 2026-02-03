@@ -6,9 +6,6 @@
 #include <AMReX_FabArray.H>
 #include <AMReX_Geometry.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex {
 

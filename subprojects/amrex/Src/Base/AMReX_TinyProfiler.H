@@ -122,14 +122,6 @@ private:
 
     static std::deque<const TinyProfiler*> mem_stack;
 
-#ifdef AMREX_USE_OMP
-    struct aligned_deque {
-        // align thread-private data to cache lines to prevent false sharing
-        alignas(64) std::deque<const TinyProfiler*> deque;
-    };
-
-    static std::vector<aligned_deque> mem_stack_thread_private;
-#endif
     static std::vector<std::map<std::string, MemStat>*> all_memstats;
     static std::vector<std::string> all_memnames;
 

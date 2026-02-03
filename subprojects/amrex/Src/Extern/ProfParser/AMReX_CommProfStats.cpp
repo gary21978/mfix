@@ -36,9 +36,6 @@ using std::pair;
 
 using namespace amrex;
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #define SHOWVAL(val) { cout << #val << " = " << val << endl; }
 
@@ -1203,18 +1200,8 @@ void CommProfStats::SendRecvData(const std::string &filenameprefix,
   //float maxLF0(0.0), maxLF1(0.0);
   Real filterTLo(00.0), filterTHi(30000.0);
 
-#ifdef AMREX_USE_OMP
-  int nReads(4);
-  Vector<omp_lock_t> locks(nReads);
-  for(int i(0); i < locks.size(); ++i) {
-    omp_init_lock(&(locks[i]));
-  }
-  int nThreads(omp_get_max_threads());
-  int myThread(omp_get_thread_num());
-#else
   int nThreads(1);
   int myThread(0);
-#endif
 
   procNodeNumber.resize(dataNProcs);
 
@@ -1272,8 +1259,6 @@ void CommProfStats::SendRecvData(const std::string &filenameprefix,
 
 
   while(anyDataLeft) {
-#ifdef AMREX_USE_OMP
-#endif
   //for(idb = 0; idb < dataBlocks.size(); ++idb) {
   for(int idbII = 0; idbII < dataBlocks.size(); ++idbII) {
     int idb(idbIndex[idbII]);
@@ -1476,11 +1461,6 @@ s2 += amrex::ParallelDescriptor::second() - st2;
 
 
 
-#ifdef AMREX_USE_OMP
-  for(int i(0); i < locks.size(); ++i) {
-    omp_destroy_lock(&(locks[i]));
-  }
-#endif
 
   cout << endl;
   SHOWVAL(maxTag);

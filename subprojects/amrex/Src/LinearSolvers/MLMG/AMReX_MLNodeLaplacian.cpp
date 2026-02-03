@@ -7,9 +7,6 @@
 #include <AMReX_algoim.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex {
 
@@ -151,8 +148,6 @@ MLNodeLaplacian::unimposeNeumannBC (int amrlev, MultiFab& rhs) const
 
         MFItInfo mfi_info;
         if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs,mfi_info); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -415,8 +410,6 @@ MLNodeLaplacian::FillBoundaryCoeff (MultiFab& sigma, const Geometry& geom)
 
         MFItInfo mfi_info;
         if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(sigma, mfi_info); mfi.isValid(); ++mfi)
         {
             Array4<Real> const& sfab = sigma.array(mfi);
@@ -432,8 +425,6 @@ MLNodeLaplacian::fixUpResidualMask (int amrlev, iMultiFab& resmsk)
 
     const iMultiFab& cfmask = *m_nd_fine_mask[amrlev];
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(resmsk,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -537,8 +528,6 @@ MLNodeLaplacian::restriction (int amrlev, int cmglev, MultiFab& crse, MultiFab& 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*pcrse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -671,8 +660,6 @@ MLNodeLaplacian::interpolation (int amrlev, int fmglev, MultiFab& fine, const Mu
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(fine, true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.tilebox();
@@ -778,8 +765,6 @@ MLNodeLaplacian::restrictInteriorNodes (int camrlev, MultiFab& crhs, MultiFab& a
     frhs->setBndry(0.0);
     frhs->FillBoundary(fgeom.periodicity());
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(cfine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -816,8 +801,6 @@ MLNodeLaplacian::restrictInteriorNodes (int camrlev, MultiFab& crhs, MultiFab& a
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(crhs, mfi_info); mfi.isValid(); ++mfi)
     {
         if (has_fine_bndry[mfi])
@@ -888,8 +871,6 @@ MLNodeLaplacian::normalize (int amrlev, int mglev, MultiFab& mf) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -1034,8 +1015,6 @@ MLNodeLaplacian::setEBInflowVelocity (int amrlev, const MultiFab& eb_vel)
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(*m_eb_vel_dot_n[amrlev], mfi_info); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();

@@ -37,9 +37,6 @@
 #include <AMReX_EBFabFactory.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <algorithm>
 #include <cstring>
@@ -216,8 +213,6 @@ Copy (FabArray<DFAB>& dst, FabArray<SFAB> const& src, int srccomp, int dstcomp, 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -264,8 +259,6 @@ Add (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp, int
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -2501,8 +2494,6 @@ FabArray<FAB>::setBndry (value_type val,
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter fai(*this); fai.isValid(); ++fai)
             {
                 get(fai).template setComplement<RunOn::Host>(val, fai.validbox(), strt_comp, ncomp);
@@ -2537,8 +2528,6 @@ FabArray<FAB>::setDomainBndry (value_type val,
         }
     }
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
         const Box& gbx = fai.fabbox();
@@ -2581,8 +2570,6 @@ FabArray<FAB>::sum (int comp, IntVect const& nghost, bool local) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.growntilebox(nghost);
@@ -2665,8 +2652,6 @@ FabArray<FAB>::setVal (value_type val,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter fai(*this,TilingIfNotGPU()); fai.isValid(); ++fai)
         {
             const Box& bx = fai.growntilebox(nghost);
@@ -2721,9 +2706,6 @@ FabArray<FAB>::setVal (value_type val,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-        AMREX_ALWAYS_ASSERT(!omp_in_parallel());
-#endif
         for (MFIter fai(*this,TilingIfNotGPU()); fai.isValid(); ++fai)
         {
             Box b = fai.growntilebox(nghost) & region;
@@ -2770,8 +2752,6 @@ FabArray<FAB>::abs (int comp, int ncomp, const IntVect& nghost)
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -2805,8 +2785,6 @@ FabArray<FAB>::plus (value_type val, int comp, int num_comp, int nghost)
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -2842,8 +2820,6 @@ FabArray<FAB>::plus (value_type val, const Box& region, int comp, int num_comp, 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost) & region;
@@ -2879,8 +2855,6 @@ FabArray<FAB>::mult (value_type val, int comp, int num_comp, int nghost)
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -2916,8 +2890,6 @@ FabArray<FAB>::mult (value_type val, const Box& region, int comp, int num_comp, 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost) & region;
@@ -2953,8 +2925,6 @@ FabArray<FAB>::invert (value_type numerator, int comp, int num_comp, int nghost)
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -2990,8 +2960,6 @@ FabArray<FAB>::invert (value_type numerator, const Box& region, int comp, int nu
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost) & region;
@@ -3013,8 +2981,6 @@ FabArray<FAB>::shift (const IntVect& v)
     clearThisBD();  // The new boxarray will have a different ID.
     boxarray.shift(v);
     addThisBD();
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
         get(fai).shift(v);
@@ -3048,8 +3014,6 @@ void FabArray<FAB>::Saxpy (FabArray<FAB>& y, value_type a, FabArray<FAB> const& 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(y,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -3094,8 +3058,6 @@ FabArray<FAB>::Xpay (FabArray<FAB>& y, value_type a, FabArray<FAB> const& x,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(y,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -3144,8 +3106,6 @@ void FabArray<FAB>::Saxpy_Xpay (FabArray<FAB>& y, value_type a1, FabArray<FAB> c
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(y,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -3202,8 +3162,6 @@ void FabArray<FAB>::Saxpy_Saxpy (FabArray<FAB>& y1, value_type a1, FabArray<FAB>
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(y1,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -3256,8 +3214,6 @@ void FabArray<FAB>::Saypy_Saxpy (FabArray<FAB>& y1, value_type a1,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(y1,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -3309,8 +3265,6 @@ FabArray<FAB>::LinComb (FabArray<FAB>& dst,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -3692,8 +3646,6 @@ FabArray<FAB>::BuildMask (const Box& phys_domain, const Periodicity& period,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             auto const& fab = this->array(mfi);
@@ -3737,8 +3689,6 @@ FabArray<FAB>::setVal (value_type val, const CommMetaData& thecmd, int scomp, in
         const CopyComTagsContainer&      LocTags = *(thecmd.m_LocTags);
         const MapOfCopyComTagContainers& RcvTags = *(thecmd.m_RcvTags);
         auto N_locs = static_cast<int>(LocTags.size());
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N_locs; ++i) {
             const CopyComTag& tag = LocTags[i];
             (*this)[tag.dstIndex].template setVal<RunOn::Host>(val, tag.dbox, scomp, ncomp);
@@ -3746,8 +3696,6 @@ FabArray<FAB>::setVal (value_type val, const CommMetaData& thecmd, int scomp, in
 
         for (const auto & RcvTag : RcvTags) {
             auto N = static_cast<int>(RcvTag.second.size());
-#ifdef AMREX_USE_OMP
-#endif
             for (int i = 0; i < N; ++i) {
                 const CopyComTag& tag = RcvTag.second[i];
                 (*this)[tag.dstIndex].template setVal<RunOn::Host>(val, tag.dbox, scomp, ncomp);
@@ -3764,8 +3712,6 @@ FabArray<FAB>::RecvLayoutMask (const CommMetaData& thecmd)
     BL_PROFILE("FabArray::RecvLayoutMask()");
 
     LayoutData<int> r(this->boxArray(), this->DistributionMap());
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(r); mfi.isValid(); ++mfi) {
         r[mfi] = 0;
     }
@@ -3827,8 +3773,6 @@ FabArray<FAB>::norminf (int comp, int ncomp, IntVect const& nghost, bool local,
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
                 if (flags[mfi].getType(bx) != FabType::covered) {
@@ -3858,8 +3802,6 @@ FabArray<FAB>::norminf (int comp, int ncomp, IntVect const& nghost, bool local,
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
                 auto const& a = this->const_array(mfi);
@@ -3911,8 +3853,6 @@ FabArray<FAB>::norminf (FabArray<IFAB> const& mask, int comp, int ncomp,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost);
             auto const& a = this->const_array(mfi);

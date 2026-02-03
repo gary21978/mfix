@@ -3,9 +3,6 @@
 #include <AMReX_GpuElixir.H>
 #include <AMReX_MemPool.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex {
 

@@ -108,8 +108,6 @@ void EBDataCollection::extendDataOutsideDomain (IntVect const& level_ng)
                       amrex::surroundingNodes(level_domain,1),
                       amrex::surroundingNodes(level_domain,2))};
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(*m_cellflags); mfi.isValid(); ++mfi) {
         auto const current_type = (*m_cellflags)[mfi].getType();
         // Because the default value for EBCellFlagFab is regular cell, we

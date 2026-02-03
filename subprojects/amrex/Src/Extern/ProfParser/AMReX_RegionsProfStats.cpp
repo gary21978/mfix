@@ -36,9 +36,6 @@ using std::pair;
 using namespace amrex;
 
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #define SHOWVAL(val) { cout << #val << " = " << val << endl; }
 

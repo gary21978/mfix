@@ -390,8 +390,6 @@ BoxArray::numPts () const noexcept
     const int N = static_cast<int>(size());
     auto const& bxs = this->m_ref->m_abox;
     if (m_bat.is_null()) {
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; ++i)
         {
             result += bxs[i].numPts();
@@ -399,15 +397,11 @@ BoxArray::numPts () const noexcept
     } else if (m_bat.is_simple()) {
         IndexType t = ixType();
         IntVect cr = crseRatio();
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; ++i)
         {
             result += amrex::convert(amrex::coarsen(bxs[i],cr),t).numPts();
         }
     } else {
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; ++i)
         {
             result += m_bat.m_op.m_bndryReg(bxs[i]).numPts();
@@ -424,8 +418,6 @@ BoxArray::d_numPts () const noexcept
     const int N = static_cast<int>(size());
     auto const& bxs = this->m_ref->m_abox;
     if (m_bat.is_null()) {
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; ++i)
         {
             result += bxs[i].d_numPts();
@@ -433,15 +425,11 @@ BoxArray::d_numPts () const noexcept
     } else if (m_bat.is_simple()) {
         IndexType t = ixType();
         IntVect cr = crseRatio();
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; ++i)
         {
             result += amrex::convert(amrex::coarsen(bxs[i],cr),t).d_numPts();
         }
     } else {
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; ++i)
         {
             result += m_bat.m_op.m_bndryReg(bxs[i]).d_numPts();
@@ -588,8 +576,6 @@ BoxArray::refine (const IntVect& iv)
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         BL_ASSERT(m_ref->m_abox[i].ok());
         m_ref->m_abox[i].refine(iv);
@@ -621,8 +607,6 @@ BoxArray::coarsenable (const IntVect& refinement_ratio, const IntVect& min_width
 
     auto const& bxs = this->m_ref->m_abox;
     if (m_bat.is_null()) {
-#ifdef AMREX_USE_OMP
-#endif
         for (Long ibox = 0; ibox < sz; ++ibox)
         {
             const Box& thisbox = bxs[ibox];
@@ -631,16 +615,12 @@ BoxArray::coarsenable (const IntVect& refinement_ratio, const IntVect& min_width
     } else if (m_bat.is_simple()) {
         IndexType t = ixType();
         IntVect cr = crseRatio();
-#ifdef AMREX_USE_OMP
-#endif
         for (Long ibox = 0; ibox < sz; ++ibox)
         {
             const Box& thisbox = amrex::convert(amrex::coarsen(bxs[ibox],cr),t);
             res = res && thisbox.coarsenable(refinement_ratio,min_width);
         }
     } else {
-#ifdef AMREX_USE_OMP
-#endif
         for (Long ibox = 0; ibox < sz; ++ibox)
         {
             const Box& thisbox = m_bat.m_op.m_bndryReg(bxs[ibox]);
@@ -676,8 +656,6 @@ BoxArray::growcoarsen (IntVect const& ngrow, const IntVect& iv)
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(ngrow).coarsen(iv);
     }
@@ -690,8 +668,6 @@ BoxArray::grow (int n)
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(n);
     }
@@ -704,8 +680,6 @@ BoxArray::grow (const IntVect& iv)
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(iv);
     }
@@ -719,8 +693,6 @@ BoxArray::grow (int dir,
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(dir, n_cell);
     }
@@ -734,8 +706,6 @@ BoxArray::growLo (int dir,
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].growLo(dir, n_cell);
     }
@@ -749,8 +719,6 @@ BoxArray::growHi (int dir,
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].growHi(dir, n_cell);
     }
@@ -810,8 +778,6 @@ BoxArray::convert (Box (*fp)(const Box&))
     if (N > 0) {
         uniqify();
 
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; ++i) {
             set(i,fp((*this)[i]));
         }
@@ -826,8 +792,6 @@ BoxArray::shift (int dir,
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].shift(dir, nzones);
     }
@@ -840,8 +804,6 @@ BoxArray::shift (const IntVect& iv)
     uniqify();
 
     const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].shift(iv);
     }
@@ -1045,13 +1007,8 @@ BoxArray::minimalBox () const
     const int N = static_cast<int>(size());
     if (N > 0)
     {
-#ifdef AMREX_USE_OMP
-        bool use_single_thread = omp_in_parallel();
-        const int nthreads = use_single_thread ? 1 : omp_get_max_threads();
-#else
         bool use_single_thread = true;
         const int nthreads = 1;
-#endif
         if (use_single_thread)
         {
             minbox = m_ref->m_abox[0];
@@ -1062,12 +1019,8 @@ BoxArray::minimalBox () const
         else
         {
             Vector<Box> bxs(nthreads, m_ref->m_abox[0]);
-#ifdef AMREX_USE_OMP
-#endif
             {
                 int tid = OpenMP::get_thread_num();
-#ifdef AMREX_USE_OMP
-#endif
                 for (int i = 0; i < N; ++i) {
                     bxs[tid].minBox(m_ref->m_abox[i]);
                 }
@@ -1091,13 +1044,8 @@ BoxArray::minimalBox (Long& npts_avg_box) const
     Long npts_tot = 0;
     if (N > 0)
     {
-#ifdef AMREX_USE_OMP
-        bool use_single_thread = omp_in_parallel();
-        const int nthreads = use_single_thread ? 1 : omp_get_max_threads();
-#else
         bool use_single_thread = true;
         const int nthreads = 1;
-#endif
         if (use_single_thread)
         {
             minbox = m_ref->m_abox[0];
@@ -1110,12 +1058,8 @@ BoxArray::minimalBox (Long& npts_avg_box) const
         else
         {
             Vector<Box> bxs(nthreads, m_ref->m_abox[0]);
-#ifdef AMREX_USE_OMP
-#endif
             {
                 int tid = OpenMP::get_thread_num();
-#ifdef AMREX_USE_OMP
-#endif
                 for (int i = 0; i < N; ++i) {
                     bxs[tid].minBox(m_ref->m_abox[i]);
                     Long npts = m_ref->m_abox[i].numPts();
@@ -1527,8 +1471,6 @@ BoxArray::getHashMap () const
 
     if (m_ref->HasHashMap()) { return BoxHashMap; }
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         if (BoxHashMap.empty() && size() > 0)
         {
@@ -1562,8 +1504,6 @@ BoxArray::getHashMap () const
             m_ref->updateMemoryUsage_hash(1);
 #endif
 
-#ifdef AMREX_USE_OMP
-#endif
             m_ref->has_hashmap = true;
         }
     }
@@ -1583,8 +1523,6 @@ BoxArray::uniqify ()
     IntVect cr = crseRatio();
     if (cr != IntVect::TheUnitVector()) {
         const int N = static_cast<int>(m_ref->m_abox.size());
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; i++) {
             m_ref->m_abox[i].coarsen(cr);
         }
@@ -1688,8 +1626,6 @@ intersect (const BoxArray& ba,
     BoxArray r(N);
 
     if (N > 0) {
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; i++)
         {
             r.set(i, isects[i].second);
@@ -1713,8 +1649,6 @@ intersect (const BoxArray& ba,
     BoxArray r(N);
 
     if (N > 0) {
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < N; i++)
         {
             r.set(i, isects[i].second);

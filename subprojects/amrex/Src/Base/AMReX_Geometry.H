@@ -8,9 +8,6 @@
 #include <AMReX_RealBox.H>
 #include <AMReX_Periodicity.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <iosfwd>
 #include <map>

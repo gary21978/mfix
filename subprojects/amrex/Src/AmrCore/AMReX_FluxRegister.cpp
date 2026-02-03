@@ -130,8 +130,6 @@ FluxRegister::SumReg (int comp) const
         else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (FabSetIter fsi(lofabs); fsi.isValid(); ++fsi)
             {
                 Array4<Real const> const& lofab = lofabs.const_array(fsi);
@@ -188,8 +186,6 @@ FluxRegister::CrseInit (const MultiFab& mflx,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mflx,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -225,8 +221,6 @@ FluxRegister::CrseInit (const MultiFab& mflx,
             tags.reserve(mflx.local_size()*AMREX_SPACEDIM*2);
 #endif
 
-#ifdef AMREX_USE_OMP
-#endif
             for (FabSetIter mfi(fs); mfi.isValid(); ++mfi)
             {
                 const Box& bx = mfi.validbox();
@@ -309,8 +303,6 @@ FluxRegister::CrseAdd (const MultiFab& mflx,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mflx,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -359,8 +351,6 @@ FluxRegister::FineAdd (const MultiFab& mflx,
                        int             numcomp,
                        Real            mult)
 {
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(mflx); mfi.isValid(); ++mfi)
     {
         const int k = mfi.index();
@@ -377,8 +367,6 @@ FluxRegister::FineAdd (const MultiFab& mflx,
                        int             numcomp,
                        Real            mult)
 {
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(mflx); mfi.isValid(); ++mfi)
     {
         const int k = mfi.index();
@@ -617,8 +605,6 @@ FluxRegister::Reflux (MultiFab& mf, const MultiFab& volume, Orientation face,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -651,8 +637,6 @@ FluxRegister::ClearInternalBorders (const Geometry& geom)
         const BoxArray& balo = frlo.boxArray();
         const BoxArray& bahi = frhi.boxArray();
 
-#ifdef AMREX_USE_OMP
-#endif
         {
             for (FabSetIter fsi(frlo); fsi.isValid(); ++fsi) {
                 const Box& bx = fsi.validbox();
@@ -767,8 +751,6 @@ FluxRegister::OverwriteFlux (Array<MultiFab*,AMREX_SPACEDIM> const& crse_fluxes,
         Vector<Array4BoxTag<int> > tags;
         amrex::ignore_unused(tags);
 
-#ifdef AMREX_USE_OMP
-#endif
         {
             std::vector< std::pair<int,Box> > isects;
 
@@ -830,8 +812,6 @@ FluxRegister::OverwriteFlux (Array<MultiFab*,AMREX_SPACEDIM> const& crse_fluxes,
         bndry[lo_face].copyTo(fine_flux, 0, srccomp, 0, numcomp, cperiod);
         bndry[hi_face].plusTo(fine_flux, 0, srccomp, 0, numcomp, cperiod);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(crse_flux,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();

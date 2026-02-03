@@ -336,8 +336,6 @@ HypreSolver<MSS>::fill_local_id (Marker const& marker)
 
 #else
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(m_local_id[0]); mfi.isValid(); ++mfi) {
         int boxno = mfi.LocalIndex();
         for (int ivar = 0; ivar < m_nvars; ++ivar) {
@@ -395,8 +393,6 @@ HypreSolver<MSS>::fill_global_id ()
         }
     }
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(m_global_id[0]); mfi.isValid(); ++mfi) {
         auto& rows_vec = m_global_id_vec[mfi];
         rows_vec.resize(m_nrows[mfi]);

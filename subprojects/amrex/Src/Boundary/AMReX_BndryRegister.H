@@ -223,8 +223,6 @@ BndryRegisterT<MF>::operator+= (const BndryRegisterT<MF>& rhs)
     for (OrientationIter face; face; ++face) {
         const auto f = face();
         const int ncomp = bndry[f].nComp();
-#ifdef AMREX_USE_OMP
-#endif
         for (FabSetIter bfsi(rhs[f]); bfsi.isValid(); ++bfsi) {
             const Box& bx = bfsi.validbox();
             auto const sfab =   rhs[f].array(bfsi);

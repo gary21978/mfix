@@ -31,14 +31,6 @@ BaseFab_Initialize ()
     {
         basefab_initialized = true;
 
-#ifdef AMREX_USE_OMP
-        {
-            amrex::private_total_bytes_allocated_in_fabs     = 0;
-            amrex::private_total_bytes_allocated_in_fabs_hwm = 0;
-            amrex::private_total_cells_allocated_in_fabs     = 0;
-            amrex::private_total_cells_allocated_in_fabs_hwm = 0;
-        }
-#endif
 
 #ifdef AMREX_MEM_PROFILING
         MemProfiler::add("Fab", std::function<MemProfiler::MemInfo()>
@@ -62,72 +54,34 @@ BaseFab_Finalize()
 Long
 TotalBytesAllocatedInFabs () noexcept
 {
-#ifdef AMREX_USE_OMP
-    Long r=0;
-    {
-        r += private_total_bytes_allocated_in_fabs;
-    }
-    return r
-        + atomic_total_bytes_allocated_in_fabs.load(std::memory_order_relaxed);
-#else
     return private_total_bytes_allocated_in_fabs
         + atomic_total_bytes_allocated_in_fabs.load(std::memory_order_relaxed);
-#endif
 }
 
 Long
 TotalBytesAllocatedInFabsHWM () noexcept
 {
-#ifdef AMREX_USE_OMP
-    Long r=0;
-    {
-        r += private_total_bytes_allocated_in_fabs_hwm;
-    }
-    return r
-        + atomic_total_bytes_allocated_in_fabs_hwm.load(std::memory_order_relaxed);
-#else
     return private_total_bytes_allocated_in_fabs_hwm
         + atomic_total_bytes_allocated_in_fabs_hwm.load(std::memory_order_relaxed);
-#endif
 }
 
 Long
 TotalCellsAllocatedInFabs () noexcept
 {
-#ifdef AMREX_USE_OMP
-    Long r=0;
-    {
-        r += private_total_cells_allocated_in_fabs;
-    }
-    return r
-        + atomic_total_cells_allocated_in_fabs.load(std::memory_order_relaxed);
-#else
     return private_total_cells_allocated_in_fabs
         + atomic_total_cells_allocated_in_fabs.load(std::memory_order_relaxed);
-#endif
 }
 
 Long
 TotalCellsAllocatedInFabsHWM () noexcept
 {
-#ifdef AMREX_USE_OMP
-    Long r=0;
-    {
-        r += private_total_cells_allocated_in_fabs_hwm;
-    }
-    return r
-        + atomic_total_cells_allocated_in_fabs_hwm.load(std::memory_order_relaxed);
-#else
     return private_total_cells_allocated_in_fabs_hwm
         + atomic_total_cells_allocated_in_fabs_hwm.load(std::memory_order_relaxed);
-#endif
 }
 
 void
 ResetTotalBytesAllocatedInFabsHWM () noexcept
 {
-#ifdef AMREX_USE_OMP
-#endif
     {
         private_total_bytes_allocated_in_fabs_hwm = 0;
     }
@@ -137,23 +91,6 @@ ResetTotalBytesAllocatedInFabsHWM () noexcept
 void
 update_fab_stats (Long n, Long s, size_t szt) noexcept
 {
-#ifdef AMREX_USE_OMP
-    if (omp_in_parallel())
-    {
-        Long tst = s * static_cast<Long>(szt);
-        amrex::private_total_bytes_allocated_in_fabs += tst;
-        amrex::private_total_bytes_allocated_in_fabs_hwm
-            = std::max(amrex::private_total_bytes_allocated_in_fabs_hwm,
-                       amrex::private_total_bytes_allocated_in_fabs);
-
-        if(szt == sizeof(Real)) {
-            amrex::private_total_cells_allocated_in_fabs += n;
-            amrex::private_total_cells_allocated_in_fabs_hwm
-                = std::max(amrex::private_total_cells_allocated_in_fabs_hwm,
-                           amrex::private_total_cells_allocated_in_fabs);
-        }
-    } else
-#endif
     {
         Long tst = s * static_cast<Long>(szt);
         Long old_bytes = amrex::atomic_total_bytes_allocated_in_fabs.fetch_add

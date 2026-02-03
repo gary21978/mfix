@@ -9,9 +9,6 @@
 #include <AMReX_BLProfiler.H>
 #include <AMReX_VisMF.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <limits>
 
@@ -171,8 +168,6 @@ FabSetT<MF>&
 FabSetT<MF>::copyFrom (const FabSetT<MF>& src, int scomp, int dcomp, int ncomp)
 {
     if (boxArray() == src.boxArray() && DistributionMap() == src.DistributionMap()) {
-#ifdef AMREX_USE_OMP
-#endif
         for (FabSetIter fsi(*this); fsi.isValid(); ++fsi) {
             const Box& bx = fsi.validbox();
             auto const srcfab =   src.array(fsi);
@@ -203,8 +198,6 @@ FabSetT<MF>&
 FabSetT<MF>::plusFrom (const FabSetT<MF>& src, int scomp, int dcomp, int ncomp)
 {
     if (boxArray() == src.boxArray() && DistributionMap() == src.DistributionMap()) {
-#ifdef AMREX_USE_OMP
-#endif
         for (FabSetIter fsi(*this); fsi.isValid(); ++fsi) {
             const Box& bx = fsi.validbox();
             auto const srcfab =   src.array(fsi);
@@ -254,8 +247,6 @@ void
 FabSetT<MF>::setVal (value_type val)
 {
     const int ncomp = nComp();
-#ifdef AMREX_USE_OMP
-#endif
     for (FabSetIter fsi(*this); fsi.isValid(); ++fsi) {
         const Box& bx = fsi.validbox();
         auto fab = this->array(fsi);
@@ -270,8 +261,6 @@ template <typename MF>
 void
 FabSetT<MF>::setVal (value_type val, int comp, int num_comp)
 {
-#ifdef AMREX_USE_OMP
-#endif
     for (FabSetIter fsi(*this); fsi.isValid(); ++fsi) {
         const Box& bx = fsi.validbox();
         auto fab = this->array(fsi);
@@ -291,8 +280,6 @@ FabSetT<MF>::linComb (value_type a, value_type b, const FabSetT<MF>& src,
 {
     BL_ASSERT(size() == src.size());
 
-#ifdef AMREX_USE_OMP
-#endif
     for (FabSetIter fsi(*this); fsi.isValid(); ++fsi)
     {
         const Box& bx = fsi.validbox();
@@ -324,8 +311,6 @@ FabSetT<MF>::linComb (value_type a, const MF& mfa, int a_comp,
 
     const auto huge = static_cast<value_type>(sizeof(value_type) == 8 ? 1.e200 : 1.e30);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(bdrya); mfi.isValid(); ++mfi) // tiling is not safe for this BoxArray
     {
         const Box& bx = mfi.validbox();
@@ -341,8 +326,6 @@ FabSetT<MF>::linComb (value_type a, const MF& mfa, int a_comp,
     bdrya.ParallelCopy(mfa,a_comp,0,ncomp,ngrow,0);
     bdryb.ParallelCopy(mfb,b_comp,0,ncomp,ngrow,0);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (FabSetIter fsi(*this); fsi.isValid(); ++fsi)
     {
         const Box& bx = fsi.validbox();
@@ -386,8 +369,6 @@ FabSetT<MF>::Copy (FabSetT<MF>& dst, const FabSetT<MF>& src)
     BL_ASSERT(amrex::match(dst.boxArray(), src.boxArray()));
     BL_ASSERT(dst.DistributionMap() == src.DistributionMap());
     int ncomp = dst.nComp();
-#ifdef AMREX_USE_OMP
-#endif
     for (FabSetIter fsi(dst); fsi.isValid(); ++fsi) {
         const Box& bx = fsi.validbox();
         auto const srcfab = src.array(fsi);

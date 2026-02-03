@@ -4,9 +4,6 @@
 #include <AMReX_EBCellFlag.H>
 #include <AMReX_iMultiFab.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex {
 
@@ -21,8 +18,6 @@ TagCutCells (TagBoxArray& tags, const MultiFab& state)
     if (factory.hasEBInfo()) {
         auto const& flags = factory.getMultiEBCellFlagFab();
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(state, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -67,8 +62,6 @@ TagVolfrac (TagBoxArray& tags, const MultiFab& volfrac, Real tol)
 //    const char clearval = TagBox::CLEAR;
     const char   tagval = TagBox::SET;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(volfrac, TilingIfNotGPU()); mfi.isValid(); ++mfi) {
         const Box& bx = mfi.tilebox();
         Array4<char> const& tagarr = tags.array(mfi);

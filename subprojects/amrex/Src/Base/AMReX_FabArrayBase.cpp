@@ -2345,8 +2345,6 @@ FabArrayBase::getTileArray (const IntVect& tilesize) const
 {
     TileArray* p;
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         BL_ASSERT(getBDKey() == m_bdkey);
 
@@ -2362,8 +2360,6 @@ FabArrayBase::getTileArray (const IntVect& tilesize) const
                                              m_TAC_stats.bytes);
 #endif
         }
-#ifdef AMREX_USE_OMP
-#endif
         {
             ++(p->nuse);
             m_TAC_stats.recordUse();

@@ -528,8 +528,6 @@ CNS::estTimeStep ()
     ReduceData<Real> reduce_data(reduce_op);
     using ReduceTuple = typename decltype(reduce_data)::Type;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(S,false); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -570,8 +568,6 @@ CNS::computeTemp (MultiFab& State, int ng)
     Parm const* lparm = d_parm;
 
     // This will reset Eint and compute Temperature
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(State,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(ng);

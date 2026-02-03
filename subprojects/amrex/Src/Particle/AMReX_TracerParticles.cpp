@@ -49,8 +49,6 @@ TracerParticleContainer::AdvectWithUmac (MultiFab* umac, int lev, Real dt)
 
     for (int ipass = 0; ipass < 2; ipass++)
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (ParIterType pti(*this, lev); pti.isValid(); ++pti)
         {
             int grid    = pti.index();
@@ -133,8 +131,6 @@ TracerParticleContainer::AdvectWithUcc (const MultiFab& Ucc, int lev, Real dt)
 
     for (int ipass = 0; ipass < 2; ipass++)
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (ParIterType pti(*this, lev); pti.isValid(); ++pti)
         {
             int grid    = pti.index();

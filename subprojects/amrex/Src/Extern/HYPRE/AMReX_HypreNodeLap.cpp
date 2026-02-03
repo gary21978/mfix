@@ -215,8 +215,6 @@ HypreNodeLap::fill_local_node_id_cpu ()
 {
     Int nnodes_proc = 0;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(local_node_id); mfi.isValid(); ++mfi)
     {
         const Box& ndbx = mfi.validbox();
@@ -250,8 +248,6 @@ HypreNodeLap::fill_local_node_id_cpu ()
 void
 HypreNodeLap::fill_global_node_id ()
 {
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(node_id); mfi.isValid(); ++mfi)
     {
         Int os = id_offset[mfi];

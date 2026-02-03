@@ -354,8 +354,6 @@ MyTest::initData ()
         const MultiCutFab& bcent = factory[ilev]->getBndryCent();
         const MultiCutFab& cent = factory[ilev]->getCentroid();
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(phiexact[ilev]); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.validbox();

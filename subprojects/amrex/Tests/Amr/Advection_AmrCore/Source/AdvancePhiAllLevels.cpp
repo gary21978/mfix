@@ -38,8 +38,6 @@ AmrCoreAdv::AdvancePhiAllLevels (Real time, Real dt_lev, int /*iteration*/)
         FillPatch(lev, time, Sborder, 0, Sborder.nComp(),
                   FillPatchType::fillpatch_function);
 
-#ifdef AMREX_USE_OMP
-#endif
         {
             FArrayBox tmpfab;
             for (MFIter mfi(phi_new[lev],TilingIfNotGPU()); mfi.isValid(); ++mfi)
@@ -297,8 +295,6 @@ AmrCoreAdv::AdvancePhiAllLevels (Real time, Real dt_lev, int /*iteration*/)
     for (int lev = 0; lev <= finest_level; lev++)
     {
 
-#ifdef AMREX_USE_OMP
-#endif
         {
             const auto dx = geom[lev].CellSizeArray();
             AMREX_D_TERM(Real dtdx = dt_lev/dx[0];,

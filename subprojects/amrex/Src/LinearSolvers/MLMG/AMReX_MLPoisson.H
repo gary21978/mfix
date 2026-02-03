@@ -243,8 +243,6 @@ MLPoissonT<MF>::Fapply (int amrlev, int mglev, MF& out, const MF& in) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(out, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -342,8 +340,6 @@ MLPoissonT<MF>::normalize (int amrlev, int mglev, MF& mf) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mf, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -580,8 +576,6 @@ MLPoissonT<MF>::Fsmooth (int amrlev, int mglev, MF& sol, const MF& rhs, int redb
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(sol,mfi_info); mfi.isValid(); ++mfi)
         {
             const auto& m0 = mm0.array(mfi);
@@ -1155,8 +1149,6 @@ MLPoissonT<MF>::get_dpdn_on_domain_faces (Array<MF*,AMREX_SPACEDIM> const& dpdn,
                  const RT dyi = RT(this->m_geom[0][0].InvCellSize(1));,
                  const RT dzi = RT(this->m_geom[0][0].InvCellSize(2));)
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(phi);  mfi.isValid(); ++mfi)
     {
         Box const& vbx = mfi.validbox();

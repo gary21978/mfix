@@ -350,8 +350,6 @@ public:
         m_offsets.resize(0);
         m_offsets.resize(nbins+1);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (int j = 0; j < nchunks; ++j) {
             int istart = j*chunksize;
             int istop = (j == nchunks-1) ? nitems : (j+1)*chunksize;
@@ -361,8 +359,6 @@ public:
             }
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < nbins; ++i) {
             index_type total = 0;
             for (int j = 0; j < nchunks; ++j) {
@@ -377,16 +373,12 @@ public:
         m_offsets[0] = 0;
         for (int i = 0; i < nbins; ++i) {m_offsets[i+1] = m_offsets[i] + m_counts[i];}
 
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < nbins; ++i) {
             for (int j = 0; j < nchunks; ++j) {
                 counts[nbins*j+i] += m_offsets[i];
             }
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         for (int j = 0; j < nchunks; ++j) {
             int istart = j*chunksize;
             int istop = (j == nchunks-1) ? nitems : (j+1)*chunksize;

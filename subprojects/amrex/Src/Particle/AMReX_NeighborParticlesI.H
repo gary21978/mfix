@@ -169,8 +169,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
         mask_ptr[lev] = std::make_unique<iMultiFab>(ba, dmap, int(num_mask_comps), m_num_neighbor_cells);
         mask_ptr[lev]->setVal(-1, m_num_neighbor_cells);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*mask_ptr[lev],this->do_tiling ? this->tile_size : IntVect::TheZeroVector());
              mfi.isValid(); ++mfi) {
             const Box& box = mfi.tilebox();
@@ -352,8 +350,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
     for (int lev = 0; lev < this->numLevels(); ++lev) {
         // First pass - each thread collects the NeighborIndexMaps it owes to other
         // grids / tiles / procs
-#ifdef AMREX_USE_OMP
-#endif
         {
             Vector<NeighborCopyTag> tags;
             tags.reserve(AMREX_D_TERM(3, *3, *3));
@@ -406,8 +402,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
 
     for (int lev = 0; lev < this->numLevels(); ++lev) {
         // second pass - for each tile, collect the neighbors owed from all threads
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi = this->MakeMFIter(lev); mfi.isValid(); ++mfi) {
             const int grid = mfi.index();
             const int tile = mfi.LocalTileIndex();
@@ -424,11 +418,7 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
 
     // do the same for the remote neighbors
     typename std::map<NeighborCommTag, Vector<Vector<NeighborIndexMap> > >::iterator it;
-#ifdef AMREX_USE_OMP
-#endif
     for (it=tmp_remote_map.begin(); it != tmp_remote_map.end(); it++) {
-#ifdef AMREX_USE_OMP
-#endif
         {
             const NeighborCommTag& tag = it->first;
             Vector<Vector<NeighborIndexMap> >& tmp = it->second;
@@ -462,8 +452,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
             PairIndex dst_index(grid, tile);
             const Vector<NeighborIndexMap>& map = local_map[lev][dst_index];
             const int num_ghosts = map.size();
-#ifdef AMREX_USE_OMP
-#endif
             for (int i = 0; i < num_ghosts; ++i) {
                 const NeighborIndexMap& nim = map[i];
                 PairIndex src_index(nim.src_grid, nim.src_tile);
@@ -502,8 +490,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
         std::memcpy(dst, &(kv.first.tile_id ), sizeof(int)); dst += sizeof(int);
         std::memcpy(dst, &data_size,           sizeof(int)); dst += sizeof(int);
         size_t buffer_offset = old_size + 4*sizeof(int);
-#ifdef AMREX_USE_OMP
-#endif
         for (int i = 0; i < np; ++i) {
             const NeighborIndexMap& nim = kv.second[i];
             PairIndex src_index(nim.src_grid, nim.src_tile);
@@ -713,8 +699,6 @@ buildNeighborList (CheckPair const& check_pair, bool /*sort*/)
               auto& plev = this->GetParticles(lev);
         const auto& geom = this->Geom(lev);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
         {
             int gid = pti.index();
@@ -797,8 +781,6 @@ buildNeighborList (CheckPair const& check_pair, OtherPCType& other,
               auto& plev = this->GetParticles(lev);
         const auto& geom = this->Geom(lev);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
         {
             int gid = pti.index();
@@ -868,8 +850,6 @@ buildNeighborList (CheckPair const& check_pair, int type_ind, int* ref_ratio,
               auto& plev = this->GetParticles(lev);
         const auto& geom = this->Geom(lev);
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
         {
             int gid = pti.index();

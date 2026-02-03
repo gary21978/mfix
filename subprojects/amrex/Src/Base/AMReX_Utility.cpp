@@ -9,9 +9,6 @@
 #include <AMReX_BoxArray.H>
 #include <AMReX_Print.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <cerrno>
 #include <cstdlib>

@@ -83,8 +83,6 @@ ParticleToMesh (PC const& pc, MF& mf, int lev, F const& f, bool zero_out_input=t
     else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         {
             typename MF::FABType::value_type local_fab;
             for(ParIter pti(pc, lev); pti.isValid(); ++pti)
@@ -139,8 +137,6 @@ MeshToParticle (PC& pc, MF const& mf, int lev, F const& f)
     const auto dxi = pc.Geom(lev).InvCellSizeArray();
 
     using ParIter = typename PC::ParIterType;
-#ifdef AMREX_USE_OMP
-#endif
     for(ParIter pti(pc, lev); pti.isValid(); ++pti)
     {
         auto& tile = pti.GetParticleTile();

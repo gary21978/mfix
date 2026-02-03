@@ -290,8 +290,6 @@ MLALaplacianT<MF>::Fapply (int amrlev, int mglev, MF& out, const MF& in) const
     const RT ascalar = m_a_scalar;
     const RT bscalar = m_b_scalar;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(out, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -358,8 +356,6 @@ MLALaplacianT<MF>::normalize (int amrlev, int mglev, MF& mf) const
     const RT ascalar = m_a_scalar;
     const RT bscalar = m_b_scalar;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(mf, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -453,8 +449,6 @@ MLALaplacianT<MF>::Fsmooth (int amrlev, int mglev, MF& sol, const MF& rhs, int r
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(sol,mfi_info); mfi.isValid(); ++mfi)
     {
         const auto& m0 = mm0.array(mfi);

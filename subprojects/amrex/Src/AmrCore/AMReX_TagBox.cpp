@@ -308,8 +308,6 @@ TagBoxArray::buffer (const IntVect& nbuf)
 
     if (nbuf.max() > 0)
     {
-#ifdef AMREX_USE_OMP
-#endif
        for (MFIter mfi(*this); mfi.isValid(); ++mfi) {
            get(mfi).buffer(nbuf, n_grow);
        }
@@ -354,8 +352,6 @@ TagBoxArray::mapPeriodicRemoveDuplicates (const Geometry& geom)
 
         // We need to keep tags in periodic boundary
         const auto owner_mask = amrex::OwnerMask(tmp, Periodicity::NonPeriodic(), nGrowVect());
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(tmp); mfi.isValid(); ++mfi) {
             Box const& box = mfi.fabbox();
             Array4<TagType> const& tag = tmp.array(mfi);
@@ -376,8 +372,6 @@ TagBoxArray::local_collate_cpu (Gpu::PinnedVector<IntVect>& v) const
     if (this->local_size() == 0) { return; }
 
     Vector<int> count(this->local_size());
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
         Array4<char const> const& arr = this->const_array(fai);
@@ -397,8 +391,6 @@ TagBoxArray::local_collate_cpu (Gpu::PinnedVector<IntVect>& v) const
 
     if (v.empty()) { return; }
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
         int li = fai.LocalIndex();
@@ -673,8 +665,6 @@ TagBoxArray::setVal (const BoxArray& ba, TagBox::TagVal val)
     Vector<Array4BoxTag<char> > tags;
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu,tags);
-#ifdef AMREX_USE_OMP
-#endif
     {
         std::vector< std::pair<int,Box> > isects;
         for (MFIter mfi(*this); mfi.isValid(); ++mfi)
@@ -761,8 +751,6 @@ TagBoxArray::hasTags (Box const& a_bx) const
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*this); mfi.isValid(); ++mfi)
         {
             Box const& b = a_bx & mfi.fabbox();

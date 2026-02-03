@@ -10,9 +10,6 @@
 
 #include <AMReX_VisMF.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex
 {
@@ -34,8 +31,6 @@ EB_set_covered (MultiFab& mf, int icomp, int ncomp, int ngrow, Real val)
     bool is_cell_centered = mf.ixType().cellCentered();
     int ng = std::min(mf.nGrow(),ngrow);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(ng);
@@ -79,8 +74,6 @@ EB_set_covered (MultiFab& mf, int icomp, int ncomp, int ngrow, const Vector<Real
     Gpu::copy(Gpu::hostToDevice, a_vals.begin(), a_vals.end(), vals_dv.begin());
     Real const* AMREX_RESTRICT vals = vals_dv.data();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(ng);
@@ -113,8 +106,6 @@ EB_set_covered_faces (const Array<MultiFab*,AMREX_SPACEDIM>& umac, Real val)
     const auto& flags = factory->getMultiEBCellFlagFab();
     const int ncomp = umac[0]->nComp();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(*umac[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         AMREX_D_TERM(const Box& xbx = mfi.tilebox(IntVect::TheDimensionVector(0));,
@@ -228,8 +219,6 @@ EB_set_covered_faces (const Array<MultiFab*,AMREX_SPACEDIM>& umac, const int sco
     Gpu::copy(Gpu::hostToDevice, a_vals.begin(), a_vals.end(), vals_dv.begin());
     Real const* AMREX_RESTRICT vals = vals_dv.data();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(*umac[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         AMREX_D_TERM(const Box& xbx = mfi.tilebox(IntVect::TheDimensionVector(0));,
@@ -345,8 +334,6 @@ EB_average_down (const MultiFab& S_fine, MultiFab& S_crse, const MultiFab& vol_f
 
     Dim3 dratio = ratio.dim3();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(crse_S_fine,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& tbx = mfi.tilebox();
@@ -413,8 +400,6 @@ EB_average_down (const MultiFab& S_fine, MultiFab& S_crse, int scomp, int ncomp,
         if (crse_S_fine_BA == S_crse.boxArray()
             && S_fine.DistributionMap() == S_crse.DistributionMap())
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(S_crse,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 const Box& tbx = mfi.tilebox();
@@ -449,8 +434,6 @@ EB_average_down (const MultiFab& S_fine, MultiFab& S_crse, int scomp, int ncomp,
             MultiFab crse_S_fine(crse_S_fine_BA, S_fine.DistributionMap(),
                                  ncomp, 0, MFInfo(),FArrayBoxFactory());
 
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(crse_S_fine,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 const Box& tbx = mfi.tilebox();
@@ -517,8 +500,6 @@ void EB_average_down_faces (const Array<const MultiFab*,AMREX_SPACEDIM>& fine,
 
         if (isMFIterSafe(*fine[0], *crse[0]))
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (int n=0; n<AMREX_SPACEDIM; ++n) {
                 for (MFIter mfi(*crse[n],TilingIfNotGPU()); mfi.isValid(); ++mfi)
                 {
@@ -635,8 +616,6 @@ void EB_average_down_boundaries (const MultiFab& fine, MultiFab& crse,
         {
             MFItInfo info;
             if (Gpu::notInLaunchRegion()) { info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(crse, info); mfi.isValid(); ++mfi)
             {
                 const Box& tbx = mfi.growntilebox(ngcrse);
@@ -704,8 +683,6 @@ void EB_computeDivergence (MultiFab& divu, const Array<MultiFab const*,AMREX_SPA
         const GpuArray<Real,AMREX_SPACEDIM> dxinv = geom.InvCellSizeArray();
         MFItInfo info;
         if (Gpu::notInLaunchRegion()) { info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(divu,info); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -765,8 +742,6 @@ void EB_computeDivergence (MultiFab& divu, const Array<MultiFab const*,AMREX_SPA
 
     MFItInfo info;
     if (Gpu::notInLaunchRegion()) { info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(divu,info); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -809,8 +784,6 @@ EB_average_face_to_cellcenter (MultiFab& ccmf, int dcomp,
 
         MFItInfo info;
         if (Gpu::notInLaunchRegion()) { info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(ccmf,info); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -854,8 +827,6 @@ EB_interp_CC_to_Centroid (MultiFab& cent, const MultiFab& cc, int scomp, int dco
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(cc, mfi_info);  mfi.isValid(); ++mfi)
     {
         const Box& vbx = mfi.validbox();
@@ -935,8 +906,6 @@ EB_interp_CC_to_FaceCentroid (const MultiFab& cc,
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(cc, mfi_info);  mfi.isValid(); ++mfi)
     {
         const Box& vbx = mfi.tilebox();
@@ -1072,8 +1041,6 @@ EB_interp_CellCentroid_to_FaceCentroid (const MultiFab& phi_centroid,
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(phi_centroid, mfi_info);  mfi.isValid(); ++mfi)
     {
         const Box& vbx = mfi.tilebox();

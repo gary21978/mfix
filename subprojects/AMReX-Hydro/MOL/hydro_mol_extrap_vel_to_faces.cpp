@@ -26,8 +26,6 @@ MOL::ExtrapVelToFaces ( const MultiFab&  a_vel,
 {
     BL_PROFILE("MOL::ExtrapVelToFaces");
 
-#ifdef _OPENMP
-#endif
     {
         for (MFIter mfi(a_vel, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

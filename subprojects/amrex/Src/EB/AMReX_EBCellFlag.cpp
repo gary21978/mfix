@@ -105,8 +105,6 @@ EBCellFlagFab::getType (const Box& bx_in) const noexcept
     {
         const Box& bx = amrex::enclosedCells(bx_in);
         std::map<Box,NumCells>::iterator it;
-#ifdef AMREX_USE_OMP
-#endif
         it = m_typemap.find(bx);
         if (it != m_typemap.end())
         {
@@ -117,8 +115,6 @@ EBCellFlagFab::getType (const Box& bx_in) const noexcept
             auto const& flag = this->const_array();
             auto const& t = countCells(flag, bx);
 
-#ifdef AMREX_USE_OMP
-#endif
             m_typemap.insert({bx,t});
 
             return t.type;
@@ -159,8 +155,6 @@ EBCellFlagFab::getNumRegularCells (const Box& bx_in) const noexcept
     else
     {
         std::map<Box,NumCells>::iterator it;
-#ifdef AMREX_USE_OMP
-#endif
         it = m_typemap.find(bx);
         if (it != m_typemap.end())
         {
@@ -171,8 +165,6 @@ EBCellFlagFab::getNumRegularCells (const Box& bx_in) const noexcept
             auto const& flag = this->const_array();
             auto const& t = countCells(flag, bx);
 
-#ifdef AMREX_USE_OMP
-#endif
             m_typemap.insert({bx,t});
 
             return t.nregular;
@@ -195,8 +187,6 @@ EBCellFlagFab::getNumCutCells (const Box& bx_in) const noexcept
     else
     {
         std::map<Box,NumCells>::iterator it;
-#ifdef AMREX_USE_OMP
-#endif
         it = m_typemap.find(bx);
         if (it != m_typemap.end())
         {
@@ -207,8 +197,6 @@ EBCellFlagFab::getNumCutCells (const Box& bx_in) const noexcept
             auto const& flag = this->const_array();
             auto const& t = countCells(flag, bx);
 
-#ifdef AMREX_USE_OMP
-#endif
             m_typemap.insert({bx,t});
 
             return t.nsingle;
@@ -234,8 +222,6 @@ EBCellFlagFab::getNumCoveredCells (const Box& bx_in) const noexcept
     else
     {
         std::map<Box,NumCells>::iterator it;
-#ifdef AMREX_USE_OMP
-#endif
         it = m_typemap.find(bx);
         if (it != m_typemap.end())
         {
@@ -246,8 +232,6 @@ EBCellFlagFab::getNumCoveredCells (const Box& bx_in) const noexcept
             auto const& flag = this->const_array();
             auto const& t = countCells(flag, bx);
 
-#ifdef AMREX_USE_OMP
-#endif
             m_typemap.insert({bx,t});
 
             return t.ncovered;

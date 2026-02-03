@@ -78,8 +78,6 @@ CNS::compute_dSdt (const MultiFab& S, MultiFab& dSdt, Real dt,
     auto const& fact = dynamic_cast<EBFArrayBoxFactory const&>(S.Factory());
     auto const& flags = fact.getMultiEBCellFlagFab();
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         std::array<FArrayBox,AMREX_SPACEDIM> flux;
         FArrayBox dm_as_fine(Box::TheUnitBox(),ncomp);

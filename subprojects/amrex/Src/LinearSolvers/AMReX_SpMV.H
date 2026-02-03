@@ -194,8 +194,6 @@ void SpMV (AlgVector<T>& y, SpMatrix<T> const& A, AlgVector<T> const& x)
 
     Long const ny = y.numLocalRows();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (Long i = 0; i < ny; ++i) {
         T r = 0;
         for (Long j = row[i]; j < row[i+1]; ++j) {

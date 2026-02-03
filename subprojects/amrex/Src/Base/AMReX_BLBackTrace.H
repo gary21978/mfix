@@ -2,9 +2,6 @@
 #define AMREX_BL_BACKTRACE_H_
 #include <AMReX_Config.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <stack>
 #include <string>

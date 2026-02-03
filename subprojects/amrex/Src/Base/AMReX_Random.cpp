@@ -91,14 +91,7 @@ InitRandom (ULong cpu_seed, int nprocs, ULong gpu_seed)
     nthreads = OpenMP::get_max_threads();
     generators.resize(nthreads);
 
-#ifdef AMREX_USE_OMP
-    if (omp_in_parallel()) {
-        amrex::Abort("It is not safe to call amrex::InitRandom inside a threaded region.");
-    }
-#endif
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         int tid = OpenMP::get_thread_num();
         ULong init_seed = cpu_seed + tid*nprocs;

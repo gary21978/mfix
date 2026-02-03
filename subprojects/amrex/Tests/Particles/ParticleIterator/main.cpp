@@ -61,8 +61,6 @@ int main(int argc, char* argv[])
 
   amrex::AllPrintToFile("outside") << "outside parallel region. \n";
 
-#ifdef AMREX_USE_OMP
-#endif
   for (ParIter<1+BL_SPACEDIM> mfi(MyPC, 0); mfi.isValid(); ++mfi) {
       amrex::AllPrintToFile("particle_iterator_out") << mfi.index() << " " << mfi.tileIndex() << "\n";
   }

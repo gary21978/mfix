@@ -220,8 +220,6 @@ void FillSignedDistance (MultiFab& mf, EB2::Level const& ls_lev,
     // we always tile this loop with a size of 32, on CPU and GPU,
     // whatever the user's requested tiling behavior.
     constexpr IntVect fsd_tilesize = IntVect(AMREX_D_DECL(32, 32, 32));
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(mf, fsd_tilesize); mfi.isValid(); ++mfi)
     {
         Box const& gbx = mfi.growntilebox();

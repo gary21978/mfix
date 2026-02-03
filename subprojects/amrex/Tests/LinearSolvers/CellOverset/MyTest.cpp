@@ -151,8 +151,6 @@ MyTest::initData ()
     auto a = ascalar;
     auto b = bscalar;
     auto loverset = do_overset;
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(rhs, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& vbx = mfi.tilebox();

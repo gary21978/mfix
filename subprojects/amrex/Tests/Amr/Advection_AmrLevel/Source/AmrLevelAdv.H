@@ -13,9 +13,6 @@
 #include <memory>
 #include <iostream>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 // Problem-dependent struct. Defined under Exec directory.
 #include "Prob_Parm.H"

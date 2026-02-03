@@ -51,10 +51,6 @@
 #include <AMReX_MemProfiler.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <AMReX_OpenMP.H>
-#include <omp.h>
-#endif
 
 #if defined(__APPLE__) && defined(__x86_64__)
 #include <xmmintrin.h>
@@ -248,8 +244,6 @@ amrex::Error_host (const char* type, const char * msg)
     } else {
         write_lib_id(type);
         write_to_stderr_without_buffering(msg);
-#ifdef AMREX_USE_OMP
-#endif
         ParallelDescriptor::Abort();
     }
 #endif
@@ -297,8 +291,6 @@ amrex::Assert_host (const char* EX, const char* file, int line, const char* msg,
         throw RuntimeError(buf.data());
     } else {
        write_to_stderr_without_buffering(buf.data());
-#ifdef AMREX_USE_OMP
-#endif
        ParallelDescriptor::Abort();
    }
 #endif
@@ -504,35 +496,6 @@ amrex::Initialize (int& argc, char**& argv, bool build_parm_parse,
     }
 #endif
 
-#ifdef AMREX_USE_OMP
-    amrex::OpenMP::Initialize();
-
-    // status output
-    if (system::verbose > 0) {
-//    static_assert(_OPENMP >= 201107, "OpenMP >= 3.1 is required.");
-        amrex::Print() << "OMP initialized with "
-                       << omp_get_max_threads()
-                       << " OMP threads\n";
-    }
-
-    // warn if over-subscription is detected
-    if (system::verbose > 0) {
-        auto ncores = int(std::thread::hardware_concurrency());
-        if (ncores != 0 && // It might be zero according to the C++ standard.
-            ncores < omp_get_max_threads() * ParallelDescriptor::NProcsPerNode())
-        {
-            amrex::Print(amrex::ErrorStream())
-                << "AMReX Warning: You might be oversubscribing CPU cores with OMP threads.\n"
-                << "               There are " << ncores << " cores per node.\n"
-#if defined(AMREX_USE_MPI)
-                << "               There are " << ParallelDescriptor::NProcsPerNode() << " MPI ranks (processes) per node.\n"
-#endif
-                << "               But OMP is initialized with " << omp_get_max_threads() << " threads per process.\n"
-                << "               You should consider setting OMP_NUM_THREADS="
-                << ncores/ParallelDescriptor::NProcsPerNode() << " or less in the environment.\n";
-        }
-    }
-#endif
 
     Machine::Initialize();
 
@@ -824,10 +787,6 @@ amrex::Finalize (amrex::AMReX* pamrex)
         if (ParallelDescriptor::NProcs() == 1) {
             if (mp_tot > 0) {
                 amrex::Print() << "MemPool: "
-#ifdef AMREX_USE_OMP
-                               << "min used in a thread: " << mp_min << " MB, "
-                               << "max used in a thread: " << mp_max << " MB, "
-#endif
                                << "tot used: " << mp_tot << " MB." << '\n';
             }
         } else {
@@ -886,9 +845,6 @@ amrex::Finalize (amrex::AMReX* pamrex)
     Gpu::Device::Finalize();
 #endif
 
-#ifdef AMREX_USE_OMP
-    amrex::OpenMP::Finalize();
-#endif
 
 #if defined(AMREX_USE_UPCXX)
     upcxx::finalize();

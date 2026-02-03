@@ -13,9 +13,6 @@
 #include <AMReX_FluxRegister.H>
 #include <AMReX_FillPatcher.H>
 
-#ifdef AMREX_USE_OMP
-#   include <omp.h>
-#endif
 
 #include <limits>
 #include <memory>

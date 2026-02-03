@@ -290,8 +290,6 @@ void main_main()
 
             auto const& dx = pf.cellSize(ilev);
 
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(mf, TilingIfNotGPU()); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.tilebox();
                 auto const& ga = gmf[ilev].array(mfi,ivar*ndims);

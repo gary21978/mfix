@@ -47,8 +47,6 @@ EBGodunov::ExtrapVelToFaces ( MultiFab const& vel,
                   w_mac.setVal(hydro_covered_val););
 
     const int ncomp = AMREX_SPACEDIM;
-#ifdef _OPENMP
-#endif
     {
         FArrayBox scratch;
         for (MFIter mfi(vel,TilingIfNotGPU()); mfi.isValid(); ++mfi)

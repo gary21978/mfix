@@ -154,8 +154,6 @@ MLNodeABecLaplacian::Fsmooth (int amrlev, int mglev, MultiFab& sol, const MultiF
     }
 #else
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(sol); mfi.isValid(); ++mfi) {
         const Box& bx = mfi.validbox();
         Array4<Real const> const& aarr = acoef.array(mfi);
@@ -314,8 +312,6 @@ MLNodeABecLaplacian::averageDownCoeffs ()
 
             MFItInfo mfi_info;
             if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(m_b_coeffs[amrlev][mglev], mfi_info); mfi.isValid(); ++mfi)
             {
                 Array4<Real> const& sfab = m_b_coeffs[amrlev][mglev].array(mfi);

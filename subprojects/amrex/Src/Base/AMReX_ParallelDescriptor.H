@@ -27,9 +27,6 @@
 #include <pmi.h>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <algorithm>
 #include <atomic>
@@ -156,10 +153,6 @@ while ( false )
         //! memory fence
         void MemoryBarrier () const {
             if (m_size > 1) {
-#ifdef AMREX_USE_OMP
-                if (omp_in_parallel()) {
-                }
-#endif
                 {
 #if defined(BL_USE_MPI3)
                     std::atomic_thread_fence(std::memory_order_release);
@@ -373,22 +366,6 @@ while ( false )
             }
         }
 
-#ifdef AMREX_USE_OMP
-        int nthreads = omp_get_num_threads();
-        if (nthreads > 1) {
-            int tid = omp_get_thread_num();
-            int ntot = re - rb;
-            int nr   = ntot / nthreads;
-            int nlft = ntot - nr * nthreads;
-            if (tid < nlft) {  // get nr+1 items
-                rb += tid * (nr + 1);
-                re = rb + nr + 1;
-            } else {           // get nr items
-                rb += tid * nr + nlft;
-                re = rb + nr;
-            }
-        }
-#endif
 
         return std::make_pair(rb,re);
     }

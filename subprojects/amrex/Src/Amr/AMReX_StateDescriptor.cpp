@@ -34,10 +34,6 @@ StateDescriptor::BndryFunc::operator () (Real* data,const int* lo,const int* hi,
 {
     BL_ASSERT(m_func != nullptr || m_func3D != nullptr);
 
-#ifdef AMREX_USE_OMP
-    bool thread_safe = bf_thread_safety(lo, hi, dom_lo, dom_hi, a_bc, 1);
-    if (thread_safe) {
-#endif
         {
             if (m_func != nullptr) {
                 m_func(data,AMREX_ARLIM(lo),AMREX_ARLIM(hi),dom_lo,dom_hi,dx,grd_lo,time,a_bc);
@@ -46,18 +42,6 @@ StateDescriptor::BndryFunc::operator () (Real* data,const int* lo,const int* hi,
                          AMREX_ZFILL(dx),AMREX_ZFILL(grd_lo),time,a_bc);
             }
         }
-#ifdef AMREX_USE_OMP
-    } else {
-        {
-            if (m_func != nullptr) {
-                m_func(data,AMREX_ARLIM(lo),AMREX_ARLIM(hi),dom_lo,dom_hi,dx,grd_lo,time,a_bc);
-            } else {
-                m_func3D(data,AMREX_ARLIM_3D(lo),AMREX_ARLIM_3D(hi),AMREX_ARLIM_3D(dom_lo),AMREX_ARLIM_3D(dom_hi),
-                         AMREX_ZFILL(dx),AMREX_ZFILL(grd_lo),time,a_bc);
-            }
-        }
-    }
-#endif
 }
 
 void
@@ -69,10 +53,6 @@ StateDescriptor::BndryFunc::operator () (Real* data,const int* lo,const int* hi,
     BL_ASSERT(m_gfunc != nullptr || m_gfunc3D != nullptr);
 
     amrex::ignore_unused(ng);
-#ifdef AMREX_USE_OMP
-    bool thread_safe = bf_thread_safety(lo, hi, dom_lo, dom_hi, a_bc, ng);
-    if (thread_safe) {
-#endif
         {
             if (m_gfunc != nullptr) {
                 m_gfunc(data,AMREX_ARLIM(lo),AMREX_ARLIM(hi),dom_lo,dom_hi,dx,grd_lo,time,a_bc);
@@ -81,18 +61,6 @@ StateDescriptor::BndryFunc::operator () (Real* data,const int* lo,const int* hi,
                           AMREX_ZFILL(dx),AMREX_ZFILL(grd_lo),time,a_bc);
             }
         }
-#ifdef AMREX_USE_OMP
-    } else {
-        {
-            if (m_gfunc != nullptr) {
-                m_gfunc(data,AMREX_ARLIM(lo),AMREX_ARLIM(hi),dom_lo,dom_hi,dx,grd_lo,time,a_bc);
-            } else {
-                m_gfunc3D(data,AMREX_ARLIM_3D(lo),AMREX_ARLIM_3D(hi),AMREX_ARLIM_3D(dom_lo),AMREX_ARLIM_3D(dom_hi),
-                          AMREX_ZFILL(dx),AMREX_ZFILL(grd_lo),time,a_bc);
-            }
-        }
-    }
-#endif
 }
 
 void

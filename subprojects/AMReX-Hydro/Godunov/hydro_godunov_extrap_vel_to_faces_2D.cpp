@@ -28,8 +28,6 @@ Godunov::ExtrapVelToFaces ( MultiFab const& a_vel,
     Box const& domain = geom.Domain();
     const Real* dx    = geom.CellSize();
     const int ncomp = AMREX_SPACEDIM;
-#ifdef _OPENMP
-#endif
     {
         FArrayBox scratch;
         for (MFIter mfi(a_vel,TilingIfNotGPU()); mfi.isValid(); ++mfi)

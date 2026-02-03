@@ -36,8 +36,6 @@ AmrCoreAdv::AdvancePhiAtLevel (int lev, Real time, Real dt_lev, int /*iteration*
     FillPatch(lev, time, Sborder, 0, Sborder.nComp(),
               FillPatchType::fillpatch_class);
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox tmpfab;
         for (MFIter mfi(S_new,TilingIfNotGPU()); mfi.isValid(); ++mfi)

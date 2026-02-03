@@ -184,8 +184,6 @@ MLEBNodeFDLaplacian::restriction (int amrlev, int cmglev, MultiFab& crse, MultiF
     MultiFab* pcrse = (need_parallel_copy) ? &cfine : &crse;
     const iMultiFab& dmsk = *m_dirichlet_mask[amrlev][cmglev-1];
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(*pcrse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -231,8 +229,6 @@ MLEBNodeFDLaplacian::interpolation (int amrlev, int fmglev, MultiFab& fine,
 
     const iMultiFab& dmsk = *m_dirichlet_mask[amrlev][fmglev];
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         Box const& bx = mfi.tilebox();
@@ -333,8 +329,6 @@ MLEBNodeFDLaplacian::scaleRHS (int amrlev, MultiFab* rhs) const
         auto const& dmask = *m_dirichlet_mask[amrlev][0];
         auto const& edgecent = factory->getEdgeCent();
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*rhs,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& box = mfi.tilebox();
@@ -385,8 +379,6 @@ MLEBNodeFDLaplacian::Fapply (int amrlev, int mglev, MultiFab& out, const MultiFa
     }
 #endif
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(out,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& box = mfi.tilebox();
@@ -511,8 +503,6 @@ MLEBNodeFDLaplacian::Fsmooth (int amrlev, int mglev, MultiFab& sol, const MultiF
         }
 #endif
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(sol,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& box = mfi.tilebox();
@@ -619,8 +609,6 @@ MLEBNodeFDLaplacian::compGrad (int amrlev, const Array<MultiFab*,AMREX_SPACEDIM>
     }
 #endif
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(*grad[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         AMREX_D_TERM(const Box& xbox = mfi.tilebox(IntVect(AMREX_D_DECL(0,1,1)));,
@@ -796,8 +784,6 @@ MLEBNodeFDLaplacian::update_sigma ()
 
             MFItInfo mfi_info;
             if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(sigma, mfi_info); mfi.isValid(); ++mfi)
             {
                 Array4<Real> const& sfab = sigma.array(mfi);

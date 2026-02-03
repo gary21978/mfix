@@ -25,9 +25,6 @@
 #include <AMReX_ParmParse.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <cstdio>
 #include <cstddef>

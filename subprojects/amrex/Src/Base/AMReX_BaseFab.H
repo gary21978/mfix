@@ -46,8 +46,6 @@ extern Long private_total_bytes_allocated_in_fabs;     //!< total bytes at any g
 extern Long private_total_bytes_allocated_in_fabs_hwm; //!< high-water-mark over a given interval
 extern Long private_total_cells_allocated_in_fabs;     //!< total cells at any given time
 extern Long private_total_cells_allocated_in_fabs_hwm; //!< high-water-mark over a given interval
-#ifdef AMREX_USE_OMP
-#endif
 
 Long TotalBytesAllocatedInFabs () noexcept;
 Long TotalBytesAllocatedInFabsHWM () noexcept;

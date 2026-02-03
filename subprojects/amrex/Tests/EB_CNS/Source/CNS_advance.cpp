@@ -89,8 +89,6 @@ CNS::compute_dSdt (const MultiFab& S, MultiFab& dSdt, Real dt,
         mfiinfo.EnableTiling(hydro_tile_size).SetDynamic(true);
     }
 
-#ifdef AMREX_USE_OMP
-#endif
     {
         std::array<FArrayBox,AMREX_SPACEDIM> flux;
         FArrayBox dm_as_fine(Box::TheUnitBox(),ncomp);

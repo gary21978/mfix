@@ -165,8 +165,6 @@ main (int   argc,
         MultiFab::Copy(mf,pfData,0,0,1,nGrow);
 
         Real sm = 0;
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
           FArrayBox& myFab = mf[mfi];
           const Box& box = mfi.tilebox();

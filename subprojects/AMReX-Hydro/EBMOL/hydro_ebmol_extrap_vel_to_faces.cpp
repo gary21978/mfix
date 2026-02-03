@@ -36,8 +36,6 @@ EBMOL::ExtrapVelToFaces ( const MultiFab&  a_vel,
     auto const& ccent = fact.getCentroid();
 #endif
 
-#ifdef _OPENMP
-#endif
     {
         for (MFIter mfi(a_vel, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

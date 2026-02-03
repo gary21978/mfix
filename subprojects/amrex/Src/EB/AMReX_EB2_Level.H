@@ -15,9 +15,6 @@
 #include <AMReX_EB2_C.H>
 #include <AMReX_EB2_IF_AllRegular.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <unordered_map>
 #include <limits>
@@ -322,8 +319,6 @@ GShopLevel<G>::define_fine (G const& gshop, const Geometry& geom,
     {
         int nsmallcells = 0;
         int nmulticuts = 0;
-#ifdef AMREX_USE_OMP
-#endif
         {
 #if (AMREX_SPACEDIM == 3)
             Array<BaseFab<Real>, AMREX_SPACEDIM> M2;
@@ -502,8 +497,6 @@ GShopLevel<G>::define_fine (G const& gshop, const Geometry& geom,
 
     AMREX_ALWAYS_ASSERT_WITH_MESSAGE(iter < maxiter, "EB: failed to fix small cells");
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(m_mgf); mfi.isValid(); ++mfi)
     {
         auto& gfab = m_mgf[mfi];

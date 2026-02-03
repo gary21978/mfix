@@ -67,8 +67,6 @@ namespace amrex
 
             const int use_limiter = 0;
 
-#ifdef AMREX_USE_OMP
-#endif
             {
                 std::array<FArrayBox,AMREX_SPACEDIM> bfab;
                 for (MFIter mfi(cmf[0]); mfi.isValid(); ++mfi)

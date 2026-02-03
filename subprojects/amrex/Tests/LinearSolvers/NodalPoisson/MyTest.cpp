@@ -241,8 +241,6 @@ MyTest::initData ()
 
         const auto dx = geom[ilev].CellSizeArray();
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs[ilev],TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();

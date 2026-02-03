@@ -338,8 +338,6 @@ void AmrCoreAdv::MakeNewLevelFromScratch (int lev, Real time, const BoxArray& ba
     const auto problo = Geom(lev).ProbLoArray();
     const auto dx     = Geom(lev).CellSizeArray();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(state,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         Array4<Real> fab = state[mfi].array();
@@ -384,8 +382,6 @@ AmrCoreAdv::ErrorEst (int lev, TagBoxArray& tags, Real time, int /*ngrow*/)
     {
         const MultiFab& state = phi_new[lev];
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(state,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx  = mfi.tilebox();

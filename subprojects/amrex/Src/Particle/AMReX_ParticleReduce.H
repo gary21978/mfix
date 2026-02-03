@@ -220,8 +220,6 @@ ReduceSum (PC const& pc, int lev_min, int lev_max, F const& f)
             }
 
             // We avoid ParIter here to allow reductions after grids change but prior to calling Redistribute()
-#ifdef AMREX_USE_OMP
-#endif
             for (int pmap_it = 0; pmap_it < static_cast<int>(ptile_ptrs.size()); ++pmap_it)
             {
                 const auto& tile = plev.at(grid_tile_ids[pmap_it]);
@@ -423,8 +421,6 @@ ReduceMax (PC const& pc, int lev_min, int lev_max, F const& f)
             }
 
             // We avoid ParIter here to allow reductions after grids change but prior to calling Redistribute()
-#ifdef AMREX_USE_OMP
-#endif
             for (int pmap_it = 0; pmap_it < static_cast<int>(ptile_ptrs.size()); ++pmap_it)
             {
                 const auto& tile = plev.at(grid_tile_ids[pmap_it]);
@@ -625,8 +621,6 @@ ReduceMin (PC const& pc, int lev_min, int lev_max, F const& f)
             }
 
             // We avoid ParIter here to allow reductions after grids change but prior to calling Redistribute()
-#ifdef AMREX_USE_OMP
-#endif
             for (int pmap_it = 0; pmap_it < static_cast<int>(ptile_ptrs.size()); ++pmap_it)
             {
                 const auto& tile = plev.at(grid_tile_ids[pmap_it]);
@@ -822,8 +816,6 @@ ReduceLogicalAnd (PC const& pc, int lev_min, int lev_max, F const& f)
             }
 
             // We avoid ParIter here to allow reductions after grids change but prior to calling Redistribute()
-#ifdef AMREX_USE_OMP
-#endif
             for (int pmap_it = 0; pmap_it < static_cast<int>(ptile_ptrs.size()); ++pmap_it)
             {
                 const auto& tile = plev.at(grid_tile_ids[pmap_it]);
@@ -1020,8 +1012,6 @@ ReduceLogicalOr (PC const& pc, int lev_min, int lev_max, F const& f)
             }
 
             // We avoid ParIter here to allow reductions after grids change but prior to calling Redistribute()
-#ifdef AMREX_USE_OMP
-#endif
             for (int pmap_it = 0; pmap_it < static_cast<int>(ptile_ptrs.size()); ++pmap_it)
             {
                 const auto& tile = plev.at(grid_tile_ids[pmap_it]);

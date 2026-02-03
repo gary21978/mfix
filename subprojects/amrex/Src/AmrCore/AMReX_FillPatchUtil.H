@@ -18,9 +18,6 @@
 #include <AMReX_EBMFInterpolater.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <cmath>
 #include <limits>

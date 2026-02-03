@@ -355,8 +355,6 @@ Real OpenBCSolver::solve (const Vector<MultiFab*>& a_sol,
     BL_PROFILE_VAR_STOP(blp_mg2);
 
     if (sol_all[0].nGrowVect() != a_sol[0]->nGrowVect()) {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*a_sol[0], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.tilebox();

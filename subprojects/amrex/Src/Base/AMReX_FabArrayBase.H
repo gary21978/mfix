@@ -12,9 +12,6 @@
 #include <AMReX_Arena.H>
 #include <AMReX_Gpu.H>
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #include <cstdint>
 #include <ostream>

@@ -42,9 +42,6 @@
 #include <AMReX_Lazy.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 #ifdef AMREX_USE_HDF5
 #include <hdf5.h>

@@ -78,8 +78,6 @@ MLMGBndryT<MF>::setLOBndryConds (const Vector<Array<LinOpBCType,AMREX_SPACEDIM> 
     AMREX_ASSERT(a_crse_fine_bc_type == LinOpBCType::Dirichlet ||
                  a_crse_fine_bc_type == LinOpBCType::Neumann);
 
-#ifdef AMREX_USE_OMP
-#endif
     for (FabSetIter fsi(this->bndry[Orientation(0,Orientation::low)]);
          fsi.isValid(); ++fsi)
     {

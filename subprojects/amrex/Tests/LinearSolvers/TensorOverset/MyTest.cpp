@@ -137,8 +137,6 @@ MyTest::initData ()
     const auto probhi = geom.ProbHiArray();
     const auto dx     = geom.CellSizeArray();
     auto loverset = do_overset;
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(rhs, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& vbx = mfi.validbox();

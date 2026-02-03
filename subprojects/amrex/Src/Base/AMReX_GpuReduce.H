@@ -700,8 +700,6 @@ template <typename T>
 AMREX_FORCE_INLINE
 void deviceReduceSum_full (T * dest, T source) noexcept
 {
-#ifdef AMREX_USE_OMP
-#endif
     *dest += source;
 }
 
@@ -716,8 +714,6 @@ template <typename T>
 AMREX_FORCE_INLINE
 void deviceReduceMin_full (T * dest, T source) noexcept
 {
-#ifdef AMREX_USE_OMP
-#endif
     *dest = std::min(*dest, source);
 }
 
@@ -732,8 +728,6 @@ template <typename T>
 AMREX_FORCE_INLINE
 void deviceReduceMax_full (T * dest, T source) noexcept
 {
-#ifdef AMREX_USE_OMP
-#endif
     *dest = std::max(*dest, source);
 }
 
@@ -747,8 +741,6 @@ void deviceReduceMax (T * dest, T source, Gpu::Handler const&) noexcept
 AMREX_FORCE_INLINE
 void deviceReduceLogicalAnd_full (int * dest, int source) noexcept
 {
-#ifdef AMREX_USE_OMP
-#endif
     *dest = (*dest) && source;
 }
 
@@ -761,8 +753,6 @@ void deviceReduceLogicalAnd (int * dest, int source, Gpu::Handler const&) noexce
 AMREX_FORCE_INLINE
 void deviceReduceLogicalOr_full (int * dest, int source) noexcept
 {
-#ifdef AMREX_USE_OMP
-#endif
     *dest = (*dest) || source;
 }
 

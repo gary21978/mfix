@@ -26,8 +26,6 @@ ReduceSum_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f)
     using value_type = typename FAB::value_type;
     value_type sm = 0;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -160,8 +158,6 @@ ReduceSum_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     using value_type = typename FAB1::value_type;
     value_type sm = 0;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -237,8 +233,6 @@ ReduceSum_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     using value_type = typename FAB1::value_type;
     value_type sm = 0;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -313,8 +307,6 @@ ReduceMin_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f)
     using value_type = typename FAB::value_type;
     value_type r = std::numeric_limits<value_type>::max();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -383,8 +375,6 @@ ReduceMin_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     using value_type = typename FAB1::value_type;
     value_type r = std::numeric_limits<value_type>::max();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -460,8 +450,6 @@ ReduceMin_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     using value_type = typename FAB1::value_type;
     value_type r = std::numeric_limits<value_type>::max();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -536,8 +524,6 @@ ReduceMax_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f)
     using value_type = typename FAB::value_type;
     value_type r = std::numeric_limits<value_type>::lowest();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -607,8 +593,6 @@ ReduceMax_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     using value_type = typename FAB1::value_type;
     value_type r = std::numeric_limits<value_type>::lowest();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -684,8 +668,6 @@ ReduceMax_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     using value_type = typename FAB1::value_type;
     value_type r = std::numeric_limits<value_type>::lowest();
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -759,8 +741,6 @@ ReduceLogicalAnd_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& 
 {
     int r = true;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -830,8 +810,6 @@ ReduceLogicalAnd_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
 {
     int r = true;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -904,8 +882,6 @@ ReduceLogicalOr_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f
 {
     int r = false;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -975,8 +951,6 @@ ReduceLogicalOr_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
 {
     int r = false;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.growntilebox(nghost);
@@ -1131,8 +1105,6 @@ Swap (FabArray<FAB>& dst, FabArray<FAB>& src, int srccomp, int dstcomp, int numc
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
                 const Box& bx = mfi.growntilebox(nghost);
@@ -1179,8 +1151,6 @@ Subtract (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -1226,8 +1196,6 @@ Multiply (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -1273,8 +1241,6 @@ Divide (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp, 
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -1318,8 +1284,6 @@ Abs (FabArray<FAB>& fa, int icomp, int numcomp, const IntVect& nghost)
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(fa,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.growntilebox(nghost);
@@ -1405,8 +1369,6 @@ OverrideSync_nowait (FabArray<FAB> & fa, FabArray<IFAB> const& msk, const Period
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(fa,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -1546,8 +1508,6 @@ indexFromValue (FabArray<FAB> const& mf, int comp, IntVect const& nghost,
 #endif
     {
         bool f = false;
-#ifdef AMREX_USE_OMP
-#endif
         {
             IntVect priv_loc = IntVect::TheMinVector();
             for (MFIter mfi(mf,true); mfi.isValid(); ++mfi)
@@ -1625,8 +1585,6 @@ Dot (FabArray<FAB> const& x, int xcomp, FabArray<FAB> const& y, int ycomp, int n
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.growntilebox(nghost);
@@ -1682,8 +1640,6 @@ Dot (FabArray<FAB> const& x, int xcomp, int ncomp, IntVect const& nghost, bool l
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.growntilebox(nghost);
@@ -1753,8 +1709,6 @@ Dot (FabArray<IFAB> const& mask, FabArray<FAB> const& x, int xcomp,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.growntilebox(nghost);
@@ -1821,8 +1775,6 @@ Dot (FabArray<IFAB> const& mask, FabArray<FAB> const& x, int xcomp, int ncomp,
     } else
 #endif
     {
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
             Box const& bx = mfi.growntilebox(nghost);
@@ -2122,8 +2074,6 @@ OverlapMask (FabArray<FAB> const& fa, IntVect const& nghost, Periodicity const& 
 
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu, tags);
-#ifdef AMREX_USE_OMP
-#endif
     {
         std::vector< std::pair<int,Box> > isects;
 

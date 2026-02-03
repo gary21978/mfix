@@ -403,8 +403,6 @@ ParallelFor_doit (TagVector<TagType> const& tv, F const& f)
     const auto d_tags = tv.d_tags;
     const auto ntags = tv.ntags;
 
-#ifdef AMREX_USE_OMP
-#endif
     for (int itag = 0; itag < ntags; ++itag) {
 
         const auto& t = d_tags[itag];

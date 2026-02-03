@@ -43,8 +43,6 @@ void amrex_mempool_init ()
             the_memory_pool[i] = std::make_unique<CArena>(0, ArenaInfo().SetCpuMemory());
         }
 
-#ifdef AMREX_USE_OMP
-#endif
         {
             size_t N = 1024*1024*sizeof(double);
             void *p = amrex_mempool_alloc(N);

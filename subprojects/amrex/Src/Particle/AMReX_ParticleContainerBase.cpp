@@ -295,8 +295,6 @@ void ParticleContainerBase::BuildRedistributeMask (int lev, int nghost) const
 
         const auto tile_size_do = amrex::ParticleContainerBase::do_tiling ? amrex::ParticleContainerBase::tile_size : IntVect::TheZeroVector();
 
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(*redistribute_mask_ptr, tile_size_do); mfi.isValid(); ++mfi)
         {
             const Box& box = mfi.tilebox();

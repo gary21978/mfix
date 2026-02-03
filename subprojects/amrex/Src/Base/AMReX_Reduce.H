@@ -1056,8 +1056,6 @@ public:
     eval (MF const& mf, IntVect const& nghost, D & reduce_data, F const& f)
     {
         using ReduceTuple = typename D::Type;
-#ifdef AMREX_USE_OMP
-#endif
         {
             ReduceTuple rr;
             Reduce::detail::for_each_init<0, ReduceTuple, Ps...>(rr);
@@ -1082,8 +1080,6 @@ public:
     eval (MF const& mf, IntVect const& nghost, int ncomp, D & reduce_data, F const& f)
     {
         using ReduceTuple = typename D::Type;
-#ifdef AMREX_USE_OMP
-#endif
         {
             ReduceTuple rr;
             Reduce::detail::for_each_init<0, ReduceTuple, Ps...>(rr);
@@ -1176,8 +1172,6 @@ template <typename T, typename N, typename F,
 T Sum (N n, F const& f, T init_val = 0)
 {
     T r = init_val;
-#ifdef AMREX_USE_OMP
-#endif
     for (N i = 0; i < n; ++i) {
         r += f(i);
     }
@@ -1195,8 +1189,6 @@ template <typename T, typename N, typename F,
 T Min (N n, F const& f, T init_val = std::numeric_limits<T>::max())
 {
     T r = init_val;
-#ifdef AMREX_USE_OMP
-#endif
     for (N i = 0; i < n; ++i) {
         r = std::min(r,f(i));
     }
@@ -1214,8 +1206,6 @@ template <typename T, typename N, typename F,
 T Max (N n, F const& f, T init_val = std::numeric_limits<T>::lowest())
 {
     T r = init_val;
-#ifdef AMREX_USE_OMP
-#endif
     for (N i = 0; i < n; ++i) {
         r = std::max(r,f(i));
     }
@@ -1234,8 +1224,6 @@ std::pair<T,T> MinMax (N n, F const& f)
 {
     T r_min = std::numeric_limits<T>::max();
     T r_max = std::numeric_limits<T>::lowest();
-#ifdef AMREX_USE_OMP
-#endif
     for (N i = 0; i < n; ++i) {
         T tmp = f(i);
         r_min = std::min(r_min,tmp);

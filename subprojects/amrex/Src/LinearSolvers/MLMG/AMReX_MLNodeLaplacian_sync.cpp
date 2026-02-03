@@ -6,9 +6,6 @@
 #include <AMReX_EBMultiFabUtil.H>
 #endif
 
-#ifdef AMREX_USE_OMP
-#include <omp.h>
-#endif
 
 namespace amrex {
 
@@ -41,8 +38,6 @@ MLNodeLaplacian::compSyncResidualCoarse (MultiFab& sync_resid, const MultiFab& a
                                                  geom.periodicity(), owner, nonowner);
 
     const Box& ccdom = geom.Domain();
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(crse_cc_mask); mfi.isValid(); ++mfi)
     {
         Array4<int> const& fab = crse_cc_mask.array(mfi);
@@ -50,8 +45,6 @@ MLNodeLaplacian::compSyncResidualCoarse (MultiFab& sync_resid, const MultiFab& a
     }
 
     MultiFab phi(ndba, dmap, 1, 1);
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(phi,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -92,8 +85,6 @@ MLNodeLaplacian::compSyncResidualCoarse (MultiFab& sync_resid, const MultiFab& a
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox rhs, u;
 #ifdef AMREX_USE_EB
@@ -361,8 +352,6 @@ MLNodeLaplacian::compSyncResidualFine (MultiFab& sync_resid, const MultiFab& phi
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     {
         FArrayBox rhs, u;
         IArrayBox tmpmask;
@@ -670,8 +659,6 @@ MLNodeLaplacian::reflux (int crse_amrlev,
 
     fine_res.FillBoundary(fgeom.periodicity());
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fine_res_for_coarse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
         const Box& bx = mfi.tilebox();
@@ -706,8 +693,6 @@ MLNodeLaplacian::reflux (int crse_amrlev,
 
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(fine_contrib,mfi_info); mfi.isValid(); ++mfi)
     {
         const Box& cbx = mfi.tilebox();
@@ -796,8 +781,6 @@ MLNodeLaplacian::reflux (int crse_amrlev,
 
     const auto& csigma = m_sigma[crse_amrlev][0][0];
 
-#ifdef AMREX_USE_OMP
-#endif
     for (MFIter mfi(res,mfi_info); mfi.isValid(); ++mfi)
     {
         if ((*has_fine_bndry)[mfi])

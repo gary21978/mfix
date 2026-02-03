@@ -11,8 +11,6 @@ MyTest::initProbPoisson ()
     {
         const auto prob_lo = geom[ilev].ProbLoArray();
         const auto dx      = geom[ilev].CellSizeArray();
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -39,8 +37,6 @@ MyTest::initProbABecLaplacian ()
         const auto dx      = geom[ilev].CellSizeArray();
         auto a = ascalar;
         auto b = bscalar;
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& vbx = mfi.validbox();
@@ -73,8 +69,6 @@ MyTest::initProbABecLaplacianInhomNeumann ()
         Box const& domain = geom[ilev].Domain();
         auto a = ascalar;
         auto b = bscalar;
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
             const Box& bx = mfi.tilebox();
@@ -176,8 +170,6 @@ MyTest::initProbNodeABecLaplacian ()
         auto a = ascalar;
         auto b = bscalar;
         Box const& nddom = amrex::surroundingNodes(geom[ilev].Domain());
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(rhs[ilev]); mfi.isValid(); ++mfi)
         {
             const Box& ndbx = mfi.validbox();

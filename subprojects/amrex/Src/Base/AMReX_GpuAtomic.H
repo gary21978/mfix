@@ -608,8 +608,6 @@ namespace HostDevice::Atomic {
     AMREX_FORCE_INLINE
     void Add_Host (T* const sum, T const value) noexcept
     {
-#ifdef AMREX_USE_OMP
-#endif
         *sum += value;
     }
 

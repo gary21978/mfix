@@ -1,21 +1,5 @@
 #include <AMReX_Config.H>
 
-#ifdef AMREX_USE_OMP
-
-module amrex_omp_module
-
-  implicit none
-
-  integer, parameter :: amrex_omp_support = (_OPENMP)
-
-  integer, external :: omp_get_num_threads
-  integer, external :: omp_get_max_threads
-  integer, external :: omp_get_thread_num
-  logical, external :: omp_in_parallel
-
-end module amrex_omp_module
-
-#else
 
 module amrex_omp_module
 
@@ -43,4 +27,3 @@ contains
 
 end module amrex_omp_module
 
-#endif

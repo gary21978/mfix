@@ -305,8 +305,6 @@ void BLProfiler::PStop() {
 
 
 void BLProfiler::start() {
-#ifdef AMREX_USE_OMP
-#endif
 {
   bltelapsed = 0.0;
   bltstart = amrex::second();
@@ -339,8 +337,6 @@ void BLProfiler::start() {
 
 
 void BLProfiler::stop() {
-#ifdef AMREX_USE_OMP
-#endif
 {
   double tDiff(amrex::second() - bltstart);
   double nestedTime(0.0);

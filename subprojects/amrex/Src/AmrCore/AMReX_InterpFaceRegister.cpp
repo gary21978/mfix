@@ -39,8 +39,6 @@ void InterpFaceRegister::define (BoxArray const& fba, DistributionMapping const&
 #ifdef AMREX_USE_GPU
         Vector<Array4BoxValTag<int> > tags;
 #endif
-#ifdef AMREX_USE_OMP
-#endif
         for (MFIter mfi(m_face_mask[face]); mfi.isValid(); ++mfi) {
             auto& fab = m_face_mask[face][mfi];
             Box const& dbox = fab.box();
@@ -156,8 +154,6 @@ InterpFaceRegister::interp (Array<MultiFab*, AMREX_SPACEDIM> const& fine, // NOL
         } else
 #endif
         {
-#ifdef AMREX_USE_OMP
-#endif
             {
                 FArrayBox slope;
                 for (MFIter mfi(*fine[idim]); mfi.isValid(); ++mfi) {

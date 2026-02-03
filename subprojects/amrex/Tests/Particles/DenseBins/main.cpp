@@ -19,8 +19,6 @@ void checkAnswer (const amrex::DenseBins<int>& bins)
         AMREX_ALWAYS_ASSERT(bins_ptr[perm[i]] <= bins_ptr[perm[i+1]]);
     });
 #else
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < bins.numItems()-1; ++i)
     {
         AMREX_ALWAYS_ASSERT(bins_ptr[perm[i]] <= bins_ptr[perm[i+1]]);
@@ -40,8 +38,6 @@ void checkAnswer (const amrex::DenseBins<int>& bins)
         }
     });
 #else
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < bins.numBins(); ++i) {
         auto start = offsets[i  ];
         auto stop  = offsets[i+1];
@@ -89,8 +85,6 @@ void initData (int nbins, amrex::Vector<int>& items)
 
     const auto nitems = int(items.size());
 
-#ifdef AMREX_USE_OMP
-#endif
     for (int i = 0; i < nitems; ++i) { items[i] = int(amrex::Random_int(nbins)); }
 }
 
@@ -107,9 +101,6 @@ void testDenseBins ()
     initData(nbins, items);
 
     testSerial(nbins, items);
-#ifdef AMREX_USE_OMP
-    testOpenMP(nbins, items);
-#endif
 #ifdef AMREX_USE_GPU
     testGPU(nbins, items);
 #endif
