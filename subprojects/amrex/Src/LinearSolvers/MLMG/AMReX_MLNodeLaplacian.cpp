@@ -152,7 +152,6 @@ MLNodeLaplacian::unimposeNeumannBC (int amrlev, MultiFab& rhs) const
         MFItInfo mfi_info;
         if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(rhs,mfi_info); mfi.isValid(); ++mfi)
         {
@@ -417,7 +416,6 @@ MLNodeLaplacian::FillBoundaryCoeff (MultiFab& sigma, const Geometry& geom)
         MFItInfo mfi_info;
         if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(sigma, mfi_info); mfi.isValid(); ++mfi)
         {
@@ -435,7 +433,6 @@ MLNodeLaplacian::fixUpResidualMask (int amrlev, iMultiFab& resmsk)
     const iMultiFab& cfmask = *m_nd_fine_mask[amrlev];
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(resmsk,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -541,7 +538,6 @@ MLNodeLaplacian::restriction (int amrlev, int cmglev, MultiFab& crse, MultiFab& 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(*pcrse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -676,7 +672,6 @@ MLNodeLaplacian::interpolation (int amrlev, int fmglev, MultiFab& fine, const Mu
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(fine, true); mfi.isValid(); ++mfi)
         {
@@ -784,7 +779,6 @@ MLNodeLaplacian::restrictInteriorNodes (int camrlev, MultiFab& crhs, MultiFab& a
     frhs->FillBoundary(fgeom.periodicity());
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(cfine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -823,7 +817,6 @@ MLNodeLaplacian::restrictInteriorNodes (int camrlev, MultiFab& crhs, MultiFab& a
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(crhs, mfi_info); mfi.isValid(); ++mfi)
     {
@@ -896,7 +889,6 @@ MLNodeLaplacian::normalize (int amrlev, int mglev, MultiFab& mf) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1043,7 +1035,6 @@ MLNodeLaplacian::setEBInflowVelocity (int amrlev, const MultiFab& eb_vel)
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*m_eb_vel_dot_n[amrlev], mfi_info); mfi.isValid(); ++mfi)
     {

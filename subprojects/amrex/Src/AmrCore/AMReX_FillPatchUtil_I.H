@@ -11,7 +11,6 @@ auto call_interp_hook (F const& f, MF& mf, int icomp, int ncomp)
     -> decltype(f(mf[0],Box(),icomp,ncomp))
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(mf); mfi.isValid(); ++mfi) {
         auto& dfab = mf[mfi];
@@ -129,7 +128,6 @@ FillPatchSingleLevel (MF& mf, IntVect const& nghost, Real time,
                 }
             }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(*dmf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -209,7 +207,6 @@ FillPatchInterp (MF& mf_fine_patch, int fcomp, MF const& mf_crse_patch, int ccom
     Box const& cdomain = amrex::convert(cgeom.Domain(), mf_fine_patch.ixType());
     int idummy=0;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         Vector<BCRec> bcr(ncomp);
@@ -722,7 +719,6 @@ namespace detail {
 #ifdef AMREX_USE_OMP
 //              bool cc = fpc.ba_crse_patch.ixType().cellCentered();
                 bool cc = false;        // can anything be done to allow threading, or can the OpenMP just be removed?
-#pragma omp parallel if (cc && Gpu::notInLaunchRegion() )
 #endif
                 {
                     Vector<Array<BCRec, AMREX_SPACEDIM> > bcr(ncomp);
@@ -1126,7 +1122,6 @@ InterpFromCoarseLevel (MF& mf, IntVect const& nghost, Real time,
                     ratio, mapper, bcs, bcscomp);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(mf); mfi.isValid(); ++mfi)
     {
@@ -1239,7 +1234,6 @@ InterpFromCoarseLevel (Array<MF*, AMREX_SPACEDIM> const& mf, IntVect const& ngho
 
     int idummy1=0, idummy2=0;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         Vector<Array<BCRec, AMREX_SPACEDIM> > bcr(ncomp);

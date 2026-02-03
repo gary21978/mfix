@@ -22,7 +22,6 @@ MFIter::currentDepth ()
 {
     int r;
 #ifdef AMREX_USE_OMP
-#pragma omp atomic read
 #endif
     r = MFIter::depth;
     return r;
@@ -99,7 +98,6 @@ MFIter::MFIter (const BoxArray& ba, const DistributionMapping& dm, unsigned char
     num_local_tiles(nullptr)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp single
 #endif
     {
         m_fa->addThisBD();
@@ -123,7 +121,6 @@ MFIter::MFIter (const BoxArray& ba, const DistributionMapping& dm, bool do_tilin
     num_local_tiles(nullptr)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp single
 #endif
     {
         m_fa->addThisBD();
@@ -149,7 +146,6 @@ MFIter::MFIter (const BoxArray& ba, const DistributionMapping& dm,
     num_local_tiles(nullptr)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp single
 #endif
     {
         m_fa->addThisBD();
@@ -174,15 +170,12 @@ MFIter::MFIter (const BoxArray& ba, const DistributionMapping& dm, const MFItInf
     num_local_tiles(nullptr)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp single
 #endif
     {
         m_fa->addThisBD();
     }
 #ifdef AMREX_USE_OMP
     if (dynamic) {
-#pragma omp barrier
-#pragma omp single
         nextDynamicIndex = omp_get_num_threads();
         // yes omp single has an implicit barrier and we need it because nextDynamicIndex is static.
     }
@@ -207,8 +200,6 @@ MFIter::MFIter (const FabArrayBase& fabarray_, const MFItInfo& info)
 {
 #ifdef AMREX_USE_OMP
     if (dynamic) {
-#pragma omp barrier
-#pragma omp single
         nextDynamicIndex = omp_get_num_threads();
         // yes omp single has an implicit barrier and we need it because nextDynamicIndex is static.
     }
@@ -253,8 +244,6 @@ MFIter::Finalize ()
 
     if (m_fa) {
 #ifdef AMREX_USE_OMP
-#pragma omp barrier
-#pragma omp single
 #endif
         m_fa->clearThisBD();
     }
@@ -263,7 +252,6 @@ MFIter::Finalize ()
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp master
 #endif
     {
         depth = 0;
@@ -274,7 +262,6 @@ void
 MFIter::Initialize ()
 {
 #ifdef AMREX_USE_OMP
-#pragma omp master
 #endif
     {
         ++depth;
@@ -287,7 +274,6 @@ MFIter::Initialize ()
         && (OpenMP::get_num_threads() > 1))
     { // If there are multiple gpu streams and multiple omp threads, we need
       // to sync here. Otherwise, the sync will be delayed.
-#pragma omp single
         Gpu::streamSynchronize();
     }
 #endif
@@ -525,7 +511,6 @@ MFIter::operator++ () noexcept
 #ifdef AMREX_USE_OMP
     if (dynamic)
     {
-#pragma omp atomic capture
         currentIndex = nextDynamicIndex++;
     }
     else

@@ -136,7 +136,6 @@ void EdgeFluxRegister::reset ()
 #else
             // Due to its special BoxArray, it's not safe do tiling
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
             for (MFIter mfi(mf); mfi.isValid(); ++mfi) {
                 mf[mfi].template setVal<RunOn::Host>(Real(0.0));
@@ -166,7 +165,6 @@ void EdgeFluxRegister::reset ()
 #else
         // Due to its special BoxArray, it's not safe do tiling
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(mf); mfi.isValid(); ++mfi) {
             mf[mfi].template setVal<RunOn::Host>(Real(0.0));
@@ -306,7 +304,6 @@ void EdgeFluxRegister::Reflux (Array<MultiFab*,AMREX_SPACEDIM> const& B_crse) co
     Real dzi = m_crse_geom.InvCellSize(2);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*B_crse[0]); mfi.isValid(); ++mfi) {
         if (m_has_cf[mfi]) {
@@ -366,7 +363,6 @@ void EdgeFluxRegister::Reflux (Array<MultiFab*,AMREX_SPACEDIM> const& B_crse) co
     Real dyi = m_crse_geom.InvCellSize(1);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*B_crse[0]); mfi.isValid(); ++mfi) {
         if (m_has_cf[mfi]) {

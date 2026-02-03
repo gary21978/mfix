@@ -13,7 +13,6 @@ FabArray<FAB>::PC_local_cpu (const CPC& thecpc, FabArray<FAB> const& src,
     if (is_thread_safe)
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < N_locs; ++i)
         {
@@ -46,7 +45,6 @@ FabArray<FAB>::PC_local_cpu (const CPC& thecpc, FabArray<FAB> const& src,
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(*this); mfi.isValid(); ++mfi)
         {

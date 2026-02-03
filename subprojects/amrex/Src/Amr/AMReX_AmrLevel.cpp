@@ -1072,7 +1072,6 @@ FillPatchIterator::Initialize (int  boxGrow,
                                                         desc.interp(SComp));
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
                 for (MFIter mfi(m_fabs); mfi.isValid(); ++mfi)
                 {
@@ -1657,7 +1656,6 @@ AmrLevel::derive (const std::string& name, Real time, int ngrow)
         if (rec->derFuncFab() != nullptr)
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(*mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -1674,7 +1672,6 @@ AmrLevel::derive (const std::string& name, Real time, int ngrow)
         else
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(*mf,true); mfi.isValid(); ++mfi)
         {
@@ -1772,7 +1769,6 @@ AmrLevel::derive (const std::string& name, Real time, MultiFab& mf, int dcomp)
         if (rec->derFuncFab() != nullptr)
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -1791,7 +1787,6 @@ AmrLevel::derive (const std::string& name, Real time, MultiFab& mf, int dcomp)
         else
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(mf,true); mfi.isValid(); ++mfi)
         {

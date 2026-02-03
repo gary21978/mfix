@@ -60,7 +60,6 @@ struct IntegratorOps<T, std::enable_if_t<std::is_base_of_v<amrex::ParticleContai
         auto ptIncrement = [&](){ ++pty; ++ptx; };
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (; checkValid(); ptIncrement())
         {

@@ -1166,18 +1166,6 @@ class MFIXSolidsData
         if (output.iterations == -1)
           amrex::Abort("Newton solver did not converge");
 
-#if 0
-        // check how different is result from m_y[ChemSolidsIndexes::temperature()]
-        printf("S: result = %e, rel_error = %e, abs_error = %e\n",
-            result,
-            std::abs(result - m_y[ChemSolidsIndexes::temperature()])/std::abs(result),
-            std::abs(result - m_y[ChemSolidsIndexes::temperature()]));
-
-        if (std::abs(result - m_y[ChemSolidsIndexes::temperature()]) > std::abs(result)*1.e-6 + 1.e-6) {
-          amrex::Abort("error 2");
-        }
-#endif
-
         m_ptile_data.rdata(SoArealData::temperature)[m_p_id] = result;
       }
 

@@ -356,7 +356,6 @@ Real OpenBCSolver::solve (const Vector<MultiFab*>& a_sol,
 
     if (sol_all[0].nGrowVect() != a_sol[0]->nGrowVect()) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*a_sol[0], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

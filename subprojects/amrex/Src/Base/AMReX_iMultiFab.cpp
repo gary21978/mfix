@@ -303,7 +303,6 @@ iMultiFab::min (int comp, int nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:mn)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost);
@@ -347,7 +346,6 @@ iMultiFab::min (const Box& region, int comp, int nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:mn)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
@@ -387,7 +385,6 @@ iMultiFab::max (int comp, int nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:mx)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost);
@@ -431,7 +428,6 @@ iMultiFab::max (const Box& region, int comp, int nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:mx)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
@@ -473,7 +469,6 @@ iMultiFab::sum (int comp, int nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
@@ -514,7 +509,6 @@ iMultiFab::sum (Box const& region, int comp, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
@@ -714,7 +708,6 @@ OwnerMask (FabArrayBase const& mf, const Periodicity& period, const IntVect& ngr
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu, tags);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
     {
         std::vector< std::pair<int,Box> > isects;

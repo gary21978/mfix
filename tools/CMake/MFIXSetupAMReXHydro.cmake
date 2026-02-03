@@ -31,8 +31,8 @@ endif ()
 # Options
 set(HYDRO_SPACEDIM              3)
 set(HYDRO_MPI                   ${MFIX_MPI})
-set(HYDRO_OMP                   ${MFIX_OMP})
-set(HYDRO_GPU_BACKEND           ${MFIX_GPU_BACKEND} CACHE STRING "" FORCE)
+set(HYDRO_OMP                   OFF)
+set(HYDRO_GPU_BACKEND           NONE CACHE STRING "" FORCE)
 set(HYDRO_EB                    ON)
 
 # Append -w to AMREX_HYDRO flags (but not MFIX flags)

@@ -51,7 +51,6 @@ EBMFCellConsLinInterp::interp (MultiFab const& crsemf, int ccomp, MultiFab& fine
     {
         auto const& fflags = ffact->getMultiEBCellFlagFab();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(finemf); mfi.isValid(); ++mfi) {
             Box const target_fine_region = amrex::grow(mfi.validbox(),ng) & dest_domain;

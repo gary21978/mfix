@@ -1282,14 +1282,6 @@ void mlndlap_stencil_rap (int i, int j, int, Array4<Real> const& csten,
 
     constexpr int k = 0;
 
-#if 0
-    auto interp_from_mm_to = [&fsten] (int i_, int j_) -> Real {
-        Real wxm = std::abs(fsten(i_-1,j_  ,0,1))/(std::abs(fsten(i_-1,j_-1,0,3))+std::abs(fsten(i_-1,j_  ,0,3))+eps);
-        Real wym = std::abs(fsten(i_  ,j_-1,0,2))/(std::abs(fsten(i_-1,j_-1,0,3))+std::abs(fsten(i_  ,j_-1,0,3))+eps);
-        Real wmm = std::abs(fsten(i_-1,j_-1,0,3)) * (Real(1.) + wxm + wym);
-        return wmm * fsten(i_,j_,0,4);
-    };
-#endif
 
     auto interp_from_mp_to = [&fsten] (int i_, int j_) -> Real {
         Real wxm = std::abs(fsten(i_-1,j_  ,0,1))/(std::abs(fsten(i_-1,j_-1,0,3))+std::abs(fsten(i_-1,j_  ,0,3))+eps);
@@ -1328,11 +1320,6 @@ void mlndlap_stencil_rap (int i, int j, int, Array4<Real> const& csten,
         return std::abs(fsten(i_,j_,0,2))/(std::abs(fsten(i_,j_-1,0,2))+std::abs(fsten(i_,j_,0,2))+eps);
     };
 
-#if 0
-    auto Amm = [&fsten] (int i_, int j_) -> Real {
-        return fsten(i_-1,j_-1,0,3);
-    };
-#endif
 
     auto A0m = [&fsten] (int i_, int j_) -> Real {
         return fsten(i_,j_-1,0,2);
@@ -1366,14 +1353,6 @@ void mlndlap_stencil_rap (int i, int j, int, Array4<Real> const& csten,
         return fsten(i_,j_,0,3);
     };
 
-#if 0
-    auto restrict_from_mm_to = [&fsten] (int ii_, int jj_) -> Real {
-        Real wxp = std::abs(fsten(ii_-1,jj_-1,0,1))/(std::abs(fsten(ii_-1,jj_-2,0,3))+std::abs(fsten(ii_-1,jj_-1,0,3))+eps);
-        Real wyp = std::abs(fsten(ii_-1,jj_-1,0,2))/(std::abs(fsten(ii_-2,jj_-1,0,3))+std::abs(fsten(ii_-1,jj_-1,0,3))+eps);
-        Real wpp = std::abs(fsten(ii_-1,jj_-1,0,3))*(Real(1.)+wxp+wyp);
-        return wpp * fsten(ii_-1,jj_-1,0,4);
-    };
-#endif
 
     auto restrict_from_0m_to = [&fsten] (int ii_, int jj_) -> Real {
         return std::abs(fsten(ii_,jj_-1,0,2))/(std::abs(fsten(ii_,jj_-2,0,2))+std::abs(fsten(ii_,jj_-1,0,2))+eps);

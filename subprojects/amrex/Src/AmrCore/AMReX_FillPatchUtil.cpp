@@ -68,7 +68,6 @@ namespace amrex
             const int use_limiter = 0;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             {
                 std::array<FArrayBox,AMREX_SPACEDIM> bfab;

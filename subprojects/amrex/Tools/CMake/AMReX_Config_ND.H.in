@@ -17,7 +17,6 @@
 #cmakedefine BL_USE_MPI
 #cmakedefine AMREX_MPI_THREAD_MULTIPLE
 #cmakedefine AMREX_USE_SIMD
-#cmakedefine AMREX_USE_OMP
 #cmakedefine BL_USE_OMP
 #cmakedefine AMREX_USE_SYCL
 #cmakedefine AMREX_USE_DPCPP
@@ -75,8 +74,4 @@
   hipcc does not necessarily set the _OPENMP macro
   https://rocmdocs.amd.com/en/latest/Programming_Guides/HIP-FAQ.html?highlight=_openmp#openmp-is-undefined-when-compiling-with-fopenmp
  */
-#if defined(AMREX_USE_OMP) && !defined(_OPENMP) && !defined(AMREX_USE_HIP)
-#error "libamrex was built with OpenMP, so the downstream project must activate it, too"
-#endif
-
 #endif /* AMREX_CONFIG_@D@D_H_ */

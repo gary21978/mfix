@@ -609,7 +609,6 @@ namespace HostDevice::Atomic {
     void Add_Host (T* const sum, T const value) noexcept
     {
 #ifdef AMREX_USE_OMP
-#pragma omp atomic update
 #endif
         *sum += value;
     }

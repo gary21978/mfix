@@ -434,7 +434,6 @@ struct alignas(sizeof(double)) Particle
         ParticleIDWrapper wrapper(tmp);
         wrapper = id;
 #if defined(AMREX_USE_OMP)
-#pragma omp atomic write
         this->m_idcpu = *(wrapper.m_idata);
 #else
         auto *old_ptr = reinterpret_cast<unsigned long long*>(&(this->m_idcpu));
@@ -604,9 +603,7 @@ Particle<NReal, NInt>::NextID ()
 // we should be able to test on _OPENMP < 201107 for capture (version 3.1)
 // but we must work around a bug in gcc < 4.9
 #if defined(AMREX_USE_OMP) && defined(_OPENMP) && _OPENMP < 201307
-#pragma omp critical (amrex_particle_nextid)
 #elif defined(AMREX_USE_OMP)
-#pragma omp atomic capture
 #endif
     next = the_next_id++;
 

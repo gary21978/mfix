@@ -600,12 +600,6 @@ BaseMonitor::setup_variables ()
       reporter::Log(reporter::Warning)
         << "The thermodynamic pressure (thermo_p_g)"
         << " is currently disabled as a monitor variable.";
-#if 0
-      variable_names.push_back(var);
-
-      for (int lev(0); lev < m_nlev; lev++)
-        m_scalars[lev].push_back(m_leveldata[lev]->thermodynamic_p_g);
-#endif
     } else if (var.compare("ro_g") == 0) {
 
       variable_names.push_back(var);

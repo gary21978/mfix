@@ -309,7 +309,6 @@ TagBoxArray::buffer (const IntVect& nbuf)
     if (nbuf.max() > 0)
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
        for (MFIter mfi(*this); mfi.isValid(); ++mfi) {
            get(mfi).buffer(nbuf, n_grow);
@@ -356,7 +355,6 @@ TagBoxArray::mapPeriodicRemoveDuplicates (const Geometry& geom)
         // We need to keep tags in periodic boundary
         const auto owner_mask = amrex::OwnerMask(tmp, Periodicity::NonPeriodic(), nGrowVect());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(tmp); mfi.isValid(); ++mfi) {
             Box const& box = mfi.fabbox();
@@ -379,7 +377,6 @@ TagBoxArray::local_collate_cpu (Gpu::PinnedVector<IntVect>& v) const
 
     Vector<int> count(this->local_size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
@@ -401,7 +398,6 @@ TagBoxArray::local_collate_cpu (Gpu::PinnedVector<IntVect>& v) const
     if (v.empty()) { return; }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
@@ -678,7 +674,6 @@ TagBoxArray::setVal (const BoxArray& ba, TagBox::TagVal val)
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu,tags);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
     {
         std::vector< std::pair<int,Box> > isects;
@@ -726,7 +721,6 @@ TagBoxArray::coarsen (const IntVect & ratio)
     }
 
 #if defined(AMREX_USE_OMP)
-#pragma omp parallel if (teamsize == 1 && Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*this,flags); mfi.isValid(); ++mfi)
     {
@@ -768,7 +762,6 @@ TagBoxArray::hasTags (Box const& a_bx) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(||:has_tags)
 #endif
         for (MFIter mfi(*this); mfi.isValid(); ++mfi)
         {

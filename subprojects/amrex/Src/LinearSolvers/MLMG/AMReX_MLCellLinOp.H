@@ -325,7 +325,6 @@ setLOBndryConds (const Geometry& geom, const Real* dx,
     const Box& domain = geom.Domain();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(bcloc); mfi.isValid(); ++mfi)
     {
@@ -618,7 +617,6 @@ MLCellLinOpT<MF>::setLevelBC (int amrlev, const MF* a_levelbcdata, const MF* rob
         MFItInfo mfi_info;
         if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*(this->m_robin_bcval[amrlev]), mfi_info); mfi.isValid(); ++mfi) {
             Box const& vbx = mfi.validbox();
@@ -809,7 +807,6 @@ MLCellLinOpT<MF>::applyBC (int amrlev, int mglev, MF& in, BCMode bc_mode, StateM
     if (cross || tensorop)
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(in, mfi_info); mfi.isValid(); ++mfi)
         {
@@ -869,7 +866,6 @@ MLCellLinOpT<MF>::applyBC (int amrlev, int mglev, MF& in, BCMode bc_mode, StateM
 #else
         if constexpr (std::is_same_v<Real,RT>) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
             for (MFIter mfi(in, mfi_info); mfi.isValid(); ++mfi)
             {
@@ -996,7 +992,6 @@ MLCellLinOpT<MF>::interpolation (int amrlev, int fmglev, MF& fine, const MF& crs
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(fine,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1053,7 +1048,6 @@ MLCellLinOpT<MF>::interpAssign (int amrlev, int fmglev, MF& fine, MF& crse) cons
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine, mfi_info); mfi.isValid(); ++mfi)
     {
@@ -1123,7 +1117,6 @@ MLCellLinOpT<MF>::interpolationAmr (int famrlev, MF& fine, const MF& crse,
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine, mfi_info); mfi.isValid(); ++mfi)
     {
@@ -1313,7 +1306,6 @@ MLCellLinOpT<MF>::reflux (int crse_amrlev, MF& res, const MF& crse_sol, const MF
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         Array<FAB,AMREX_SPACEDIM> flux;
@@ -1334,7 +1326,6 @@ MLCellLinOpT<MF>::reflux (int crse_amrlev, MF& res, const MF& crse_sol, const MF
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp barrier
 #endif
 
         for (MFIter mfi(fine_sol, mfi_info);  mfi.isValid(); ++mfi)
@@ -1371,7 +1362,6 @@ MLCellLinOpT<MF>::compFlux (int amrlev, const Array<MF*,AMREX_SPACEDIM>& fluxes,
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         Array<FAB,AMREX_SPACEDIM> flux;
@@ -1417,7 +1407,6 @@ MLCellLinOpT<MF>::compGrad (int amrlev, const Array<MF*,AMREX_SPACEDIM>& grad,
                  const RT dyi = static_cast<RT>(this->m_geom[amrlev][mglev].InvCellSize(1));,
                  const RT dzi = static_cast<RT>(this->m_geom[amrlev][mglev].InvCellSize(2)););
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(sol, TilingIfNotGPU());  mfi.isValid(); ++mfi)
     {
@@ -1467,7 +1456,6 @@ MLCellLinOpT<MF>::applyMetricTerm (int amrlev, int mglev, MF& rhs) const
     const RT probxlo = static_cast<RT>(geom.ProbLo(0));
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(rhs,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -1523,7 +1511,6 @@ MLCellLinOpT<MF>::unapplyMetricTerm (int amrlev, int mglev, MF& rhs) const
     const RT probxlo = static_cast<RT>(geom.ProbLo(0));
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(rhs,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -1846,7 +1833,6 @@ MLCellLinOpT<MF>::prepareForSolve ()
 #endif
             {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
                 for (MFIter mfi(foo, MFItInfo{}.SetDynamic(true)); mfi.isValid(); ++mfi)
                 {
@@ -2080,7 +2066,6 @@ MLCellLinOpT<MF>::normInf (int amrlev, MF const& mf, bool local) const -> RT
 #endif
                 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:norm)
 #endif
                     for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
                         Box const& bx = mfi.tilebox();
@@ -2114,7 +2099,6 @@ MLCellLinOpT<MF>::normInf (int amrlev, MF const& mf, bool local) const -> RT
 #endif
                 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:norm)
 #endif
                     for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
                         Box const& bx = mfi.tilebox();

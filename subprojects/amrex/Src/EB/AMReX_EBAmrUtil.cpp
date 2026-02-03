@@ -22,7 +22,6 @@ TagCutCells (TagBoxArray& tags, const MultiFab& state)
         auto const& flags = factory.getMultiEBCellFlagFab();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(state, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -69,7 +68,6 @@ TagVolfrac (TagBoxArray& tags, const MultiFab& volfrac, Real tol)
     const char   tagval = TagBox::SET;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(volfrac, TilingIfNotGPU()); mfi.isValid(); ++mfi) {
         const Box& bx = mfi.tilebox();

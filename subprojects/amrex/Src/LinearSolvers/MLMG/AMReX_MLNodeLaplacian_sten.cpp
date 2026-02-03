@@ -66,7 +66,6 @@ MLNodeLaplacian::buildStencil ()
             MFItInfo mfi_info;
             if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             {
                 FArrayBox sgfab;
@@ -195,7 +194,6 @@ MLNodeLaplacian::buildStencil ()
             // set_stencil_s0 has to be in a separate MFIter from set_stencil
             // because it uses other cells' data.
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(*m_stencil[amrlev][0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -237,7 +235,6 @@ MLNodeLaplacian::buildStencil ()
             MultiFab* pcrse = (need_parallel_copy) ? &cfine : &crse;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(*pcrse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -255,7 +252,6 @@ MLNodeLaplacian::buildStencil ()
             }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(*pcrse,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -294,7 +290,6 @@ MLNodeLaplacian::buildStencil ()
 #endif
             {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
                 for (MFIter mfi(*m_stencil[amrlev][mglev],TilingIfNotGPU()); mfi.isValid(); ++mfi) {
                     Box const& bx = mfi.tilebox();

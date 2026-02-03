@@ -506,17 +506,6 @@ calc_particles_from_vol (amrex::Real const a_vol,
       Real const probability = std::get<1>(dist_info);
       Real const vol_s = vfrac * a_vol * probability;
 
-#if 0
-        PrintToFile("dist", Print::AllProcs)
-          << std::setw(3) << bin << "  "
-          << std::scientific << std::setw(16) << std::setprecision(8) << dp << "   "
-          << std::scientific << std::setw(16) << std::setprecision(8) << vol_s << "   "
-          << std::scientific << std::setw(16) << std::setprecision(8) << vol_p << "   "
-          << std::fixed      << std::setw( 8) << std::setprecision(4) << probability << "   "
-          << std::fixed      << std::setw( 8) << std::setprecision(4) << (vol_s/vol_p) << "   "
-          //<< std::setw(8) << static_cast<long>(vol_s / vol_p)
-          << '\n';
-#endif
       np_r += vol_s / vol_p;
     }
 

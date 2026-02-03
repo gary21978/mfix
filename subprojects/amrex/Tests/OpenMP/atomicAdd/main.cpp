@@ -9,7 +9,6 @@ void test_atomicAdd (MultiFab& mf)
 {
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     {
         FArrayBox tmp;
@@ -26,7 +25,6 @@ void test_lockAdd (MultiFab& mf)
 {
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     {
         FArrayBox tmp;

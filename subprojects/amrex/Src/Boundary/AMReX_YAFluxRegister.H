@@ -167,7 +167,6 @@ YAFluxRegisterT<MF>::define (const BoxArray& fba, const BoxArray& cba,
         m_crse_flag.setVal(fine_cell, cpc0, 0, 1);
         auto recv_layout_mask = m_crse_flag.RecvLayoutMask(cpc0);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(m_crse_flag); mfi.isValid(); ++mfi) {
             if (recv_layout_mask[mfi]) {
@@ -189,14 +188,12 @@ YAFluxRegisterT<MF>::define (const BoxArray& fba, const BoxArray& cba,
     Vector<BoxList> bl_priv(nthreads, BoxList());
     Vector<Vector<int> > procmap_priv(nthreads);
     Vector<Vector<int> > localindex_priv(nthreads);
-#pragma omp parallel
     {
         BoxList bl_tmp;
         const int tid = omp_get_thread_num();
         BoxList& bl = bl_priv[tid];
         Vector<int>& pmp = procmap_priv[tid];
         Vector<int>& lid = localindex_priv[tid];
-#pragma omp for
         for (int i = 0; i < n_cfba; ++i)
         {
             Box bx = amrex::grow(cfba[i], 1);
@@ -289,7 +286,6 @@ YAFluxRegisterT<MF>::define (const BoxArray& fba, const BoxArray& cba,
         const Box& domainbox = m_crse_geom.Domain();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
         {
             std::vector< std::pair<int,Box> > isects;
@@ -530,7 +526,6 @@ YAFluxRegisterT<MF>::Reflux (MF& state, int srccomp, int destcomp, int numcomp)
     if (!m_cfp_mask.empty())
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(m_cfpatch); mfi.isValid(); ++mfi)
         {

@@ -85,12 +85,6 @@ void get_interp_mapping (const amrex::RealVect& pos,
                          amrex::Real& zeta)
 {
 
-#if (0)
-    amrex::Print() << 0
-                   << "  xi: " << xi << "  "
-                   << " eta: " << eta << "  "
-                   << "zeta: " << zeta << std::endl;
-#endif
 
     int lc(0);
     amrex::Real err(1.0);
@@ -129,14 +123,6 @@ void get_interp_mapping (const amrex::RealVect& pos,
                               - df0deta  * (df1dxi*f2      - f1*df2dxi)
                               + f0       * (df1dxi*df2deta - df1deta*df2dxi);
 
-#if (0)
-        amrex::Print() << std::endl << std::endl;
-        amrex::Print() << "detJ      " << detJ << std::endl;
-        amrex::Print() << "detJ_xi   " << detJ_xi << std::endl;
-        amrex::Print() << "detJ_eta  " << detJ_eta << std::endl;
-        amrex::Print() << "detJ_zeta " << detJ_zeta << std::endl;
-        amrex::Print() << std::endl << std::endl;
-#endif
         amrex::Real new_xi   = xi   - detJ_xi   / detJ;
         amrex::Real new_eta  = eta  - detJ_eta  / detJ;
         amrex::Real new_zeta = zeta - detJ_zeta / detJ;
@@ -148,13 +134,6 @@ void get_interp_mapping (const amrex::RealVect& pos,
         eta  = new_eta;
         zeta = new_zeta;
 
-#if (0)
-    amrex::Print() << lc
-                   << "  xi: " << xi << "  "
-                   << " eta: " << eta << "  "
-                   << "zeta: " << zeta << "  "
-                   << " err: " << err << std::endl;
-#endif
     }
 
 }

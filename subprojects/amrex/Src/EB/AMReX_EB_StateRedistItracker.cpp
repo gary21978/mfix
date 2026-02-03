@@ -19,9 +19,6 @@ MakeITracker ( Box const& bx,
                Geometry const& lev_geom,
                Real target_volfrac)
 {
-#if 0
-    int debug_verbose = 0;
-#endif
 
     const Real small_norm_diff = 1.e-8;
 
@@ -124,13 +121,6 @@ MakeITracker ( Box const& bx,
 
            Real sum_vol = vfrac(i,j,k) + vfrac(i+ioff,j+joff,k);
 
-#if 0
-           if (debug_verbose > 0)
-               amrex::Print() << "Cell " << IntVect(i,j) << " with volfrac " << vfrac(i,j,k) <<
-                                 " trying to merge with " << IntVect(i+ioff,j+joff) <<
-                                 " with volfrac " << vfrac(i+ioff,j+joff,k) <<
-                                 " to get new sum_vol " <<  sum_vol << '\n';
-#endif
 
            // If the merged cell isn't large enough, we try to merge in the other direction
            if (sum_vol < target_volfrac || nx_eq_ny)
@@ -171,13 +161,6 @@ MakeITracker ( Box const& bx,
                    int joff2 = jmap[itracker(i,j,k,2)];
 
                    sum_vol += vfrac(i+ioff2,j+joff2,k);
-#if 0
-                   if (debug_verbose > 0)
-                       amrex::Print() << "Cell " << IntVect(i,j) << " with volfrac " << vfrac(i,j,k) <<
-                                         " trying to ALSO merge with " << IntVect(i+ioff2,j+joff2) <<
-                                         " with volfrac " << vfrac(i+ioff2,j+joff2,k) <<
-                                          " to get new sum_vol " <<  sum_vol << '\n';
-#endif
                }
            }
 
@@ -202,20 +185,9 @@ MakeITracker ( Box const& bx,
                itracker(i,j,k,0) += 1;
 
                sum_vol += vfrac(i+ioff,j+joff,k);
-#if 0
-               if (debug_verbose > 0)
-                   amrex::Print() << "Cell " << IntVect(i,j) << " with volfrac " << vfrac(i,j,k) <<
-                                     " trying to ALSO merge with " << IntVect(i+ioff,j+joff) <<
-                                     " with volfrac " << vfrac(i+ioff,j+joff,k) <<
-                                     " to get new sum_vol " <<  sum_vol << '\n';
-#endif
            }
            if (sum_vol < target_volfrac)
            {
-#if 0
-             amrex::Print() << "Couldn't merge with enough cells to raise volume at " <<
-                               IntVect(i,j) << " so stuck with sum_vol " << sum_vol << '\n';
-#endif
              amrex::Abort("Couldn't merge with enough cells to raise volume greater than target_volfrac");
            }
        }
@@ -234,9 +206,6 @@ MakeITracker ( Box const& bx,
                Geometry const& lev_geom,
                Real target_volfrac)
 {
-#if 0
-     bool debug_print = false;
-#endif
 
     const Real small_norm_diff = Real(1.e-8);
 
@@ -263,10 +232,6 @@ MakeITracker ( Box const& bx,
     const auto& is_periodic_y = lev_geom.isPeriodic(1);
     const auto& is_periodic_z = lev_geom.isPeriodic(2);
 
-#if 0
-    if (debug_print)
-        amrex::Print() << " IN MERGE_REDISTRIBUTE DOING BOX " << bx << '\n';
-#endif
 
     amrex::ParallelFor(Box(itracker),
     [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
@@ -390,13 +355,6 @@ MakeITracker ( Box const& bx,
 
            Real sum_vol = vfrac(i,j,k) + vfrac(i+ioff,j+joff,k+koff);
 
-#if 0
-           if (debug_print)
-               amrex::Print() << "Cell " << IntVect(i,j,k) << " with volfrac " << vfrac(i,j,k) <<
-                                 " trying to merge with " << IntVect(i+ioff,j+joff,k+koff) <<
-                                 " with volfrac " << vfrac(i+ioff,j+joff,k+koff) <<
-                                 " to get new sum_vol " <<  sum_vol << '\n';
-#endif
 
            bool just_broke_symmetry = ( ( (joff == 0 && koff == 0) && (nx_eq_ny || nx_eq_nz) ) ||
                                         ( (ioff == 0 && koff == 0) && (nx_eq_ny || ny_eq_nz) ) ||
@@ -457,13 +415,6 @@ MakeITracker ( Box const& bx,
                int koff2 = kmap[itracker(i,j,k,2)];
 
                sum_vol += vfrac(i+ioff2,j+joff2,k+koff2);
-#if 0
-               if (debug_print)
-                   amrex::Print() << "Cell " << IntVect(i,j,k) << " with volfrac " << vfrac(i,j,k) <<
-                                     " trying to ALSO merge with " << IntVect(i+ioff2,j+joff2,k+koff2) <<
-                                     " with volfrac " << vfrac(i+ioff2,j+joff2,k+koff2) <<
-                                      " to get new sum_vol " <<  sum_vol << '\n';
-#endif
            }
 
            // If the merged cell has merged in two directions, we now merge in the corner direction within the current plane
@@ -517,15 +468,6 @@ MakeITracker ( Box const& bx,
 
                sum_vol += vfrac(i+ioff,j+joff,k+koff);
 
-#if 0
-               int ioff3 = imap[itracker(i,j,k,3)];
-               int joff3 = jmap[itracker(i,j,k,3)];
-               int koff3 = kmap[itracker(i,j,k,3)];
-               if (debug_print)
-                   amrex::Print() << "Cell " << IntVect(i,j,k) << " with volfrac " << vfrac(i,j,k) <<
-                                     " trying to ALSO merge with " << IntVect(i+ioff3,j+joff3,k+koff3) <<
-                                     " with volfrac " << vfrac(i+ioff3,j+joff3,k+koff3) << '\n';
-#endif
 
                // All nbors are currently in one of three planes
                just_broke_symmetry = ( ( (koff == 0) && (nx_eq_nz || ny_eq_nz) ) ||
@@ -537,15 +479,6 @@ MakeITracker ( Box const& bx,
                //    normal to know whether to go lo or hi in the new direction.
                if (sum_vol < target_volfrac || just_broke_symmetry)
                {
-#if 0
-                   if (debug_print)
-                       if (just_broke_symmetry)
-                           amrex::Print() << "Expanding neighborhood of " << IntVect(i,j,k) <<
-                                             " from 4 to 8 since we just broke symmetry with the last merge " << '\n';
-                       else
-                           amrex::Print() << "Expanding neighborhood of " << IntVect(i,j,k) <<
-                                             " from 4 to 8 since sum_vol with 4 was only " << sum_vol << " " << '\n';
-#endif
                    // All nbors are currently in the koff=0 plane
                    if (koff == 0)
                    {
@@ -708,13 +641,6 @@ MakeITracker ( Box const& bx,
                      int joffn = jmap[itracker(i,j,k,n)];
                      int koffn = kmap[itracker(i,j,k,n)];
                      sum_vol += vfrac(i+ioffn,j+joffn,k+koffn);
-#if 0
-                     if (debug_print)
-                       amrex::Print() << "Cell " << IntVect(i,j,k) << " with volfrac " << vfrac(i,j,k) <<
-                         " trying to ALSO merge with " << IntVect(i+ioffn,j+joffn,k+koffn) <<
-                         " with volfrac " << vfrac(i+ioffn,j+joffn,k+koffn) <<
-                         " to get new sum_vol " <<  sum_vol << '\n';
-#endif
                    }
 
                    // (i,j,k) has a 2x2x2 neighborhood now
@@ -723,10 +649,6 @@ MakeITracker ( Box const& bx,
            }
            if (sum_vol < target_volfrac)
            {
-#if 0
-             amrex::Print() << "Couldn't merge with enough cells to raise volume at " <<
-                               IntVect(i,j,k) << " so stuck with sum_vol " << sum_vol << '\n';
-#endif
              amrex::Abort("Couldn't merge with enough cells to raise volume greater than target_volfrac");
            }
        }

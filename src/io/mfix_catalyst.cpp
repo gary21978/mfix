@@ -131,24 +131,7 @@ RunCatalystAdaptor(int nstep, const Real time) const
       }
     }
 
-#if 0
-    // Verify the mesh
-    conduit::Node info;
-    if (!conduit::blueprint::mesh::verify(meshData, info)) {
-      Print() << "Conduit Blueprint verify failed before Catalyst\n";
-      info.print();
-    } else {
-      Print() << "Conduit Blueprint verify passed\n";
-    }
-#endif
 
-#if 0
-    ParallelDescriptor::Barrier();
-    Print() << "\n=== meshData after MultiLevelToBlueprint ===\n";
-    if (ParallelDescriptor::IOProcessor()) { meshData.print(); }
-    Print() << "\n===========================================\n";
-    ParallelDescriptor::Barrier();
-#endif
   } // end fluid setup
 
 
@@ -186,15 +169,6 @@ RunCatalystAdaptor(int nstep, const Real time) const
       }
     }
 
-#if 0
-    ParallelDescriptor::Barrier();
-    if (ParallelDescriptor::IOProcessor()) {
-      Print() << "\n=== particleData after ParticleContainerToBlueprint ===\n";
-      particleData.print();
-      Print() << "======================================================\n";
-    }
-    ParallelDescriptor::Barrier();
-#endif
   } // end particle setup
 
 

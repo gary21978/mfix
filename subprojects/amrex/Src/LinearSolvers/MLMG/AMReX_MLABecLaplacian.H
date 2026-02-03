@@ -520,7 +520,6 @@ void applyRobinBCTermsCoeffs (LP& linop)
         if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(linop.m_a_coeffs[amrlev][mglev], mfi_info); mfi.isValid(); ++mfi)
         {
@@ -661,7 +660,6 @@ MLABecLaplacianT<MF>::averageDownCoeffsSameAmrLevel (int amrlev, Vector<MF>& a,
             const RT osfac = RT(2.0)*fac/(fac+RT(1.0));
             const int ncomp = this->getNComp();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(a[mglev],TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -848,7 +846,6 @@ MLABecLaplacianT<MF>::Fapply (int amrlev, int mglev, MF& out, const MF& in) cons
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(out, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1043,7 +1040,6 @@ MLABecLaplacianT<MF>::Fsmooth (int amrlev, int mglev, MF& sol, const MF& rhs, in
         mfi_info.EnableTiling().SetDynamic(true);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(sol,mfi_info); mfi.isValid(); ++mfi)
         {
@@ -1282,7 +1278,6 @@ MLABecLaplacianT<MF>::normalize (int amrlev, int mglev, MF& mf) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1396,7 +1391,6 @@ MLABecLaplacianT<MF>::makeNLinOp (int /*grid_size*/) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(alpha,TilingIfNotGPU()); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.tilebox();
@@ -1449,7 +1443,6 @@ MLABecLaplacianT<MF>::copyNSolveSolution (MF& dst, MF const& src) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.tilebox();

@@ -363,11 +363,9 @@ BoxList::complementIn (const Box& b, const BoxArray& ba)
         {
 #ifdef AMREX_USE_OMP
             Vector<BoxList> bl_priv(nthreads, BoxList(mytyp));
-#pragma omp parallel
             {
                 BoxList bl_tmp(mytyp);
                 auto& vbox = bl_priv[omp_get_thread_num()].m_lbox;
-#pragma omp for
                 for (int i = 0; i < N; ++i)
                 {
                     ba.complementIn(bl_tmp, bl_mesh.m_lbox[i]);
@@ -462,11 +460,9 @@ BoxList::parallelComplementIn (const Box& b, BoxArray const& ba)
 #ifdef AMREX_USE_OMP
             Vector<BoxList> bl_priv(nthreads, BoxList(mytyp));
             int ntot = 0;
-#pragma omp parallel reduction(+:ntot)
             {
                 BoxList bl_tmp(mytyp);
                 auto& vbox = bl_priv[omp_get_thread_num()].m_lbox;
-#pragma omp for
                 for (int i = ilo; i <= ihi; ++i)
                 {
                     ba.complementIn(bl_tmp, bl_mesh.m_lbox[i]);

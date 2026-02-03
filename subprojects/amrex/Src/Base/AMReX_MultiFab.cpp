@@ -66,7 +66,6 @@ MultiFab::Dot (const MultiFab& x, int xcomp, int numcomp, int nghost, bool local
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -123,7 +122,6 @@ MultiFab::Dot (const iMultiFab& mask,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -352,7 +350,6 @@ MultiFab::AddProduct (MultiFab& dst,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -543,7 +540,6 @@ void
 MultiFab::initVal ()
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*this); mfi.isValid(); ++mfi)
     {
@@ -585,7 +581,6 @@ MultiFab::is_finite (int scomp, int ncomp, const IntVect& ngrow, bool local) con
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(||:r)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid() && !r; ++mfi)
         {
@@ -640,7 +635,6 @@ MultiFab::contains_nan (int scomp, int ncomp, const IntVect& ngrow, bool local) 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(||:r)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid() && !r; ++mfi)
         {
@@ -689,7 +683,6 @@ MultiFab::contains_inf (int scomp, int ncomp, IntVect const& ngrow, bool local) 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(||:r)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid() && !r; ++mfi)
         {
@@ -752,7 +745,6 @@ MultiFab::min (int comp, int nghost, bool local) const
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:mn)
 #endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
@@ -784,7 +776,6 @@ MultiFab::min (int comp, int nghost, bool local) const
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:mn)
 #endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
@@ -829,7 +820,6 @@ MultiFab::min (const Box& region, int comp, int nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:mn)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
@@ -881,7 +871,6 @@ MultiFab::max (int comp, int nghost, bool local) const
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:mx)
 #endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
@@ -913,7 +902,6 @@ MultiFab::max (int comp, int nghost, bool local) const
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:mx)
 #endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
@@ -956,7 +944,6 @@ MultiFab::max (const Box& region, int comp, int nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:mx)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost) & region;
@@ -1104,7 +1091,6 @@ MultiFab::norm2 (int comp, const Periodicity& period) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:nm2)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
@@ -1180,7 +1166,6 @@ MultiFab::norm1 (int comp, int ngrow, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(+:nm1)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(ngrow);
@@ -1244,7 +1229,6 @@ MultiFab::sum (Box const& region, int comp, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.tilebox() & region;
@@ -1297,7 +1281,6 @@ MultiFab::sum_unique (int comp,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
@@ -1349,7 +1332,6 @@ MultiFab::sum_unique (Box const& region, int comp, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
@@ -1488,7 +1470,6 @@ MultiFab::OverlapMask (const Periodicity& period) const
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu, tags);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
     {
         std::vector< std::pair<int,Box> > isects;

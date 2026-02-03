@@ -32,7 +32,6 @@ MyTest::initProb ()
     amrex::ignore_unused(cid,ndhi);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(rhs[0], TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {

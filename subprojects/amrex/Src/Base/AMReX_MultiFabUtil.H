@@ -267,7 +267,6 @@ namespace amrex
         T mf_out(mf_in.boxArray(), mf_in.DistributionMap(), mf_in.nComp(), mf_in.nGrowVect());
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf_in); mfi.isValid(); ++mfi)
         {
@@ -616,7 +615,6 @@ void average_down_nodal (const FabArray<FAB>& fine, FabArray<FAB>& crse,
     if (mfiter_is_definitely_safe || isMFIterSafe(fine, crse))
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(crse,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -694,7 +692,6 @@ void average_down (const FabArray<FAB>& S_fine, FabArray<FAB>& S_crse,
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(S_crse,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -745,7 +742,6 @@ void average_down (const FabArray<FAB>& S_fine, FabArray<FAB>& S_crse,
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(crse_S_fine,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -818,7 +814,6 @@ NormHelper (const MultiFab& x, int xcomp,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -886,7 +881,6 @@ NormHelper (const MMF& mask,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -958,7 +952,6 @@ void average_face_to_cellcenter (CMF& cc, int dcomp,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(cc,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1060,7 +1053,6 @@ void average_down_faces (const FabArray<FAB>& fine, FabArray<FAB>& crse,
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(crse,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -1180,7 +1172,6 @@ MF get_line_data (MF const& mf, int dir, IntVect const& cell, Box const& bnd_bx)
         MF rmf(rba, rdm, mf.nComp(), IntVect(0),
                MFInfo().SetArena(mf.arena()));
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(rmf); mfi.isValid(); ++mfi) {
             Box const& b = mfi.validbox();

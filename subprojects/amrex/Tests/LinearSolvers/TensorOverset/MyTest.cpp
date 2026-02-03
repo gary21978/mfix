@@ -138,7 +138,6 @@ MyTest::initData ()
     const auto dx     = geom.CellSizeArray();
     auto loverset = do_overset;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(rhs, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {

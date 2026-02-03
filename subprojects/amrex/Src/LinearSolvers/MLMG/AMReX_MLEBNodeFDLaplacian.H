@@ -158,7 +158,6 @@ MLEBNodeFDLaplacian::setEBDirichlet (F const& f)
             auto const& flags = factory->getMultiEBCellFlagFab();
             auto const& levset = factory->getLevelSet();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(m_phi_eb[amrlev],TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {

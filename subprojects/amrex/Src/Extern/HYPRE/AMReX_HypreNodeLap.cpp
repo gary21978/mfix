@@ -216,7 +216,6 @@ HypreNodeLap::fill_local_node_id_cpu ()
     Int nnodes_proc = 0;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(+:nnodes_proc)
 #endif
     for (MFIter mfi(local_node_id); mfi.isValid(); ++mfi)
     {
@@ -252,7 +251,6 @@ void
 HypreNodeLap::fill_global_node_id ()
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(node_id); mfi.isValid(); ++mfi)
     {

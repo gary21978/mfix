@@ -391,7 +391,6 @@ BoxArray::numPts () const noexcept
     auto const& bxs = this->m_ref->m_abox;
     if (m_bat.is_null()) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(+:result)
 #endif
         for (int i = 0; i < N; ++i)
         {
@@ -401,7 +400,6 @@ BoxArray::numPts () const noexcept
         IndexType t = ixType();
         IntVect cr = crseRatio();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(+:result)
 #endif
         for (int i = 0; i < N; ++i)
         {
@@ -409,7 +407,6 @@ BoxArray::numPts () const noexcept
         }
     } else {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(+:result)
 #endif
         for (int i = 0; i < N; ++i)
         {
@@ -428,7 +425,6 @@ BoxArray::d_numPts () const noexcept
     auto const& bxs = this->m_ref->m_abox;
     if (m_bat.is_null()) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(+:result)
 #endif
         for (int i = 0; i < N; ++i)
         {
@@ -438,7 +434,6 @@ BoxArray::d_numPts () const noexcept
         IndexType t = ixType();
         IntVect cr = crseRatio();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(+:result)
 #endif
         for (int i = 0; i < N; ++i)
         {
@@ -446,7 +441,6 @@ BoxArray::d_numPts () const noexcept
         }
     } else {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(+:result)
 #endif
         for (int i = 0; i < N; ++i)
         {
@@ -595,7 +589,6 @@ BoxArray::refine (const IntVect& iv)
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         BL_ASSERT(m_ref->m_abox[i].ok());
@@ -629,7 +622,6 @@ BoxArray::coarsenable (const IntVect& refinement_ratio, const IntVect& min_width
     auto const& bxs = this->m_ref->m_abox;
     if (m_bat.is_null()) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(&&:res)
 #endif
         for (Long ibox = 0; ibox < sz; ++ibox)
         {
@@ -640,7 +632,6 @@ BoxArray::coarsenable (const IntVect& refinement_ratio, const IntVect& min_width
         IndexType t = ixType();
         IntVect cr = crseRatio();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(&&:res)
 #endif
         for (Long ibox = 0; ibox < sz; ++ibox)
         {
@@ -649,7 +640,6 @@ BoxArray::coarsenable (const IntVect& refinement_ratio, const IntVect& min_width
         }
     } else {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(&&:res)
 #endif
         for (Long ibox = 0; ibox < sz; ++ibox)
         {
@@ -687,7 +677,6 @@ BoxArray::growcoarsen (IntVect const& ngrow, const IntVect& iv)
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(ngrow).coarsen(iv);
@@ -702,7 +691,6 @@ BoxArray::grow (int n)
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(n);
@@ -717,7 +705,6 @@ BoxArray::grow (const IntVect& iv)
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(iv);
@@ -733,7 +720,6 @@ BoxArray::grow (int dir,
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].grow(dir, n_cell);
@@ -749,7 +735,6 @@ BoxArray::growLo (int dir,
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].growLo(dir, n_cell);
@@ -765,7 +750,6 @@ BoxArray::growHi (int dir,
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].growHi(dir, n_cell);
@@ -827,7 +811,6 @@ BoxArray::convert (Box (*fp)(const Box&))
         uniqify();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < N; ++i) {
             set(i,fp((*this)[i]));
@@ -844,7 +827,6 @@ BoxArray::shift (int dir,
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].shift(dir, nzones);
@@ -859,7 +841,6 @@ BoxArray::shift (const IntVect& iv)
 
     const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < N; i++) {
         m_ref->m_abox[i].shift(iv);
@@ -1082,12 +1063,10 @@ BoxArray::minimalBox () const
         {
             Vector<Box> bxs(nthreads, m_ref->m_abox[0]);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
             {
                 int tid = OpenMP::get_thread_num();
 #ifdef AMREX_USE_OMP
-#pragma omp for
 #endif
                 for (int i = 0; i < N; ++i) {
                     bxs[tid].minBox(m_ref->m_abox[i]);
@@ -1132,12 +1111,10 @@ BoxArray::minimalBox (Long& npts_avg_box) const
         {
             Vector<Box> bxs(nthreads, m_ref->m_abox[0]);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(+:npts_tot)
 #endif
             {
                 int tid = OpenMP::get_thread_num();
 #ifdef AMREX_USE_OMP
-#pragma omp for
 #endif
                 for (int i = 0; i < N; ++i) {
                     bxs[tid].minBox(m_ref->m_abox[i]);
@@ -1551,7 +1528,6 @@ BoxArray::getHashMap () const
     if (m_ref->HasHashMap()) { return BoxHashMap; }
 
 #ifdef AMREX_USE_OMP
-#pragma omp critical(intersections_lock)
 #endif
     {
         if (BoxHashMap.empty() && size() > 0)
@@ -1587,8 +1563,6 @@ BoxArray::getHashMap () const
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp flush
-#pragma omp atomic write
 #endif
             m_ref->has_hashmap = true;
         }
@@ -1610,7 +1584,6 @@ BoxArray::uniqify ()
     if (cr != IntVect::TheUnitVector()) {
         const int N = static_cast<int>(m_ref->m_abox.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < N; i++) {
             m_ref->m_abox[i].coarsen(cr);
@@ -1716,7 +1689,6 @@ intersect (const BoxArray& ba,
 
     if (N > 0) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < N; i++)
         {
@@ -1742,7 +1714,6 @@ intersect (const BoxArray& ba,
 
     if (N > 0) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < N; i++)
         {

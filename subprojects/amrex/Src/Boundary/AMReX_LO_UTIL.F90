@@ -37,9 +37,6 @@ contains
             num = num*(xInt - x(i))
             den = den*(x(j) - x(i))
          end do
-#if 0
-         if (den .eq. zero) STOP 'polyInterpCoeff::invalid data'
-#endif
          c(j) = num/den
       end do
 

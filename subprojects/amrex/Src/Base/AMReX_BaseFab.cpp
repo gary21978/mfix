@@ -32,7 +32,6 @@ BaseFab_Initialize ()
         basefab_initialized = true;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
         {
             amrex::private_total_bytes_allocated_in_fabs     = 0;
             amrex::private_total_bytes_allocated_in_fabs_hwm = 0;
@@ -65,7 +64,6 @@ TotalBytesAllocatedInFabs () noexcept
 {
 #ifdef AMREX_USE_OMP
     Long r=0;
-#pragma omp parallel reduction(+:r)
     {
         r += private_total_bytes_allocated_in_fabs;
     }
@@ -82,7 +80,6 @@ TotalBytesAllocatedInFabsHWM () noexcept
 {
 #ifdef AMREX_USE_OMP
     Long r=0;
-#pragma omp parallel reduction(+:r)
     {
         r += private_total_bytes_allocated_in_fabs_hwm;
     }
@@ -99,7 +96,6 @@ TotalCellsAllocatedInFabs () noexcept
 {
 #ifdef AMREX_USE_OMP
     Long r=0;
-#pragma omp parallel reduction(+:r)
     {
         r += private_total_cells_allocated_in_fabs;
     }
@@ -116,7 +112,6 @@ TotalCellsAllocatedInFabsHWM () noexcept
 {
 #ifdef AMREX_USE_OMP
     Long r=0;
-#pragma omp parallel reduction(+:r)
     {
         r += private_total_cells_allocated_in_fabs_hwm;
     }
@@ -132,7 +127,6 @@ void
 ResetTotalBytesAllocatedInFabsHWM () noexcept
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     {
         private_total_bytes_allocated_in_fabs_hwm = 0;

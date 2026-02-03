@@ -44,7 +44,6 @@ void amrex_mempool_init ()
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel num_threads(nthreads)
 #endif
         {
             size_t N = 1024*1024*sizeof(double);

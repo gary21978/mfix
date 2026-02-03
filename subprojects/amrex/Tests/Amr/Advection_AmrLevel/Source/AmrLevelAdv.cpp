@@ -291,7 +291,6 @@ AmrLevelAdv::advance (Real time,
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         FArrayBox fluxfab[AMREX_SPACEDIM], velfab[AMREX_SPACEDIM];
@@ -418,7 +417,6 @@ AmrLevelAdv::estTimeStep (Real)
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:dt_est)
 #endif
     {
         FArrayBox uface[BL_SPACEDIM];
@@ -706,7 +704,6 @@ AmrLevelAdv::errorEst (TagBoxArray& tags,
     // const char clearval = TagBox::CLEAR;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         for (MFIter mfi(phi,TilingIfNotGPU()); mfi.isValid(); ++mfi)

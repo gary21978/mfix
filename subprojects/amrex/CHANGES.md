@@ -3373,10 +3373,6 @@
 
   -- Fix RegridOnly to regrid even with single level grids (#1722)
 
-  -- Define: _OPENMP -> AMREX_USE_OMP (#1560) Replace the define `_OPENMP`
-     with `AMREX_USE_OMP` for all parallel "backend" implementations and
-     control of MFIter loops.
-
   -- Update Make.nrel to accommodate MPT MPI with CUDA enabled (#1726)
 
   -- Cell-centered Hypre and Petsc setup on GPU (#1709)

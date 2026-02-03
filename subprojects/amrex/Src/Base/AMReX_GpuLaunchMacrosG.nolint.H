@@ -32,12 +32,6 @@
         amrex::Abort("amrex:: HOST_DEVICE disabled for Intel.  It takes too long to compile"); \
     }}}
 
-#if 0
-        for (auto const TI : amrex::Gpu::Range(amrex_i_tn)) { \
-            block \
-        } \
-    }}}
-#endif
 
 #else
 #define AMREX_GPU_LAUNCH_HOST_DEVICE_LAMBDA_RANGE(TN,TI,block) \
@@ -102,15 +96,6 @@
         amrex::Abort("amrex:: HOST_DEVICE disabled for Intel.  It takes too long to compile"); \
     }}}
 
-#if 0
-        for (auto const TI1 : amrex::Gpu::Range(amrex_i_tn1)) { \
-            block1 \
-        } \
-        for (auto const TI2 : amrex::Gpu::Range(amrex_i_tn2)) { \
-            block2 \
-        } \
-    }}}
-#endif
 
 #else
 #define AMREX_GPU_LAUNCH_HOST_DEVICE_LAMBDA_RANGE_2(TN1,TI1,block1,TN2,TI2,block2) \
@@ -194,18 +179,6 @@
         amrex::Abort("amrex:: HOST_DEVICE disabled for Intel.  It takes too long to compile"); \
     }}}
 
-#if 0
-        for (auto const TI1 : amrex::Gpu::Range(amrex_i_tn1)) { \
-            block1 \
-        } \
-        for (auto const TI2 : amrex::Gpu::Range(amrex_i_tn2)) { \
-            block2 \
-        } \
-        for (auto const TI3 : amrex::Gpu::Range(amrex_i_tn3)) { \
-            block3 \
-        } \
-    }}}
-#endif
 
 #else
 #define AMREX_GPU_LAUNCH_HOST_DEVICE_LAMBDA_RANGE_3(TN1,TI1,block1,TN2,TI2,block2,TN3,TI3,block3) \

@@ -387,7 +387,6 @@ BLBTer::BLBTer(const std::string& s, const char* file, int line)
         BLBackTrace::bt_stack.emplace(ss0.str(), line_file);
     }
     else {
-        #pragma omp parallel
         {
             std::ostringstream ss0;
             ss0 << "Proc. " << ParallelDescriptor::MyProc()
@@ -411,7 +410,6 @@ BLBTer::~BLBTer()
         pop_bt_stack();
     }
     else {
-        #pragma omp parallel
         {
             pop_bt_stack();
         }

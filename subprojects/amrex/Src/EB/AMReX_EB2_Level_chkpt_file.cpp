@@ -59,7 +59,6 @@ ChkptFileLevel::define_fine_chkpt_file (ChkptFile const& chkpt_file,
     m_cellflag.define(m_grids, m_dmap, 1, ng, mf_info);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(m_mgf); mfi.isValid(); ++mfi)
     {
@@ -87,7 +86,6 @@ ChkptFileLevel::finalize_cell_flags ()
 {
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         EBCellFlagFab cellflagtmp;

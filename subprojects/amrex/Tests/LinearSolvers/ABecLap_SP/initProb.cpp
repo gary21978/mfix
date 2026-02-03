@@ -12,7 +12,6 @@ MyTest::initProbPoisson ()
         const auto prob_lo = geom[ilev].ProbLoArray();
         const auto dx      = geom[ilev].CellSizeArray();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(rhs[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -42,7 +41,6 @@ MyTest::initProbABecLaplacian ()
         auto a = ascalar;
         auto b = bscalar;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(rhs[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

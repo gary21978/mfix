@@ -130,7 +130,6 @@ void
 MultiCutFab::setVal (Real val)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(m_data); mfi.isValid(); ++mfi)
     {
@@ -157,7 +156,6 @@ MultiCutFab::ToMultiFab (Real regular_value, Real covered_value) const
     const int ncomp = nComp();
     MultiFab mf(boxArray(), DistributionMap(), ncomp, nGrow());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(mf); mfi.isValid(); ++mfi)
     {

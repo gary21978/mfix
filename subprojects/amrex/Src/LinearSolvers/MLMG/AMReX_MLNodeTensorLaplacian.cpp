@@ -99,7 +99,6 @@ MLNodeTensorLaplacian::restriction (int amrlev, int cmglev, MultiFab& crse, Mult
     const iMultiFab& dmsk = *m_dirichlet_mask[amrlev][cmglev-1];
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*pcrse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -147,7 +146,6 @@ MLNodeTensorLaplacian::interpolation (int amrlev, int fmglev, MultiFab& fine,
     const iMultiFab& dmsk = *m_dirichlet_mask[amrlev][fmglev];
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {

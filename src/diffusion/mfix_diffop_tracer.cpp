@@ -90,11 +90,6 @@ computeLap ( Vector< MultiFab      *> const& a_laps,
           0, 0, b_ncomp, m_geom[lev], /*m_bcrec*/ dummy_bc);
     }
 
-#if 0
-    if (eb_is_dirichlet) {
-      m_matrix->setEBDirichlet(lev, *phi_eb[lev], mu_s);
-    }
-#endif
 
     m_matrix->setBCoeffs(lev, GetArrOfConstPtrs(m_b[lev]),MLMG::Location::FaceCentroid);
     m_matrix->setLevelBC(lev, &tracer[lev]);

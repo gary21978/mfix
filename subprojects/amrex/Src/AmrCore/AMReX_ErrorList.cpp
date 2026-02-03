@@ -248,7 +248,6 @@ AMRErrorTag::operator() (TagBoxArray&    tba,
                                          "UserFunc not properly set in AMRErrorTag");
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(tba,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

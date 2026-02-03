@@ -208,25 +208,7 @@ struct ComputeDragBVK2 : public ComputeTxfrCoeff
 
     amrex::Real F(0.);
 
-#if 0
 
-    // Beetstra, van der Hoef, Kuipers (2007). Chem. Eng. Science, 62.
-
-    F = 10.0*eps_s/eps_f/eps_f + eps_f*eps_f*(1.0 + 1.5*sqrt(eps_s));
-
-    F += 0.413*Re/(24.0*eps_f*eps_f) *
-        (1.0/eps_f + 3.0*eps_f*eps_s + 8.4/std::pow(Re, 0.343)) /
-        (1.0 + std::pow(10.0, 3.0*eps_s)/std::pow(Re, 0.5 + 2.0*eps_s));
-
-#elif 0
-
-    // Tenneti, Garg, Subramaniam (2011). Int. J. Multiphase Flow, 37(9).
-
-    F = (amrex::max(1. + 0.15*std::pow(Re, 0.687), 0.44*Re/24.)
-        + 5.81*eps_s + 0.48*std::pow(eps_s, 1./3.)/eps_f)/eps_f/eps_f
-        + eps_f*eps_s*eps_s*eps_s*Re*(0.95 + 0.61*eps_s*eps_s*eps_s/eps_f/eps_f);
-
-#else
 
     // Tang, Peters, Kuipers, Kriebitzsch, van der Hoef (2015). AIChEJ, 61(2)
 
@@ -235,7 +217,6 @@ struct ComputeDragBVK2 : public ComputeTxfrCoeff
     F += Re*(0.11*eps_s*(1.0+eps_s) - 4.56e-3*inv_pow_eps_f_4 +
          std::pow(Re, -0.343)*(0.169*eps_f + 6.44e-2*inv_pow_eps_f_4));
 
-#endif
     return F*F_Stokes;
   }
 };
@@ -334,9 +315,6 @@ struct ComputeDragUser : public ComputeTxfrCoeff
   { }
 
   AMREX_GPU_HOST_DEVICE
-#if defined(AMREX_USE_DPCPP)
-  SYCL_EXTERNAL
-#endif
   amrex::Real operator()
     ( int const a_id, MFIXParticleContainer::ParticleType& /*a_particle*/,
       const amrex::GpuArray<int*,                 SoAintData::count>& /*a_intarray*/,

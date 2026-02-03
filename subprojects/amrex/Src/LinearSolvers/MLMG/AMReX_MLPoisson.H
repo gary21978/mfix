@@ -244,7 +244,6 @@ MLPoissonT<MF>::Fapply (int amrlev, int mglev, MF& out, const MF& in) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(out, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -344,7 +343,6 @@ MLPoissonT<MF>::normalize (int amrlev, int mglev, MF& mf) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -583,7 +581,6 @@ MLPoissonT<MF>::Fsmooth (int amrlev, int mglev, MF& sol, const MF& rhs, int redb
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(sol,mfi_info); mfi.isValid(); ++mfi)
         {
@@ -1159,7 +1156,6 @@ MLPoissonT<MF>::get_dpdn_on_domain_faces (Array<MF*,AMREX_SPACEDIM> const& dpdn,
                  const RT dzi = RT(this->m_geom[0][0].InvCellSize(2));)
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(phi);  mfi.isValid(); ++mfi)
     {

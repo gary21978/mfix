@@ -131,7 +131,6 @@ FluxRegister::SumReg (int comp) const
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(+:sum)
 #endif
             for (FabSetIter fsi(lofabs); fsi.isValid(); ++fsi)
             {
@@ -190,7 +189,6 @@ FluxRegister::CrseInit (const MultiFab& mflx,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mflx,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -228,7 +226,6 @@ FluxRegister::CrseInit (const MultiFab& mflx,
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (FabSetIter mfi(fs); mfi.isValid(); ++mfi)
             {
@@ -313,7 +310,6 @@ FluxRegister::CrseAdd (const MultiFab& mflx,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mflx,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -364,7 +360,6 @@ FluxRegister::FineAdd (const MultiFab& mflx,
                        Real            mult)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(mflx); mfi.isValid(); ++mfi)
     {
@@ -383,7 +378,6 @@ FluxRegister::FineAdd (const MultiFab& mflx,
                        Real            mult)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(mflx); mfi.isValid(); ++mfi)
     {
@@ -624,7 +618,6 @@ FluxRegister::Reflux (MultiFab& mf, const MultiFab& volume, Orientation face,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -659,7 +652,6 @@ FluxRegister::ClearInternalBorders (const Geometry& geom)
         const BoxArray& bahi = frhi.boxArray();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         {
             for (FabSetIter fsi(frlo); fsi.isValid(); ++fsi) {
@@ -776,7 +768,6 @@ FluxRegister::OverwriteFlux (Array<MultiFab*,AMREX_SPACEDIM> const& crse_fluxes,
         amrex::ignore_unused(tags);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
         {
             std::vector< std::pair<int,Box> > isects;
@@ -840,7 +831,6 @@ FluxRegister::OverwriteFlux (Array<MultiFab*,AMREX_SPACEDIM> const& crse_fluxes,
         bndry[hi_face].plusTo(fine_flux, 0, srccomp, 0, numcomp, cperiod);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
         for (MFIter mfi(crse_flux,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

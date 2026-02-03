@@ -129,7 +129,6 @@ MLNodeLinOp::solutionResidual (int amrlev, MultiFab& resid, MultiFab& x, const M
 
     const iMultiFab& dmsk = *m_dirichlet_mask[amrlev][0];
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(resid, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -267,7 +266,6 @@ void MLNodeLinOp_set_dot_mask (MultiFab& dot_mask, iMultiFab const& omask, Geome
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(dot_mask,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -325,7 +323,6 @@ MLNodeLinOp::buildMasks ()
                 amrex::average_down_nodal(dmask_fine, dmask, IntVect(2));
             }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(dmask, mfi_info); mfi.isValid(); ++mfi)
             {
@@ -355,7 +352,6 @@ MLNodeLinOp::buildMasks ()
                                       0, 1, has_cf); // coarse: 0, fine: 1
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(cc_mask); mfi.isValid(); ++mfi)
         {
@@ -365,7 +361,6 @@ MLNodeLinOp::buildMasks ()
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(nd_mask,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -381,7 +376,6 @@ MLNodeLinOp::buildMasks ()
 
     auto& has_cf = *m_has_fine_bndry[m_num_amr_levels-1];
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(has_cf); mfi.isValid(); ++mfi)
     {
@@ -428,7 +422,6 @@ MLNodeLinOp::preparePrecond ()
             if (ilev < m_num_amr_levels-1) {
                 auto const& fmask = *m_nd_fine_mask[ilev];
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
                 for (MFIter mfi(m_precond_weight_mask[ilev],TilingIfNotGPU());
                      mfi.isValid(); ++mfi)
@@ -444,7 +437,6 @@ MLNodeLinOp::preparePrecond ()
                 }
             } else {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
                 for (MFIter mfi(m_precond_weight_mask[ilev],TilingIfNotGPU());
                      mfi.isValid(); ++mfi)
@@ -485,7 +477,6 @@ void
 MLNodeLinOp::setOversetMask (int amrlev, const iMultiFab& a_dmask)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*m_dirichlet_mask[amrlev][0], TilingIfNotGPU()); mfi.isValid(); ++mfi) {
         Array4<int const> const& omsk = a_dmask.const_array(mfi);
@@ -519,7 +510,6 @@ MLNodeLinOp::applyBC (int amrlev, int mglev, MultiFab& phi, BCMode/* bc_mode*/,
         const auto lobc = LoBC();
         const auto hibc = HiBC();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(phi); mfi.isValid(); ++mfi)
         {
@@ -583,7 +573,6 @@ MLNodeLinOp::interpolationAmr (int famrlev, MultiFab& fine, const MultiFab& crse
 
     AMREX_ALWAYS_ASSERT(refratio == 2 || refratio == 4);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -654,7 +643,6 @@ MLNodeLinOp::interpAssign (int amrlev, int fmglev, MultiFab& fine, MultiFab& crs
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {

@@ -884,7 +884,6 @@ StateDataPhysBCFunct::operator() (MultiFab& mf, int dest_comp, int num_comp, Int
     amrex::ignore_unused(run_on_gpu);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
     {
         FArrayBox tmp;

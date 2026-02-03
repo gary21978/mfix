@@ -266,7 +266,6 @@ void AlgVector<T,Allocator>::copyFrom (FabArray<FAB> const& fa)
     }
 
 #if defined(AMREX_USE_OMP) && !defined(AMREX_USE_GPU)
-#pragma omp parallel
 #endif
     for (MFIter mfi(fa); mfi.isValid(); ++mfi) {
         fa[mfi].template copyToMem<RunOn::Device>(mfi.validbox(), 0, 1, dptrs[mfi]);
@@ -288,7 +287,6 @@ void AlgVector<T,Allocator>::copyTo (FabArray<FAB> & fa) const
     }
 
 #if defined(AMREX_USE_OMP) && !defined(AMREX_USE_GPU)
-#pragma omp parallel
 #endif
     for (MFIter mfi(fa); mfi.isValid(); ++mfi) {
         fa[mfi].template copyFromMem<RunOn::Device>(mfi.validbox(), 0, 1, dptrs[mfi]);

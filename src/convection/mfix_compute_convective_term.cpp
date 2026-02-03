@@ -181,24 +181,6 @@ compute_convective_term ( Vector< MultiFab*      > const& conv_u,
         }
       }
 
-#if 0
-      // TODO
-      if(fluid.solve_enthalpy()){
-        amrex::Abort("Enthalpy forces are not broken out yet.");
-      }
-      if(solve_species){
-        amrex::Abort("Species forces are not broken out yet.");
-      }
-
-      // Note this is forcing for (rho s), not for s
-      if (fluid.solve_tracer) {
-        compute_tra_forces(tra_forces, get_density_old_const());
-        if (m_godunov_include_diff_in_forcing)
-          for (int lev = 0; lev < nlev(); ++lev)
-            MultiFab::Add(*tra_forces[lev], m_leveldata[lev]->laps_o, 0, 0, ntrac, 0);
-        if (nghost_force() > 0) { fillpatch(tra_forces); }
-      }
-#endif
     }
 
     if (maxLevel() > 0) {

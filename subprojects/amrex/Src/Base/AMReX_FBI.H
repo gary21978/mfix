@@ -352,7 +352,6 @@ FabArray<FAB>::FB_local_copy_cpu (const FB& TheFB, int scomp, int ncomp)
     if (is_thread_safe)
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < N_locs; ++i)
         {
@@ -380,7 +379,6 @@ FabArray<FAB>::FB_local_copy_cpu (const FB& TheFB, int scomp, int ncomp)
                 ({this->fabPtr(tag.srcIndex), tag.dbox, tag.sbox.smallEnd()-tag.dbox.smallEnd()});
         }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(*this); mfi.isValid(); ++mfi)
         {
@@ -420,7 +418,6 @@ FabArray<FAB>::FB_local_add_cpu (const FB& TheFB, int scomp, int ncomp)
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int itag = 0; itag < N_locs; ++itag) {
         const CopyComTag& tag = LocTags[itag];
@@ -428,7 +425,6 @@ FabArray<FAB>::FB_local_add_cpu (const FB& TheFB, int scomp, int ncomp)
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(*this); mfi.isValid(); ++mfi)
     {
@@ -1355,7 +1351,6 @@ FabArray<FAB>::pack_send_buffer_cpu (FabArray<FAB> const& src, int scomp, int nc
     if (N_snds == 0) { return; }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int j = 0; j < N_snds; ++j)
     {
@@ -1397,7 +1392,6 @@ FabArray<FAB>::unpack_recv_buffer_cpu (FabArray<FAB>& dst, int dcomp, int ncomp,
     if (is_thread_safe)
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int k = 0; k < N_rcvs; ++k)
         {
@@ -1443,7 +1437,6 @@ FabArray<FAB>::unpack_recv_buffer_cpu (FabArray<FAB>& dst, int dcomp, int ncomp,
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(dst); mfi.isValid(); ++mfi)
         {

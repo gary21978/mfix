@@ -19,7 +19,6 @@ AmrCoreAdv::DefineVelocityAtLevel (int lev, Real time)
     const auto dx = geom[lev].CellSizeArray();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         for (MFIter mfi(phi_new[lev],TilingIfNotGPU()); mfi.isValid(); ++mfi)

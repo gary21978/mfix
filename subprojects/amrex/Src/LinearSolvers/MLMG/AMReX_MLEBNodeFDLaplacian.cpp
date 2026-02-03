@@ -185,7 +185,6 @@ MLEBNodeFDLaplacian::restriction (int amrlev, int cmglev, MultiFab& crse, MultiF
     const iMultiFab& dmsk = *m_dirichlet_mask[amrlev][cmglev-1];
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*pcrse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -233,7 +232,6 @@ MLEBNodeFDLaplacian::interpolation (int amrlev, int fmglev, MultiFab& fine,
     const iMultiFab& dmsk = *m_dirichlet_mask[amrlev][fmglev];
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -336,7 +334,6 @@ MLEBNodeFDLaplacian::scaleRHS (int amrlev, MultiFab* rhs) const
         auto const& edgecent = factory->getEdgeCent();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*rhs,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -389,7 +386,6 @@ MLEBNodeFDLaplacian::Fapply (int amrlev, int mglev, MultiFab& out, const MultiFa
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(out,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -516,7 +512,6 @@ MLEBNodeFDLaplacian::Fsmooth (int amrlev, int mglev, MultiFab& sol, const MultiF
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(sol,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -625,7 +620,6 @@ MLEBNodeFDLaplacian::compGrad (int amrlev, const Array<MultiFab*,AMREX_SPACEDIM>
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*grad[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -803,7 +797,6 @@ MLEBNodeFDLaplacian::update_sigma ()
             MFItInfo mfi_info;
             if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(sigma, mfi_info); mfi.isValid(); ++mfi)
             {

@@ -337,7 +337,6 @@ HypreSolver<MSS>::fill_local_id (Marker const& marker)
 #else
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(m_local_id[0]); mfi.isValid(); ++mfi) {
         int boxno = mfi.LocalIndex();
@@ -397,7 +396,6 @@ HypreSolver<MSS>::fill_global_id ()
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(m_global_id[0]); mfi.isValid(); ++mfi) {
         auto& rows_vec = m_global_id_vec[mfi];

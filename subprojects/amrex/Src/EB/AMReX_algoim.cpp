@@ -33,7 +33,6 @@ compute_integrals (MultiFab& intgmf, IntVect nghost)
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if(Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(intgmf,mfi_info); mfi.isValid(); ++mfi)
     {
@@ -224,7 +223,6 @@ compute_surface_integrals (MultiFab& sintgmf, IntVect nghost)
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if(Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(sintgmf,mfi_info); mfi.isValid(); ++mfi)
     {

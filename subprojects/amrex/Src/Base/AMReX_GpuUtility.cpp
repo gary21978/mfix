@@ -40,7 +40,6 @@ StreamIter::init () noexcept // NOLINT
 #if defined(AMREX_USE_GPU)
     if (m_sync) {
 #ifdef AMREX_USE_OMP
-#pragma omp single
 #endif
         Gpu::streamSynchronize();
     }

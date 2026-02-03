@@ -48,7 +48,6 @@ StateDescriptor::BndryFunc::operator () (Real* data,const int* lo,const int* hi,
         }
 #ifdef AMREX_USE_OMP
     } else {
-#pragma omp critical (bndryfunc)
         {
             if (m_func != nullptr) {
                 m_func(data,AMREX_ARLIM(lo),AMREX_ARLIM(hi),dom_lo,dom_hi,dx,grd_lo,time,a_bc);
@@ -84,7 +83,6 @@ StateDescriptor::BndryFunc::operator () (Real* data,const int* lo,const int* hi,
         }
 #ifdef AMREX_USE_OMP
     } else {
-#pragma omp critical (bndryfunc)
         {
             if (m_gfunc != nullptr) {
                 m_gfunc(data,AMREX_ARLIM(lo),AMREX_ARLIM(hi),dom_lo,dom_hi,dx,grd_lo,time,a_bc);

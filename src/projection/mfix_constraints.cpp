@@ -200,15 +200,6 @@ compute_MAC_proj_RHS( Vector< MultiFab      * > const& a_rhs,
 
     a_rhs[lev]->FillBoundary(geom[lev].periodicity());
 
-#if 0
-    Print() << "MAC proj on level " << lev
-        << "  min(rhs) = " << a_rhs[lev]->min(0)
-        << "  max(rhs) = " << a_rhs[lev]->max(0) << '\n';
-
-    if (a_rhs[0]->nGrow() > 0) {
-      bcs().fillpatch(lev, 0., BCFillVar::none, a_rhs);
-    }
-#endif
   }
 }
 

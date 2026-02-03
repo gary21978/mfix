@@ -701,7 +701,6 @@ AMREX_FORCE_INLINE
 void deviceReduceSum_full (T * dest, T source) noexcept
 {
 #ifdef AMREX_USE_OMP
-#pragma omp atomic
 #endif
     *dest += source;
 }
@@ -718,7 +717,6 @@ AMREX_FORCE_INLINE
 void deviceReduceMin_full (T * dest, T source) noexcept
 {
 #ifdef AMREX_USE_OMP
-#pragma omp critical (gpureduce_reducemin)
 #endif
     *dest = std::min(*dest, source);
 }
@@ -735,7 +733,6 @@ AMREX_FORCE_INLINE
 void deviceReduceMax_full (T * dest, T source) noexcept
 {
 #ifdef AMREX_USE_OMP
-#pragma omp critical (gpureduce_reducemax)
 #endif
     *dest = std::max(*dest, source);
 }
@@ -751,7 +748,6 @@ AMREX_FORCE_INLINE
 void deviceReduceLogicalAnd_full (int * dest, int source) noexcept
 {
 #ifdef AMREX_USE_OMP
-#pragma omp critical (gpureduce_reduceand)
 #endif
     *dest = (*dest) && source;
 }
@@ -766,7 +762,6 @@ AMREX_FORCE_INLINE
 void deviceReduceLogicalOr_full (int * dest, int source) noexcept
 {
 #ifdef AMREX_USE_OMP
-#pragma omp critical (gpureduce_reduceor)
 #endif
     *dest = (*dest) || source;
 }

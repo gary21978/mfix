@@ -294,7 +294,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
                 auto& tags = buffer_tag_cache[lev][src_index][j];
                 int num_tags = tags.size();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
                 for (int i = 0; i < num_tags; ++i) {
                     const NeighborCopyTag& tag = tags[i];
@@ -386,7 +385,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi = this->MakeMFIter(lev); mfi.isValid(); ++mfi) {
             const int grid = mfi.index();

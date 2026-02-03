@@ -90,7 +90,6 @@ CNS::compute_dSdt (const MultiFab& S, MultiFab& dSdt, Real dt,
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         std::array<FArrayBox,AMREX_SPACEDIM> flux;

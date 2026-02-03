@@ -166,7 +166,6 @@ MLTensorOp::prepareForSolve ()
                 const Real fac = static_cast<Real>(1 << mglev); // 2**mglev
                 const Real osfac = Real(2.0)*fac/(fac+Real(1.0));
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
                 for (MFIter mfi(m_kappa[amrlev][mglev][0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
                 {
@@ -225,7 +224,6 @@ MLTensorOp::apply (int amrlev, int mglev, MultiFab& out, MultiFab& in, BCMode bc
     Real bscalar = m_b_scalar;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         FArrayBox fluxfab_tmp[AMREX_SPACEDIM];
@@ -352,7 +350,6 @@ MLTensorOp::applyBCTensor (int amrlev, int mglev, MultiFab& vel, // NOLINT(reada
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(vel, mfi_info); mfi.isValid(); ++mfi)
     {

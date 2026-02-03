@@ -224,7 +224,6 @@ BndryRegisterT<MF>::operator+= (const BndryRegisterT<MF>& rhs)
         const auto f = face();
         const int ncomp = bndry[f].nComp();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (FabSetIter bfsi(rhs[f]); bfsi.isValid(); ++bfsi) {
             const Box& bx = bfsi.validbox();

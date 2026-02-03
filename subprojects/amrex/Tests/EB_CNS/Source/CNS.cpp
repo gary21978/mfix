@@ -529,7 +529,6 @@ CNS::estTimeStep ()
     using ReduceTuple = typename decltype(reduce_data)::Type;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(S,false); mfi.isValid(); ++mfi)
     {
@@ -572,7 +571,6 @@ CNS::computeTemp (MultiFab& State, int ng)
 
     // This will reset Eint and compute Temperature
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(State,true); mfi.isValid(); ++mfi)
     {

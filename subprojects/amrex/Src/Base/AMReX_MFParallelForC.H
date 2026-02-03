@@ -13,7 +13,6 @@ std::enable_if_t<IsFabArray<MF>::value>
 ParallelFor (MF const& mf, IntVect const& nghost, IntVect const& ts, bool dynamic, F const& f)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(mf,MFItInfo().EnableTiling(ts).SetDynamic(dynamic)); mfi.isValid(); ++mfi) {
         Box const& bx = mfi.growntilebox(nghost);
@@ -36,7 +35,6 @@ std::enable_if_t<IsFabArray<MF>::value>
 ParallelFor (MF const& mf, IntVect const& nghost, int ncomp, IntVect const& ts, bool dynamic, F const& f)
 {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(mf,MFItInfo().EnableTiling(ts).SetDynamic(dynamic)); mfi.isValid(); ++mfi) {
         Box const& bx = mfi.growntilebox(nghost);

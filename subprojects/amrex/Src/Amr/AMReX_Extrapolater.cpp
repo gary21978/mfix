@@ -29,7 +29,6 @@ namespace amrex::Extrapolater
         // Do the extrap. on successive layers of ghost cells
         for (int layer = 0; layer < ngrow; layer++) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(mf); mfi.isValid(); ++mfi)
             {

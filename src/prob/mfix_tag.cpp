@@ -80,23 +80,6 @@ Initialize ( int const a_max_level,
     }
   }
 
-#if 0
-  { Vector<Real> values;
-    if ( pp_tag.queryarr("vorticity", values ) ) {
-      Real last = values.back();
-      values.resize(a_max_level+1, last);
-
-      bool less_than = false;
-      if ( pp_tag.queryAdd("vorticity.less_than", less_than) )
-
-      vorticity.set(true, less_than, values);
-      m_tags++;
-    } else {
-      values.resize(a_max_level+1, std::numeric_limits<Real>::max());
-      vorticity.set(false, false, values);
-    }
-  }
-#endif
 
   { Vector<std::string> tag_regions;
     if ( pp_tag.queryarr("regions", tag_regions ) ) {

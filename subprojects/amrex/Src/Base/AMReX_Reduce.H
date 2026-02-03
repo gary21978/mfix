@@ -1057,7 +1057,6 @@ public:
     {
         using ReduceTuple = typename D::Type;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         {
             ReduceTuple rr;
@@ -1084,7 +1083,6 @@ public:
     {
         using ReduceTuple = typename D::Type;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         {
             ReduceTuple rr;
@@ -1179,7 +1177,6 @@ T Sum (N n, F const& f, T init_val = 0)
 {
     T r = init_val;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(+:r)
 #endif
     for (N i = 0; i < n; ++i) {
         r += f(i);
@@ -1199,7 +1196,6 @@ T Min (N n, F const& f, T init_val = std::numeric_limits<T>::max())
 {
     T r = init_val;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(min:r)
 #endif
     for (N i = 0; i < n; ++i) {
         r = std::min(r,f(i));
@@ -1219,7 +1215,6 @@ T Max (N n, F const& f, T init_val = std::numeric_limits<T>::lowest())
 {
     T r = init_val;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(max:r)
 #endif
     for (N i = 0; i < n; ++i) {
         r = std::max(r,f(i));
@@ -1240,7 +1235,6 @@ std::pair<T,T> MinMax (N n, F const& f)
     T r_min = std::numeric_limits<T>::max();
     T r_max = std::numeric_limits<T>::lowest();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for reduction(min:r_min) reduction(max:r_max)
 #endif
     for (N i = 0; i < n; ++i) {
         T tmp = f(i);

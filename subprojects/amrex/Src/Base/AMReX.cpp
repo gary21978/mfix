@@ -249,7 +249,6 @@ amrex::Error_host (const char* type, const char * msg)
         write_lib_id(type);
         write_to_stderr_without_buffering(msg);
 #ifdef AMREX_USE_OMP
-#pragma omp critical (amrex_abort_omp_critical)
 #endif
         ParallelDescriptor::Abort();
     }
@@ -299,7 +298,6 @@ amrex::Assert_host (const char* EX, const char* file, int line, const char* msg,
     } else {
        write_to_stderr_without_buffering(buf.data());
 #ifdef AMREX_USE_OMP
-#pragma omp critical (amrex_abort_omp_critical)
 #endif
        ParallelDescriptor::Abort();
    }

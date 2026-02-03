@@ -40,7 +40,6 @@ void InterpFaceRegister::define (BoxArray const& fba, DistributionMapping const&
         Vector<Array4BoxValTag<int> > tags;
 #endif
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(m_face_mask[face]); mfi.isValid(); ++mfi) {
             auto& fab = m_face_mask[face][mfi];
@@ -158,7 +157,6 @@ InterpFaceRegister::interp (Array<MultiFab*, AMREX_SPACEDIM> const& fine, // NOL
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
             {
                 FArrayBox slope;

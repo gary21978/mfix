@@ -313,29 +313,7 @@ calc_txfr_particle ( Real const a_time, Real const a_dt,
 
                 // At least one of the cells in the stencil is cut or covered
                 } else {
-#if 0
-                  // TODO: This was initially split for variables that may have known
-                  // EB values (e.g., no-slip velocity). However, the results changed
-                  // more than expected so now EB values are not used.
-                  {
-                    const int srccomp = 0;
-                    const int dstcomp = 0;
-                    const int numcomp = 3;
 
-                    shepard_interp_eb(particle.pos(), iloc, jloc, kloc, dx, dxi, plo,
-                                      flags_array, ccent_fab, bcent_fab, apx_fab, apy_fab, apz_fab,
-                                      interp_array, interp_loc.data(), srccomp, dstcomp, numcomp);
-                  }
-                  {
-                    const int srccomp = 3;
-                    const int dstcomp = 3;
-                    const int numcomp = idx_count-3;
-
-                    shepard_interp(particle.pos(), iloc, jloc, kloc, dx, dxi, plo,
-                                   flags_array, ccent_fab, bcent_fab, apx_fab, apy_fab, apz_fab,
-                                   interp_array, interp_loc.data(), srccomp, dstcomp, numcomp);
-                  }
-#else
                   const int srccomp = 0;
                   const int dstcomp = 0;
                   const int numcomp = idx_count;
@@ -343,7 +321,6 @@ calc_txfr_particle ( Real const a_time, Real const a_dt,
                   shepard_interp(particle.pos(), iloc, jloc, kloc, dx, dxi, plo,
                                  flags_array, ccent_fab, bcent_fab, apx_fab, apy_fab, apz_fab,
                                  interp_array, interp_loc.data(), srccomp, dstcomp, numcomp);
-#endif
                 } // Cut cell
               } // Not covered
             } // if box not all regular

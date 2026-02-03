@@ -332,19 +332,6 @@ bool AmrData::ReadData(const string &filename, Amrvis::FileType filetype) {
       while(isPltIn.get() != '\n') {
         ;  // do nothing
       }
-#if 0
-      char lstepbuff[128];
-      isPltIn.getline(lstepbuff, 128);  // ignore levelsteps--some files have
-                                   // finestlevel of these, others have
-                                   // finestlevel + 1
-
-
-      if(verbose) {
-        if(ParallelDescriptor::IOProcessor()) {
-          cout << "Ignored levelSteps = " << lstepbuff << endl;
-        }
-      }
-#else
       // Get level steps - why do some have fl+1 ? (note above...just throw away last one here)
       levelSteps.resize(finestLevel+1);
       for(i = 0; i <= finestLevel; ++i) {
@@ -361,7 +348,6 @@ bool AmrData::ReadData(const string &filename, Amrvis::FileType filetype) {
             }
         }
       }
-#endif
 
       dxLevel.resize(finestLevel + 1);
       for(i = 0; i <= finestLevel; ++i) {

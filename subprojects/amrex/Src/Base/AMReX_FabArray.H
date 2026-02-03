@@ -217,7 +217,6 @@ Copy (FabArray<DFAB>& dst, FabArray<SFAB> const& src, int srccomp, int dstcomp, 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -266,7 +265,6 @@ Add (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp, int
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -2504,7 +2502,6 @@ FabArray<FAB>::setBndry (value_type val,
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
             for (MFIter fai(*this); fai.isValid(); ++fai)
             {
@@ -2541,7 +2538,6 @@ FabArray<FAB>::setDomainBndry (value_type val,
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
@@ -2586,7 +2582,6 @@ FabArray<FAB>::sum (int comp, IntVect const& nghost, bool local) const
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi)
         {
@@ -2671,7 +2666,6 @@ FabArray<FAB>::setVal (value_type val,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter fai(*this,TilingIfNotGPU()); fai.isValid(); ++fai)
         {
@@ -2729,7 +2723,6 @@ FabArray<FAB>::setVal (value_type val,
     {
 #ifdef AMREX_USE_OMP
         AMREX_ALWAYS_ASSERT(!omp_in_parallel());
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter fai(*this,TilingIfNotGPU()); fai.isValid(); ++fai)
         {
@@ -2778,7 +2771,6 @@ FabArray<FAB>::abs (int comp, int ncomp, const IntVect& nghost)
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -2814,7 +2806,6 @@ FabArray<FAB>::plus (value_type val, int comp, int num_comp, int nghost)
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -2852,7 +2843,6 @@ FabArray<FAB>::plus (value_type val, const Box& region, int comp, int num_comp, 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -2890,7 +2880,6 @@ FabArray<FAB>::mult (value_type val, int comp, int num_comp, int nghost)
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -2928,7 +2917,6 @@ FabArray<FAB>::mult (value_type val, const Box& region, int comp, int num_comp, 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -2966,7 +2954,6 @@ FabArray<FAB>::invert (value_type numerator, int comp, int num_comp, int nghost)
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3004,7 +2991,6 @@ FabArray<FAB>::invert (value_type numerator, const Box& region, int comp, int nu
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3028,7 +3014,6 @@ FabArray<FAB>::shift (const IntVect& v)
     boxarray.shift(v);
     addThisBD();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter fai(*this); fai.isValid(); ++fai)
     {
@@ -3064,7 +3049,6 @@ void FabArray<FAB>::Saxpy (FabArray<FAB>& y, value_type a, FabArray<FAB> const& 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(y,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3111,7 +3095,6 @@ FabArray<FAB>::Xpay (FabArray<FAB>& y, value_type a, FabArray<FAB> const& x,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(y,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3162,7 +3145,6 @@ void FabArray<FAB>::Saxpy_Xpay (FabArray<FAB>& y, value_type a1, FabArray<FAB> c
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(y,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3221,7 +3203,6 @@ void FabArray<FAB>::Saxpy_Saxpy (FabArray<FAB>& y1, value_type a1, FabArray<FAB>
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(y1,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3276,7 +3257,6 @@ void FabArray<FAB>::Saypy_Saxpy (FabArray<FAB>& y1, value_type a1,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(y1,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3330,7 +3310,6 @@ FabArray<FAB>::LinComb (FabArray<FAB>& dst,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3714,7 +3693,6 @@ FabArray<FAB>::BuildMask (const Box& phys_domain, const Periodicity& period,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*this,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -3760,7 +3738,6 @@ FabArray<FAB>::setVal (value_type val, const CommMetaData& thecmd, int scomp, in
         const MapOfCopyComTagContainers& RcvTags = *(thecmd.m_RcvTags);
         auto N_locs = static_cast<int>(LocTags.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for if (thecmd.m_threadsafe_loc)
 #endif
         for (int i = 0; i < N_locs; ++i) {
             const CopyComTag& tag = LocTags[i];
@@ -3770,7 +3747,6 @@ FabArray<FAB>::setVal (value_type val, const CommMetaData& thecmd, int scomp, in
         for (const auto & RcvTag : RcvTags) {
             auto N = static_cast<int>(RcvTag.second.size());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for if (thecmd.m_threadsafe_rcv)
 #endif
             for (int i = 0; i < N; ++i) {
                 const CopyComTag& tag = RcvTag.second[i];
@@ -3789,7 +3765,6 @@ FabArray<FAB>::RecvLayoutMask (const CommMetaData& thecmd)
 
     LayoutData<int> r(this->boxArray(), this->DistributionMap());
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (thecmd.m_threadsafe_rcv)
 #endif
     for (MFIter mfi(r); mfi.isValid(); ++mfi) {
         r[mfi] = 0;
@@ -3853,7 +3828,6 @@ FabArray<FAB>::norminf (int comp, int ncomp, IntVect const& nghost, bool local,
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:nm0)
 #endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
@@ -3885,7 +3859,6 @@ FabArray<FAB>::norminf (int comp, int ncomp, IntVect const& nghost, bool local,
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:nm0)
 #endif
             for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
                 Box const& bx = mfi.growntilebox(nghost);
@@ -3939,7 +3912,6 @@ FabArray<FAB>::norminf (FabArray<IFAB> const& mask, int comp, int ncomp,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:nm0)
 #endif
         for (MFIter mfi(*this,true); mfi.isValid(); ++mfi) {
             Box const& bx = mfi.growntilebox(nghost);

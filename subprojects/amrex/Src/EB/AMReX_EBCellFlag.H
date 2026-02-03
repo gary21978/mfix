@@ -254,18 +254,6 @@ private:
     static constexpr int w_type       = 2;
     static constexpr int w_numvofs    = 3;
     static constexpr int pos_numvofs  = 2;
-#if 0
-    static constexpr std::array<std::array<std::array<int,3>,3>,3> pos_ngbr
-        {{ std::array<std::array<int,3>,3>{{{ w_lower_mask   , w_lower_mask+ 1, w_lower_mask+ 2 },
-                                            { w_lower_mask+ 3, w_lower_mask+ 4, w_lower_mask+ 5 },
-                                            { w_lower_mask+ 6, w_lower_mask+ 7, w_lower_mask+ 8 }}},
-           std::array<std::array<int,3>,3>{{{ w_lower_mask+ 9, w_lower_mask+10, w_lower_mask+11 },
-                                            { w_lower_mask+12, w_lower_mask+13, w_lower_mask+14 },
-                                            { w_lower_mask+15, w_lower_mask+16, w_lower_mask+17 }}},
-           std::array<std::array<int,3>,3>{{{ w_lower_mask+18, w_lower_mask+19, w_lower_mask+20 },
-                                            { w_lower_mask+21, w_lower_mask+22, w_lower_mask+23 },
-                                            { w_lower_mask+24, w_lower_mask+25, w_lower_mask+26 }}} }};
-#endif
 
     //! regular connected with all neighbors
 #if AMREX_SPACEDIM == 3

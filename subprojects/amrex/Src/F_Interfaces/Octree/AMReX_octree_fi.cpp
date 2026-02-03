@@ -168,7 +168,6 @@ extern "C" {
         const auto n = static_cast<int>(leaves->size());
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < n; ++i) {
             a_copy[i] = (*leaves)[i];
@@ -198,7 +197,6 @@ extern "C" {
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(lmf,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

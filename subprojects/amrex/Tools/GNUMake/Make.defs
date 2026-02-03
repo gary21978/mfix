@@ -721,14 +721,9 @@ endif
 
 ifeq ($(USE_OMP),TRUE)
     OMPSuffix	:= .OMP
-    CPPFLAGS	+= -DBL_USE_OMP -DAMREX_USE_OMP
+  CPPFLAGS	+= -DBL_USE_OMP
 else
     OMPSuffix	:=
-endif
-
-ifeq ($(USE_OMP_OFFLOAD),TRUE)
-  DEFINES += -DAMREX_USE_OMP_OFFLOAD
-  OMPSuffix := $(OMPSuffix).OMP_OFFLOAD
 endif
 
 ifeq ($(USE_FORCE_INLINE),TRUE)

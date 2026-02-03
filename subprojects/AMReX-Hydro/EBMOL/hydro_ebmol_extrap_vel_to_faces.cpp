@@ -37,7 +37,6 @@ EBMOL::ExtrapVelToFaces ( const MultiFab&  a_vel,
 #endif
 
 #ifdef _OPENMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         for (MFIter mfi(a_vel, TilingIfNotGPU()); mfi.isValid(); ++mfi)

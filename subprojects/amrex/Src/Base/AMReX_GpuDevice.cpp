@@ -392,18 +392,6 @@ Device::Initialize (bool minimal, int a_device_id)
             num_devices_used = uuid_counts.size();
             num_device_partners = uuid_counts[my_uuid];
 
-#if 0
-            for (int i = 0; i < ParallelDescriptor::NProcs(); ++i) {
-                if (i == ParallelDescriptor::MyProc()) {
-                    std::cout << "Proc. " << i << ": |";
-                    for (auto x : uuid) {
-                        std::cout << std::hex << static_cast<unsigned int>(x) << "|";
-                    }
-                    std::cout << '\n';;
-                }
-                ParallelDescriptor::Barrier();
-            }
-#endif
         }
 
 #endif

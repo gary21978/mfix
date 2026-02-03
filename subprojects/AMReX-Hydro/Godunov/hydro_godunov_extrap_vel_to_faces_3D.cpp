@@ -32,7 +32,6 @@ Godunov::ExtrapVelToFaces ( MultiFab const& a_vel,
 
     const int ncomp = AMREX_SPACEDIM;
 #ifdef _OPENMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         FArrayBox scratch;

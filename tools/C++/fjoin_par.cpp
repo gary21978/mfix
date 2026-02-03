@@ -101,21 +101,6 @@ int main ( int argc, char* argv[] )
       ifs >> SoA_nr;
       ifs >> SoA_ni;
 
-#if 0
-    std::cout << "\n\nDEBUG summary: **"
-              << "\n   np " << np
-              << "\n   AoS_nr    " << AoS_nr
-              << "\n   AoS_ni    " << AoS_ni
-              << "\n   SoA_nr    " << SoA_nr
-              << "\n   SoA_ni    " << SoA_ni
-              << "\n\n";
-
-      AMREX_ALWAYS_ASSERT_WITH_MESSAGE((AoS_nr + SoA_nr) == 25,
-          "Number of reals does not equal 20. Need to update fjoin par.");
-
-      AMREX_ALWAYS_ASSERT_WITH_MESSAGE((AoS_ni + SoA_ni) ==  2,
-          "Number of ints does not equal 2. Need to update fjoin par.");
-#endif
 
       if(lc2 == 0){
         npo = np;

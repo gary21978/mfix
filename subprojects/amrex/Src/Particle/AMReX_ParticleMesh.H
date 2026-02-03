@@ -84,7 +84,6 @@ ParticleToMesh (PC const& pc, MF& mf, int lev, F const& f, bool zero_out_input=t
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         {
             typename MF::FABType::value_type local_fab;
@@ -141,7 +140,6 @@ MeshToParticle (PC& pc, MF const& mf, int lev, F const& f)
 
     using ParIter = typename PC::ParIterType;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for(ParIter pti(pc, lev); pti.isValid(); ++pti)
     {

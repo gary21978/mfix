@@ -238,7 +238,6 @@ Geometry::GetVolume (MultiFab& vol) const
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(vol,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -284,7 +283,6 @@ Geometry::GetDLogA (MultiFab&       dloga,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dloga,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -344,7 +342,6 @@ Geometry::GetFaceArea (MultiFab&       area,
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(area,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {

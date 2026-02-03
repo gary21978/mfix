@@ -170,7 +170,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
         mask_ptr[lev]->setVal(-1, m_num_neighbor_cells);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(*mask_ptr[lev],this->do_tiling ? this->tile_size : IntVect::TheZeroVector());
              mfi.isValid(); ++mfi) {
@@ -354,7 +353,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
         // First pass - each thread collects the NeighborIndexMaps it owes to other
         // grids / tiles / procs
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         {
             Vector<NeighborCopyTag> tags;
@@ -409,7 +407,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
     for (int lev = 0; lev < this->numLevels(); ++lev) {
         // second pass - for each tile, collect the neighbors owed from all threads
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi = this->MakeMFIter(lev); mfi.isValid(); ++mfi) {
             const int grid = mfi.index();
@@ -428,12 +425,9 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
     // do the same for the remote neighbors
     typename std::map<NeighborCommTag, Vector<Vector<NeighborIndexMap> > >::iterator it;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
-#pragma omp single nowait
 #endif
     for (it=tmp_remote_map.begin(); it != tmp_remote_map.end(); it++) {
 #ifdef AMREX_USE_OMP
-#pragma omp task firstprivate(it)
 #endif
         {
             const NeighborCommTag& tag = it->first;
@@ -469,7 +463,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
             const Vector<NeighborIndexMap>& map = local_map[lev][dst_index];
             const int num_ghosts = map.size();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
             for (int i = 0; i < num_ghosts; ++i) {
                 const NeighborIndexMap& nim = map[i];
@@ -510,7 +503,6 @@ NeighborParticleContainer<NStructReal, NStructInt, NArrayReal, NArrayInt>
         std::memcpy(dst, &data_size,           sizeof(int)); dst += sizeof(int);
         size_t buffer_offset = old_size + 4*sizeof(int);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < np; ++i) {
             const NeighborIndexMap& nim = kv.second[i];
@@ -722,7 +714,6 @@ buildNeighborList (CheckPair const& check_pair, bool /*sort*/)
         const auto& geom = this->Geom(lev);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
         {
@@ -807,7 +798,6 @@ buildNeighborList (CheckPair const& check_pair, OtherPCType& other,
         const auto& geom = this->Geom(lev);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
         {
@@ -879,7 +869,6 @@ buildNeighborList (CheckPair const& check_pair, int type_ind, int* ref_ratio,
         const auto& geom = this->Geom(lev);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
         {

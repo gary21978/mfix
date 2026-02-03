@@ -121,36 +121,6 @@ AllGatherBoxes (Vector<Box>& bxs, int n_extra_reserve)
 {
 #ifdef BL_USE_MPI
 
-#if 0
-    // In principle, MPI_Allgather/MPI_Allgatherv should not be slower than
-    // MPI_Gather/MPI_Gatherv followed by MPI_Bcast.  But that's not true on Summit.
-    MPI_Comm comm = ParallelContext::CommunicatorSub();
-    const int count = bxs.size();
-    Vector<int> countvec(ParallelContext::NProcsSub());
-    MPI_Allgather(&count, 1, MPI_INT, countvec.data(), 1, MPI_INT, comm);
-
-    Vector<int> offset(countvec.size(),0);
-    Long count_tot = countvec[0];
-    for (int i = 1, N = offset.size(); i < N; ++i) {
-        offset[i] = offset[i-1] + countvec[i-1];
-        count_tot += countvec[i];
-    }
-
-    if (count_tot == 0) { return; }
-
-    if (count_tot > static_cast<Long>(std::numeric_limits<int>::max())) {
-        amrex::Abort("AllGatherBoxes: too many boxes");
-    }
-
-    Vector<Box> recv_buffer;
-    recv_buffer.reserve(count_tot+n_extra_reserve);
-    recv_buffer.resize(count_tot);
-    MPI_Allgatherv(bxs.data(), count, ParallelDescriptor::Mpi_typemap<Box>::type(),
-                   recv_buffer.data(), countvec.data(), offset.data(),
-                   ParallelDescriptor::Mpi_typemap<Box>::type(), comm);
-
-    std::swap(bxs,recv_buffer);
-#else
     MPI_Comm comm = ParallelContext::CommunicatorSub();
     const int root = ParallelContext::IOProcessorNumberSub();
     const int myproc = ParallelContext::MyProcSub();
@@ -187,7 +157,6 @@ AllGatherBoxes (Vector<Box>& bxs, int n_extra_reserve)
               root, comm);
 
     std::swap(bxs,recv_buffer);
-#endif
 
 #else
     amrex::ignore_unused(bxs,n_extra_reserve);

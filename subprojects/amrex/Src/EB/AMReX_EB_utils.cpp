@@ -221,7 +221,6 @@ void FillSignedDistance (MultiFab& mf, EB2::Level const& ls_lev,
     // whatever the user's requested tiling behavior.
     constexpr IntVect fsd_tilesize = IntVect(AMREX_D_DECL(32, 32, 32));
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(mf, fsd_tilesize); mfi.isValid(); ++mfi)
     {

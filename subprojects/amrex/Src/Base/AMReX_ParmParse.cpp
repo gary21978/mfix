@@ -400,7 +400,6 @@ ppindex (const ParmParse::Table& table, int n, const std::string& name)
     if (found == table.cend()) { return nullptr; }
 
 #ifdef AMREX_USE_OMP
-#pragma omp atomic update
 #endif
     ++(found->second.m_count);
 
@@ -2196,7 +2195,6 @@ ParmParse::contains (std::string_view name) const
     auto found = m_table->find(pname);
     if (found != m_table->cend()) {
 #ifdef AMREX_USE_OMP
-#pragma omp atomic update
 #endif
         ++(found->second.m_count);
         return true;

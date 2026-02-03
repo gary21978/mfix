@@ -2346,7 +2346,6 @@ FabArrayBase::getTileArray (const IntVect& tilesize) const
     TileArray* p;
 
 #ifdef AMREX_USE_OMP
-#pragma omp critical(gettilearray)
 #endif
     {
         BL_ASSERT(getBDKey() == m_bdkey);
@@ -2364,7 +2363,6 @@ FabArrayBase::getTileArray (const IntVect& tilesize) const
 #endif
         }
 #ifdef AMREX_USE_OMP
-#pragma omp master
 #endif
         {
             ++(p->nuse);

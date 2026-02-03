@@ -42,7 +42,6 @@ MLNodeLaplacian::compSyncResidualCoarse (MultiFab& sync_resid, const MultiFab& a
 
     const Box& ccdom = geom.Domain();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(crse_cc_mask); mfi.isValid(); ++mfi)
     {
@@ -52,7 +51,6 @@ MLNodeLaplacian::compSyncResidualCoarse (MultiFab& sync_resid, const MultiFab& a
 
     MultiFab phi(ndba, dmap, 1, 1);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(phi,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -95,7 +93,6 @@ MLNodeLaplacian::compSyncResidualCoarse (MultiFab& sync_resid, const MultiFab& a
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         FArrayBox rhs, u;
@@ -365,7 +362,6 @@ MLNodeLaplacian::compSyncResidualFine (MultiFab& sync_resid, const MultiFab& phi
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         FArrayBox rhs, u;
@@ -675,7 +671,6 @@ MLNodeLaplacian::reflux (int crse_amrlev,
     fine_res.FillBoundary(fgeom.periodicity());
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine_res_for_coarse, TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -712,7 +707,6 @@ MLNodeLaplacian::reflux (int crse_amrlev,
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.EnableTiling().SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(fine_contrib,mfi_info); mfi.isValid(); ++mfi)
     {
@@ -803,7 +797,6 @@ MLNodeLaplacian::reflux (int crse_amrlev,
     const auto& csigma = m_sigma[crse_amrlev][0][0];
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(res,mfi_info); mfi.isValid(); ++mfi)
     {

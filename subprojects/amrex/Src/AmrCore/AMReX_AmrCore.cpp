@@ -168,7 +168,6 @@ AmrCore::printGridSummary (std::ostream& os, int min_lev, int max_lev) const noe
             int imax = std::numeric_limits<int>::lowest();
             int imin = std::numeric_limits<int>::lowest();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
             {
                 Long vmin_this = std::numeric_limits<Long>::max();
@@ -178,7 +177,6 @@ AmrCore::printGridSummary (std::ostream& os, int min_lev, int max_lev) const noe
                 int imax_this = std::numeric_limits<int>::lowest();
                 int imin_this = std::numeric_limits<int>::lowest();
 #ifdef AMREX_USE_OMP
-#pragma omp for
 #endif
                 for (int k = 0; k < numgrid; k++) {
                     const Box& bx = bs[k];
@@ -197,7 +195,6 @@ AmrCore::printGridSummary (std::ostream& os, int min_lev, int max_lev) const noe
                     }
                 }
 #ifdef AMREX_USE_OMP
-#pragma omp critical (amr_prtgs)
 #endif
                 {
                     if (vmin_this < vmin || (vmin_this == vmin && smin_this < smin)) {

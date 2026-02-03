@@ -158,9 +158,7 @@ while ( false )
             if (m_size > 1) {
 #ifdef AMREX_USE_OMP
                 if (omp_in_parallel()) {
-                    #pragma omp barrier
                 }
-                #pragma omp master
 #endif
                 {
 #if defined(BL_USE_MPI3)

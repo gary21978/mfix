@@ -198,16 +198,6 @@ public:
     static void PrintUsageToFiles (std::string const& filename, std::string const& message);
     static void Finalize ();
 
-#if 0
-    union Word
-    {
-        void*  p;
-        long long ll;
-        long double ld;
-        void (*f) ();
-    };
-    static const std::size_t align_size = sizeof(Word);
-#endif
 
     static const std::size_t align_size = 16;
 

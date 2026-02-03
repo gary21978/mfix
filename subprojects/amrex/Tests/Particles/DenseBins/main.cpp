@@ -20,7 +20,6 @@ void checkAnswer (const amrex::DenseBins<int>& bins)
     });
 #else
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < bins.numItems()-1; ++i)
     {
@@ -42,7 +41,6 @@ void checkAnswer (const amrex::DenseBins<int>& bins)
     });
 #else
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < bins.numBins(); ++i) {
         auto start = offsets[i  ];
@@ -92,7 +90,6 @@ void initData (int nbins, amrex::Vector<int>& items)
     const auto nitems = int(items.size());
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int i = 0; i < nitems; ++i) { items[i] = int(amrex::Random_int(nbins)); }
 }

@@ -506,9 +506,6 @@ NodalProjector::setCoarseBoundaryVelocityForSync ()
         }
         else
         {
-#ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
-#endif
             for (MFIter mfi(*m_vel[0]); mfi.isValid(); ++mfi)
             {
                 int i = mfi.index();
@@ -544,7 +541,6 @@ NodalProjector::setCoarseBoundaryVelocityForSync ()
             }
         }
     }
-
 }
 
 
@@ -577,5 +573,4 @@ NodalProjector::averageDown (const amrex::Vector<amrex::MultiFab*>& a_var)
 
 }
 
-
-}
+} // namespace Hydro

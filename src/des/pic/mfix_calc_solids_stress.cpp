@@ -290,37 +290,6 @@ MFIX_CalcSolidsStress ( Vector< MultiFab* >& ep_s_in,
 
 
 // Some debugging code
-#if 0
-    for (MFIter mfi(tau, TilingIfNotGPU()); mfi.isValid(); ++mfi)
-    {
-      // Tilebox
-      const Box& bx = mfi.validbox();
-
-      if(bx.contains(epg_cell)) {
-
-        for(int ii(-1); ii<=1; ii++){
-            for(int kk(-1); kk<=1; kk++){
-              for(int jj(-1); jj<=1; jj++){
-
-              const int i = epg_cell[0] + ii;
-              const int j = epg_cell[1] + jj;
-              const int k = epg_cell[2] + kk;
-
-              IntVect ijk = {i,j,k};
-              //value = mf[mfi](iv,icomp); // icomp : component index
-              if(amrex::grow(bx,2).contains(ijk)) {
-                        amrex::Print(Print::AllProcs) << ijk << ", "
-                          << ep_s_in[lev]->const_array(mfi)(ijk,0) << ", "
-                          << tau.const_array(mfi)(ijk,0) << ", "
-                          << "\n";
-                }
-
-              }
-            }
-          }
-      }
-    }
-#endif
 
 
     // We now have the solids stress on the field. We now need to interpolate

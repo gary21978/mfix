@@ -79,7 +79,6 @@ CNS::compute_dSdt (const MultiFab& S, MultiFab& dSdt, Real dt,
     auto const& flags = fact.getMultiEBCellFlagFab();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     {
         std::array<FArrayBox,AMREX_SPACEDIM> flux;

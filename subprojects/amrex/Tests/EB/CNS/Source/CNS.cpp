@@ -97,7 +97,6 @@ CNS::initData ()
     Real cur_time   = state[State_Type].curTime();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(S_new); mfi.isValid(); ++mfi)
     {
@@ -318,7 +317,6 @@ CNS::errorEst (TagBoxArray& tags, int, int, Real time, int, int)
         const Real* dx = geom.CellSize();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(tags); mfi.isValid(); ++mfi)
         {
@@ -351,7 +349,6 @@ CNS::errorEst (TagBoxArray& tags, int, int, Real time, int, int)
         auto const& flags = fact.getMultiEBCellFlagFab();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         for (MFIter mfi(*rho,true); mfi.isValid(); ++mfi)
         {
@@ -474,7 +471,6 @@ CNS::estTimeStep ()
     auto const& flags = fact.getMultiEBCellFlagFab();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:estdt)
 #endif
     {
         Real dt = std::numeric_limits<Real>::max();
@@ -514,7 +510,6 @@ CNS::computeTemp (MultiFab& State, int ng)
 
     // This will reset Eint and compute Temperature
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     for (MFIter mfi(State,true); mfi.isValid(); ++mfi)
     {

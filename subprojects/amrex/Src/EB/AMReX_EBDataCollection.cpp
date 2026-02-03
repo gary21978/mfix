@@ -109,7 +109,6 @@ void EBDataCollection::extendDataOutsideDomain (IntVect const& level_ng)
                       amrex::surroundingNodes(level_domain,2))};
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(*m_cellflags); mfi.isValid(); ++mfi) {
         auto const current_type = (*m_cellflags)[mfi].getType();

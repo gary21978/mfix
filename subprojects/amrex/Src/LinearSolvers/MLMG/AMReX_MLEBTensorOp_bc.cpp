@@ -26,7 +26,6 @@ MLEBTensorOp::applyBCTensor (int amrlev, int mglev, MultiFab& vel,
     MFItInfo mfi_info;
     if (Gpu::notInLaunchRegion()) { mfi_info.SetDynamic(true); }
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(vel, mfi_info); mfi.isValid(); ++mfi)
     {

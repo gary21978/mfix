@@ -172,30 +172,6 @@ ErrorEst (int a_lev, TagBoxArray& a_tags, Real a_time, int /*a_ngrow*/)
 
     // Refine by vorticity
     //___________________________________________________________________________
-#if 0
-    if ( tag_vorticity ) {
-
-      bcs().fillpatch(a_lev, a_time, BCFillVar::vel, leveldata().vel());
-
-      AMREX_ASSERT( m_rw );
-
-      m_rw->ComputeVort();
-
-      for (MFIter mfi(*(leveldata().vorticity(a_lev))); mfi.isValid(); ++mfi) {
-
-        Box const& bx = mfi.tilebox();
-        auto const& tag = a_tags.array(mfi);
-        auto const& vort  = leveldata().vorticity_const(a_lev,mfi);
-        Real d_vort_val = vort_val;
-
-        ParallelFor(bx, [vort,tag,d_vort_val,tagval]
-        AMREX_GPU_DEVICE (int i, int j, int k) noexcept
-        {
-          if (vort(i,j,k) > d_vort_val) { tag(i,j,k) = tagval; }
-        });
-      }
-    } // tag vorticity
-#endif
 
     if ( num_regions > 0 ) {
 

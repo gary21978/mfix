@@ -186,24 +186,12 @@ struct custom {
       }
       if ( amrex::almostEqual(p_CDF[0], 0.) ) { m_can_interp = 1; }
 
-#if 0
-      amrex::Print() << "\n\noriginal dist:\n";
-      for (int b(0); b<m_bins; ++b) {
-        amrex::Print() << a_diam[b] << "  " << p_CDF[b] << '\n';
-      }
-#endif
       // Normal the CDF to run from [0,1];
       {
         amrex::Real const scale = 1.0/p_CDF[(m_bins-1)];
         for (int b(0); b<(m_bins); ++b) { p_CDF[b] *= scale; }
       }
 
-#if 0
-      amrex::Print() << "\n\nnormalizlied dist:\n";
-      for (int b(0); b<(m_bins); ++b) {
-        amrex::Print() << a_diam[b] << "  " << p_CDF[b] << '\n';
-      }
-#endif
       m_min = a_diam[0];
       m_max = a_diam[(m_bins-1)];
 

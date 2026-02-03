@@ -132,19 +132,6 @@ MFIXReadWrite::WriteAscentFile (int nstep, const Real time) const
 
       // Currently runtime particle variables are not supported
       // by AMReX.
-#if 0
-      if (solids.solve_species())
-        for(auto species: solids.species_names())
-          real_comp_names.push_back("X_"+species+"_s");
-
-      if (solids.solve_species() && reactions.solve())
-        for(auto species: solids.species_names())
-          real_comp_names.push_back("chem_ro_txfr_"+species);
-
-      if (reactions.solve())
-        real_comp_names.push_back("chem_h_txfr");
-#endif
-
       int_comp_names.push_back("phase");
       int_comp_names.push_back("state");
 #if MFIX_POLYDISPERSE

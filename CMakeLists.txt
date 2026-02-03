@@ -44,12 +44,11 @@ endif()
 #  set( CMAKE_CUDA_COMPILER_LAUNCHER ccache )
 #endif()
 
-# We want to offer the user some core options, i.e. MPI, OpenMP, CUDA, HYPRE
+# We want to offer the user some core options, i.e. MPI, HYPRE
 # and floating-point exceptions, which require related AMReX components to
 # be enabled in the installation.
 # In STANDALONE mode, find_package will make sure these options are available
 # IN SUPERBUILD mode, These options will supersede AMReX options with the same name
-option( MFIX_OMP    "Enable OpenMP" NO )
 option( MFIX_MPI    "Enable MPI"   YES )
 
 option( MFIX_POLYDISPERSE "Enable polydisperse support" NO )
@@ -63,38 +62,8 @@ cmake_dependent_option( MFIX_MPI_THREAD_MULTIPLE
 option( MFIX_HYPRE  "Enable HYPRE"  NO )
 option( MFIX_FPE    "Enable Floating Point Exceptions checks" NO )
 
-#
-# GPU backends    =============================================================
-#
-set(MFIX_GPU_BACKEND_VALUES NONE SYCL CUDA HIP)
-set(MFIX_GPU_BACKEND NONE CACHE STRING "On-node, accelerated GPU backend: <NONE,SYCL,CUDA,HIP>")
-set_property(CACHE MFIX_GPU_BACKEND PROPERTY STRINGS ${MFIX_GPU_BACKEND_VALUES})
-if (NOT MFIX_GPU_BACKEND IN_LIST MFIX_GPU_BACKEND_VALUES)
-   message(FATAL_ERROR "MFIX_GPU_BACKEND=${MFIX_GPU_BACKEND} is not allowed."
-      " Must be one of ${MFIX_GPU_BACKEND_VALUES}")
-endif ()
-
-if (NOT MFIX_GPU_BACKEND STREQUAL NONE)
-   message( STATUS "   MFIX_GPU_BACKEND = ${MFIX_GPU_BACKEND}")
-endif ()
-
-if (MFIX_GPU_BACKEND STREQUAL SYCL)
-   set(MFIX_DPCPP ON  )
-   set(MFIX_CUDA  OFF )
-   set(MFIX_HIP   OFF )
-elseif (MFIX_GPU_BACKEND STREQUAL CUDA)
-   set(MFIX_DPCPP OFF )
-   set(MFIX_CUDA  ON  )
-   set(MFIX_HIP   OFF )
-elseif (MFIX_GPU_BACKEND STREQUAL HIP)
-   set(MFIX_DPCPP OFF )
-   set(MFIX_CUDA  OFF )
-   set(MFIX_HIP   ON  )
-else ()
-   set(MFIX_DPCPP OFF )
-   set(MFIX_CUDA  OFF )
-   set(MFIX_HIP   OFF )
-endif ()
+set(MFIX_OMP OFF)
+set(MFIX_GPU_BACKEND NONE)
 
 # CSG support
 option( MFIX_CSG "Build with CSG support" OFF)
@@ -111,10 +80,6 @@ option( VODE_JACOBIAN_CACHING "Build VODE integrator with Jacobian caching suppo
 if (VODE_JACOBIAN_CACHING)
   add_compile_definitions(VODE_JACOBIAN_CACHING)
 endif()
-
-if (MFIX_CUDA)
-   enable_language(CUDA)
-endif ()
 
 # Setup AMReX
 include(MFIXSetupAMReX)
@@ -146,10 +111,6 @@ target_include_directories( mfixcore PRIVATE ${PROJECT_BINARY_DIR})
 # We should check what this line does
 file( GLOB USR_OVERRIDES ${CMAKE_CURRENT_BINARY_DIR}/*.cpp)
 add_udfs_to_target(mfix ${USR_OVERRIDES})
-
-if (MFIX_CUDA)
-   setup_target_for_cuda_compilation(mfix)
-endif ()
 
 # Tools
 add_subdirectory(tools)

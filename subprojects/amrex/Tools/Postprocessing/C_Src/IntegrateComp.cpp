@@ -166,7 +166,6 @@ main (int   argc,
 
         Real sm = 0;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(+:sm)
 #endif
         for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
           FArrayBox& myFab = mf[mfi];

@@ -321,12 +321,6 @@ bool BLProfStats::InTimeRange(int proc, Real calltime) {
 //    return true;
 //  }
   if(filterTimeRanges.empty()) {
-#if 0
-  static int count(0);
-  if(count++ < 4) {
-    cout << "**** BLProfStats::InTimeRange:  init true but range empty." << endl;
-  }
-#endif
     return true;
   }
   std::list<TimeRange>::iterator iit;

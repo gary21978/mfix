@@ -339,7 +339,6 @@ void AmrCoreAdv::MakeNewLevelFromScratch (int lev, Real time, const BoxArray& ba
     const auto dx     = Geom(lev).CellSizeArray();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(state,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -386,7 +385,6 @@ AmrCoreAdv::ErrorEst (int lev, TagBoxArray& tags, Real time, int /*ngrow*/)
         const MultiFab& state = phi_new[lev];
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if(Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(state,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {

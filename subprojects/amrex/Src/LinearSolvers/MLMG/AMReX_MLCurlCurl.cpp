@@ -139,7 +139,6 @@ void MLCurlCurl::setDirichletNodesToZero (int amrlev, int mglev, MF& a_mf) const
         Box const domain = amrex::convert(m_geom[amrlev][mglev].Domain(), idxtype);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf,mfi_info); mfi.isValid(); ++mfi) {
             auto const& vbx = mfi.validbox();
@@ -269,7 +268,6 @@ MLCurlCurl::apply (int amrlev, int mglev, MF& out, MF& in, BCMode /*bc_mode*/,
     amrex::ignore_unused(coord);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(out[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -522,7 +520,6 @@ void MLCurlCurl::compresid (int amrlev, int mglev, MF& resid, MF const& b) const
     auto dinfo = getDirichletInfo(amrlev,mglev);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(resid[0],TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -802,7 +799,6 @@ void MLCurlCurl::applyPhysBC (int amrlev, int mglev, MultiFab& mf, CurlCurlState
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(mf,mfi_info); mfi.isValid(); ++mfi) {
         auto const& vbx = mfi.validbox();
@@ -859,7 +855,6 @@ void MLCurlCurl::applyPhysBC (int amrlev, int mglev, MultiFab& mf, CurlCurlState
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf,mfi_info); mfi.isValid(); ++mfi) {
             auto const& vbx = mfi.validbox();

@@ -323,7 +323,6 @@ GShopLevel<G>::define_fine (G const& gshop, const Geometry& geom,
         int nsmallcells = 0;
         int nmulticuts = 0;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion()) reduction(+:nsmallcells,nmulticuts)
 #endif
         {
 #if (AMREX_SPACEDIM == 3)
@@ -504,7 +503,6 @@ GShopLevel<G>::define_fine (G const& gshop, const Geometry& geom,
     AMREX_ALWAYS_ASSERT_WITH_MESSAGE(iter < maxiter, "EB: failed to fix small cells");
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(m_mgf); mfi.isValid(); ++mfi)
     {

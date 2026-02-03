@@ -32,13 +32,6 @@ output_hdf5 (std::string a_plotfile)
 
   const std::string& hdf5_dir = amrex::Concatenate(path+"hdf5_",nstep);
 
-#if 0
-  Print() << "plotfile: " << a_plotfile << "\n"
-          << "       path: " << path  << "\n"
-          << "      nstep: " << nstep << "\n"
-          << "       hdf5: " << hdf5_dir << "\n"
-          << "compression: " << hdf5_compression << "\n";
-#endif
 
   Vector<int> istep;
   istep.resize(get_nlev(),nstep);

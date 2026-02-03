@@ -57,12 +57,6 @@ NFilesIter::NFilesIter(int noutfiles, std::string fileprefix,
     }
   }
 
-#if 0
-  bool checkNFiles(false);
-  if(checkNFiles) {
-    CheckNFiles(nProcs, nOutFiles, groupSets);
-  }
-#endif
 }
 
 
@@ -87,13 +81,6 @@ void NFilesIter::SetDynamic(int deciderproc)
   if(currentDeciderIndex >= availableDeciders.size() || currentDeciderIndex < 0) {
     currentDeciderIndex = 0;
   }
-#if 0
-  // The following has no effect because WhichSetPostion is a pure function and
-  // its return type is not used. So not sure why this is here in the first place.
-  if(myProc == deciderProc) {
-    NFilesIter::WhichSetPosition(myProc, nProcs, nOutFiles, groupSets);
-  }
-#endif
 
   deciderTag = ParallelDescriptor::SeqNum();
   coordinatorTag = ParallelDescriptor::SeqNum();
@@ -520,22 +507,6 @@ Vector<int> NFilesIter::FileNumbersWritten()
 
   if(myProc == coordinatorProc) {
 
-#if 0
-    int total(0);
-    std::set<int> procSet;
-    for(int f(0); f < fileNumbersWriteOrder.size(); ++f) {
-      total += fileNumbersWriteOrder[f].size();
-      for(int r(0); r < fileNumbersWriteOrder[f].size(); ++r) {
-        procSet.insert(fileNumbersWriteOrder[f][r]);
-      }
-    }
-    if(total != nProcs || static_cast<int>(procSet.size()) != nProcs) {
-      amrex::AllPrint() << "**** Error in NFilesIter::FileNumbersWritten():  "
-                << " coordinatorProc nProcs total procSet.size() = "
-                << coordinatorProc << "  " << nProcs << "  "
-                << total << "  " << procSet.size() << '\n';
-    }
-#endif
 
     for(int f(0); f < fileNumbersWriteOrder.size(); ++f) {
       for(int r(0); r < fileNumbersWriteOrder[f].size(); ++r) {
@@ -554,10 +525,6 @@ void NFilesIter::CleanUpMessages() {
   BL_PROFILE("NFI::CleanUpMessages");
   for(auto & pii : unreadMessages) {
     int fromProc, tag(pii.first), nMessages(pii.second);
-#if 0
-    amrex::AllPrint() << ParallelDescriptor::MyProc() << ":: cleaning up " << nMessages
-              << " messages for tag " << tag << '\n';
-#endif
     for(int n(0); n < nMessages; ++n) {
       ParallelDescriptor::Recv(&fromProc, 1, MPI_ANY_SOURCE, tag);
     }

@@ -66,11 +66,7 @@ void init_AMReX(py::module& m)
         .def_property_readonly_static(
             "have_omp",
             [](py::object){
-#ifdef AMREX_USE_OMP
-                return true;
-#else
                 return false;
-#endif
         })
         .def_property_readonly_static(
             "have_simd",
@@ -91,10 +87,6 @@ void init_AMReX(py::module& m)
             [](py::object){
 #ifdef AMREX_USE_CUDA
                 return "CUDA";
-#elif defined(AMREX_USE_HIP)
-                return "HIP";
-#elif defined(AMREX_USE_DPCPP)
-                return "SYCL";
 #else
                 return py::none();
 #endif

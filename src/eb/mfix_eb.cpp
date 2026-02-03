@@ -247,12 +247,6 @@ update_factory (int a_lev, Geometry const& a_geom,
       *(m_eb_levels[a_lev]), a_geom, a_grids, a_dmap,
       nghost_factory(), m_support_level);
 
-#if 0
-  std::unique_ptr<FabFactory<FArrayBox> > new_factory = makeEBFabFactory(
-      a_geom, a_grids, a_dmap, nghost_factory(), EBSupport::full);
-
-  m_factory[a_lev] = std::move(new_factory);
-#endif
 }
 
 
@@ -492,59 +486,6 @@ fill_levelsets ( Vector<Geometry> const& a_geom,
   else
   {
     amrex::Abort("xxxxx fill_levelsets todo");
-#if 0
-    const DistributionMapping & part_dm = a_pc->ParticleDistributionMap(0);
-    const BoxArray &            part_ba = a_pc->ParticleBoxArray(0);
-
-    //_______________________________________________________________________
-    // Multi-level level-set: build finer level using coarse level set
-
-    EBFArrayBoxFactory eb_factory(*m_eb_levels[0], a_geom[0], part_ba, part_dm,
-                                  {m_levelset_eb_pad + 2, m_levelset_eb_pad + 2,
-                                   m_levelset_eb_pad + 2}, EBSupport::full);
-
-    // NOTE: reference BoxArray is not nodal
-    BoxArray ba = amrex::convert(part_ba, IntVect::TheNodeVector());
-    m_level_sets[0] = std::make_unique<MultiFab>(ba, part_dm, 1, m_levelset_pad);
-    iMultiFab valid(ba, part_dm, 1, m_levelset_pad);
-
-    MultiFab impfunc(ba, part_dm, 1, m_levelset_pad);
-    m_eb_levels[0]->fillLevelSet(impfunc, a_geom[0]);
-    impfunc.FillBoundary(a_geom[0].periodicity());
-
-
-    LSFactory::fill_data(*m_level_sets[0], valid, *m_particle_ebfactory[0], impfunc,
-                         32, 1, 1, a_geom[0], a_geom[0]);
-
-    for (int lev = 1; lev <= m_max_level; lev++)
-    {
-        const DistributionMapping & part_dm_lev = a_pc->ParticleDistributionMap(lev);
-        const BoxArray &            part_ba_lev = a_pc->ParticleBoxArray(lev);
-
-        // NOTE: reference BoxArray is not nodal
-        BoxArray ba_lev = amrex::convert(part_ba_lev, IntVect::TheNodeVector());
-        if (m_level_sets[lev] != nullptr) delete m_level_sets[lev];
-        m_level_sets[lev] = new MultiFab();
-        // iMultiFab valid_lev(ba_lev, part_dm_lev, 1, levelset_pad);
-
-        // Fills level-set[lev] with coarse data
-        LSCoreBase::MakeNewLevelFromCoarse( *m_level_sets[lev], *m_level_sets[lev-1],
-                                           part_ba_lev, part_dm_lev, a_geom[lev], a_geom[lev-1],
-                                           bcs_ls, refRatio(lev-1));
-
-        EBFArrayBoxFactory eb_factory_lev(*m_eb_levels[lev], a_geom[lev], part_ba_lev, part_dm_lev,
-                                          {m_levelset_eb_pad + 2, m_levelset_eb_pad + 2,
-                                           m_levelset_eb_pad + 2}, EBSupport::full);
-
-        MultiFab impfunc_lev(ba_lev, part_dm_lev, 1, m_levelset_pad);
-        m_eb_levels[lev]->fillLevelSet(impfunc_lev, a_geom[lev]);
-        impfunc_lev.FillBoundary(a_geom[lev].periodicity());
-
-        IntVect ebt_size{32, 32, 32}; // Fudge factors...
-        LSCoreBase::FillLevelSet(*m_level_sets[lev], *m_level_sets[lev], eb_factory_lev, impfunc_lev,
-                                 ebt_size, m_levelset_eb_pad, a_geom[lev]);
-    }
-#endif
   }
 
   // Add walls (for instance MI) to levelset data
@@ -647,31 +588,6 @@ intersect_ls_walls ( Vector<Geometry> const& a_geom,
   else
   {
     amrex::Abort("xxxxx intersect_ls_walls todo");
-#if 0
-    //_______________________________________________________________________
-    // Multi-level level-set: apply wall-intersection to each level
-
-    for (int lev = 0; lev <= m_max_level; lev++)
-    {
-      const int ng = m_level_sets[lev]->nGrow();
-      const BoxArray & ba = m_level_sets[lev]->boxArray();
-      const DistributionMapping & dm = m_level_sets[lev]->DistributionMap();
-
-      MultiFab wall_if(ba, dm, 1, ng);
-      iMultiFab valid_lev(ba, dm, 1, ng);
-      valid_lev.setVal(1);
-
-      GShopLSFactory<UnionListIF<EB2::PlaneIF>> gshop_lsf(gshop, a_geom[lev], ba, dm, ng);
-      std::unique_ptr<MultiFab> impfunc = gshop_lsf.fill_impfunc();
-
-      LSFactory::fill_data(wall_if, valid_lev, *impfunc, m_levelset_eb_pad, a_geom[lev]);
-      LSFactory::intersect_data(*m_level_sets[lev], valid_lev, wall_if, valid_lev, a_geom[lev]);
-
-      if (a_porous_media.nregions() > 0) {
-        a_porous_media.block_particles(*m_level_sets[lev], a_geom[lev]);
-      }
-    }
-#endif
   }
 }
 

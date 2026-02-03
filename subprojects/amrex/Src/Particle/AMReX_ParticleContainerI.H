@@ -1200,7 +1200,6 @@ addParticles (const PCType& other, F const& f, bool local)
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (int lev = 0; lev < other.numLevels(); ++lev)
     {
@@ -1734,7 +1733,6 @@ ParticleContainer_impl<ParticleType, NArrayReal, NArrayInt, Allocator, CellAssig
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int pmap_it = 0; pmap_it < static_cast<int>(ptile_ptrs.size()); ++pmap_it)
         {
@@ -2023,7 +2021,6 @@ ParticleContainer_impl<ParticleType, NArrayReal, NArrayInt, Allocator, CellAssig
             }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
             for (int pit = 0; pit < static_cast<int>(pvec_ptrs.size()); ++pit)
             {
@@ -2061,7 +2058,6 @@ ParticleContainer_impl<ParticleType, NArrayReal, NArrayInt, Allocator, CellAssig
             }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
             for (int pit = 0; pit < static_cast<int>(grid_tile_ids.size()); ++pit) // NOLINT(modernize-loop-convert)
             {
@@ -2107,7 +2103,6 @@ ParticleContainer_impl<ParticleType, NArrayReal, NArrayInt, Allocator, CellAssig
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
     for (int pmap_it = 0; pmap_it < static_cast<int>(pbuff_ptrs.size()); ++pmap_it)
     {
@@ -2626,7 +2621,6 @@ AssignCellDensitySingleLevel (int rho_index,
 
     using ParConstIter = ParConstIter_impl<ParticleType, NArrayReal, NArrayInt, Allocator>;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         FArrayBox local_rho;

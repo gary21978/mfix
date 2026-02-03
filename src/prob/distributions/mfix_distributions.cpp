@@ -301,23 +301,3 @@ set_sample_pointers ( int const a_sample_size,
 }
 
 
-#if 0
-void
-INPUT_DIST_t::
-report_distribution ( amrex::Real const a_scale ) const noexcept
-{
-  Print() << "\nDistribution overview:\n"
-          << "  mean:   " << a_scale * m_mean   << '\n'
-          << "  stddev: " << a_scale * m_stddev << '\n'
-          << "  min:    " << a_scale * m_min    << '\n'
-          << "  max:    " << a_scale * m_max    << '\n';
-
-  Print() << "\nbin    value       PDF\n";
-  for (int n(0); n<m_bins; ++n) {
-    Print() << std::setw(3) << n << "  "
-      << std::scientific << std::setw(8) << std::setprecision(2) << m_h_ptr_diameters[n] << "   "
-      << std::scientific << std::setw(12) << std::setprecision(6) << m_h_ptr_NwCDF[n] << "   "
-      << std::scientific << std::setw(12) << std::setprecision(6) << m_h_ptr_VwCDF[n] << '\n';
-  }
-}
-#endif

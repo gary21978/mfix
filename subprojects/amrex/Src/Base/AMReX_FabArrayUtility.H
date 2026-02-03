@@ -27,7 +27,6 @@ ReduceSum_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f)
     value_type sm = 0;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
@@ -162,7 +161,6 @@ ReduceSum_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     value_type sm = 0;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -240,7 +238,6 @@ ReduceSum_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     value_type sm = 0;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -317,7 +314,6 @@ ReduceMin_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f)
     value_type r = std::numeric_limits<value_type>::max();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:r)
 #endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
@@ -388,7 +384,6 @@ ReduceMin_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     value_type r = std::numeric_limits<value_type>::max();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:r)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -466,7 +461,6 @@ ReduceMin_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     value_type r = std::numeric_limits<value_type>::max();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(min:r)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -543,7 +537,6 @@ ReduceMax_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f)
     value_type r = std::numeric_limits<value_type>::lowest();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:r)
 #endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
@@ -615,7 +608,6 @@ ReduceMax_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     value_type r = std::numeric_limits<value_type>::lowest();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:r)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -693,7 +685,6 @@ ReduceMax_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     value_type r = std::numeric_limits<value_type>::lowest();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:r)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -769,7 +760,6 @@ ReduceLogicalAnd_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& 
     int r = true;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(&&:r)
 #endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
@@ -841,7 +831,6 @@ ReduceLogicalAnd_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     int r = true;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(&&:r)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -916,7 +905,6 @@ ReduceLogicalOr_host (FabArray<FAB> const& fa, IntVect const& nghost, F const& f
     int r = false;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(||:r)
 #endif
     for (MFIter mfi(fa,true); mfi.isValid(); ++mfi)
     {
@@ -988,7 +976,6 @@ ReduceLogicalOr_host (FabArray<FAB1> const& fa1, FabArray<FAB2> const& fa2,
     int r = false;
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(||:r)
 #endif
     for (MFIter mfi(fa1,true); mfi.isValid(); ++mfi)
     {
@@ -1145,7 +1132,6 @@ Swap (FabArray<FAB>& dst, FabArray<FAB>& src, int srccomp, int dstcomp, int numc
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -1194,7 +1180,6 @@ Subtract (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1242,7 +1227,6 @@ Multiply (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1290,7 +1274,6 @@ Divide (FabArray<FAB>& dst, FabArray<FAB> const& src, int srccomp, int dstcomp, 
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dst,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1336,7 +1319,6 @@ Abs (FabArray<FAB>& fa, int icomp, int numcomp, const IntVect& nghost)
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(fa,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1424,7 +1406,6 @@ OverrideSync_nowait (FabArray<FAB> & fa, FabArray<IFAB> const& msk, const Period
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(fa,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -1566,7 +1547,6 @@ indexFromValue (FabArray<FAB> const& mf, int comp, IntVect const& nghost,
     {
         bool f = false;
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
         {
             IntVect priv_loc = IntVect::TheMinVector();
@@ -1588,9 +1568,7 @@ indexFromValue (FabArray<FAB> const& mf, int comp, IntVect const& nghost,
 // but we must work around a bug in gcc < 4.9
 // And, with NVHPC 21.9 to <23.1, we saw an ICE with the atomic capture (NV bug: #3390723)
 #if defined(AMREX_USE_OMP) && defined(_OPENMP) && (_OPENMP < 201307 || (defined(__NVCOMPILER) && __NVCOMPILER_MAJOR__ < 23)) // OpenMP 4.0
-#pragma omp critical (amrex_indexfromvalue)
 #elif defined(AMREX_USE_OMP)
-#pragma omp atomic capture
 #endif
                 {
                     old = f;
@@ -1648,7 +1626,6 @@ Dot (FabArray<FAB> const& x, int xcomp, FabArray<FAB> const& y, int ycomp, int n
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -1706,7 +1683,6 @@ Dot (FabArray<FAB> const& x, int xcomp, int ncomp, IntVect const& nghost, bool l
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -1778,7 +1754,6 @@ Dot (FabArray<IFAB> const& mask, FabArray<FAB> const& x, int xcomp,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -1847,7 +1822,6 @@ Dot (FabArray<IFAB> const& mask, FabArray<FAB> const& x, int xcomp, int ncomp,
 #endif
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!system::regtest_reduction) reduction(+:sm)
 #endif
         for (MFIter mfi(x,true); mfi.isValid(); ++mfi)
         {
@@ -2149,7 +2123,6 @@ OverlapMask (FabArray<FAB> const& fa, IntVect const& nghost, Periodicity const& 
     bool run_on_gpu = Gpu::inLaunchRegion();
     amrex::ignore_unused(run_on_gpu, tags);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
     {
         std::vector< std::pair<int,Box> > isects;

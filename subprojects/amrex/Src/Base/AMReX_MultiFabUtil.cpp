@@ -85,7 +85,6 @@ namespace amrex
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(cc,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -134,7 +133,6 @@ namespace amrex
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(cc,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -212,7 +210,6 @@ namespace amrex
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(cc,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -300,7 +297,6 @@ namespace amrex
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(cc,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -391,7 +387,6 @@ namespace amrex
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(crse_S_fine,TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -444,7 +439,6 @@ namespace amrex
 #endif
         {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             for (MFIter mfi(crse_S_fine, TilingIfNotGPU()); mfi.isValid(); ++mfi)
             {
@@ -519,7 +513,6 @@ namespace amrex
 #endif
             {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if(Gpu::notInLaunchRegion())
 #endif
                 for (MFIter mfi(crse,TilingIfNotGPU()); mfi.isValid(); ++mfi)
                 {
@@ -595,7 +588,6 @@ namespace amrex
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(*slice, TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -650,7 +642,6 @@ namespace amrex
         const BoxArray& cfba = amrex::coarsen(fba,ratio);
         const std::vector<IntVect>& pshifts = period.shiftIntVect();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (!run_on_gpu)
 #endif
         {
             std::vector <std::pair<int,Box> > isects;
@@ -731,7 +722,6 @@ namespace amrex
         const GpuArray<Real,AMREX_SPACEDIM> dxinv = geom.InvCellSizeArray();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(divu,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -781,7 +771,6 @@ namespace amrex
         const GpuArray<Real,AMREX_SPACEDIM> dxinv = geom.InvCellSizeArray();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(grad,TilingIfNotGPU()); mfi.isValid(); ++mfi)
         {
@@ -934,7 +923,6 @@ namespace amrex
             }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
             for (MFIter mfi(mf,true); mfi.isValid(); ++mfi) {
                 Box const& b = mfi.tilebox();
@@ -960,7 +948,6 @@ namespace amrex
 
             if (! other_hv.empty()) {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
                 for (int i = 0; i < n1d; ++i) {
                     for (auto const& v : other_hv) {
@@ -1143,7 +1130,6 @@ namespace amrex
                      ncomp, 0);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         {
 #if (AMREX_SPACEDIM > 1)
@@ -1221,7 +1207,6 @@ namespace amrex
     void FillRandom (MultiFab& mf, int scomp, int ncomp)
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf); mfi.isValid(); ++mfi)
         {
@@ -1234,7 +1219,6 @@ namespace amrex
     void FillRandomNormal (MultiFab& mf, int scomp, int ncomp, Real mean, Real stddev)
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(mf); mfi.isValid(); ++mfi)
         {
@@ -1285,7 +1269,6 @@ namespace amrex
                 DistributionMapping dmnew(std::move(procmap));
                 rmf[ilev].define(banew, dmnew, ncomp, 0);
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
                 for (MFIter mfi(rmf[ilev], TilingIfNotGPU()); mfi.isValid(); ++mfi) {
                    rmf[ilev][mfi].template copy<RunOn::Device>

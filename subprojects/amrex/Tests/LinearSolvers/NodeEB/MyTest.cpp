@@ -80,15 +80,6 @@ MyTest::solve ()
 
     mlndlap.updateVelocity(amrex::GetVecOfPtrs(vel), amrex::GetVecOfConstPtrs(phi));
 
-#if 0
-    mlndlap.compRHS(amrex::GetVecOfPtrs(rhs), amrex::GetVecOfPtrs(vel), {}, {});
-
-    for (int ilev = 0; ilev <= max_level; ++ilev) {
-        amrex::VisMF::Write(rhs[ilev], "rhs"+std::to_string(ilev));
-        amrex::Print() << "rhs.norm0() = " << rhs[ilev].norm0() << "\n";
-        amrex::Print() << "rhs.norm1()/npoints = " << rhs[ilev].norm1() / grids[0].d_numPts() << "\n";
-    }
-#endif
 }
 
 void

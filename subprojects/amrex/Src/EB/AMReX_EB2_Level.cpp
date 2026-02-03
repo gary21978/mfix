@@ -102,7 +102,6 @@ Level::coarsenFromFine (Level& fineLevel, bool fill_boundary)
     if (Gpu::notInLaunchRegion())
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:mvmc_error)
 #endif
         for (MFIter mfi(m_levelset,true); mfi.isValid(); ++mfi)
         {
@@ -211,7 +210,6 @@ Level::coarsenFromFine (Level& fineLevel, bool fill_boundary)
             const std::vector<IntVect>& pshifts = fine_period.shiftIntVect();
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             {
                 std::vector<std::pair<int,Box> > isects;
@@ -257,7 +255,6 @@ Level::coarsenFromFine (Level& fineLevel, bool fill_boundary)
     if (Gpu::notInLaunchRegion())
     {
 #ifdef AMREX_USE_OMP
-#pragma omp parallel reduction(max:error)
 #endif
         for (MFIter mfi(m_volfrac,true); mfi.isValid(); ++mfi)
         {
@@ -404,7 +401,6 @@ Level::buildCellFlag ()
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(m_cellflag,TilingIfNotGPU()); mfi.isValid(); ++mfi)
     {
@@ -446,7 +442,6 @@ Level::fillEBCellFlag (FabArray<EBCellFlagFab>& cellflag, const Geometry& /*geom
 
     auto cov_val = EBCellFlag::TheCoveredCell();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     {
         std::vector<std::pair<int,Box> > isects;
@@ -491,7 +486,6 @@ Level::fillVolFrac (MultiFab& vfrac, const Geometry& /*geom*/) const
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     if (!m_covered_grids.empty())
     {
@@ -520,7 +514,6 @@ namespace {
     {
         const int ncomp = srcmf.nComp();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(dstmf.data()); mfi.isValid(); ++mfi)
         {
@@ -661,7 +654,6 @@ Level::fillAreaFrac (Array<MultiCutFab*,AMREX_SPACEDIM> const& a_areafrac,
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     if (!m_covered_grids.empty())
     {
@@ -737,7 +729,6 @@ Level::fillAreaFrac (Array<MultiFab*,AMREX_SPACEDIM> const& a_areafrac,
     }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     if (!m_covered_grids.empty())
     {
@@ -868,7 +859,6 @@ Level::fillEdgeCent (Array<MultiFab*,AMREX_SPACEDIM> const& a_edgecent,
                                            -m_shift,m_geom.periodicity());
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
             if (!m_covered_grids.empty())
             {
@@ -915,7 +905,6 @@ Level::fillLevelSet (MultiFab& levelset, const Geometry& /*geom*/) const
     Real cov_val = 1.0; // for covered cells
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     if (!m_covered_grids.empty())
     {

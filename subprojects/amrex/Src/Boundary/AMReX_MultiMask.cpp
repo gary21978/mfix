@@ -45,7 +45,6 @@ MultiMask::define (const BoxArray& regba, const DistributionMapping& dm, const G
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
         for (MFIter mfi(m_fa); mfi.isValid(); ++mfi)
         {
@@ -78,7 +77,6 @@ MultiMask::Copy (MultiMask& dst, const MultiMask& src)
     BL_ASSERT(dst.DistributionMap() == src.DistributionMap());
     const int ncomp = dst.nComp();
 #ifdef AMREX_USE_OMP
-#pragma omp parallel if (Gpu::notInLaunchRegion())
 #endif
     for (MFIter mfi(dst.m_fa); mfi.isValid(); ++mfi) {
         auto const srcfab = src.m_fa.array(mfi);

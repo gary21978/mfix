@@ -351,7 +351,6 @@ public:
         m_offsets.resize(nbins+1);
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int j = 0; j < nchunks; ++j) {
             int istart = j*chunksize;
@@ -363,7 +362,6 @@ public:
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < nbins; ++i) {
             index_type total = 0;
@@ -380,7 +378,6 @@ public:
         for (int i = 0; i < nbins; ++i) {m_offsets[i+1] = m_offsets[i] + m_counts[i];}
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int i = 0; i < nbins; ++i) {
             for (int j = 0; j < nchunks; ++j) {
@@ -389,7 +386,6 @@ public:
         }
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel for
 #endif
         for (int j = 0; j < nchunks; ++j) {
             int istart = j*chunksize;

@@ -139,21 +139,6 @@ struct INPUT_DIST_t {
       else {return {m_d_ptr_diameters[a_bin], m_d_ptr_CDF[a_bin]}; }
     }
 
-#if 0
-    std::tuple<amrex::Real, amrex::Real> get_bin_extents ( int const a_bin) const
-    { AMREX_ASSERT(a_bin >= 0 && a_bin < m_bins);
-
-      amrex::Real blo = std::numeric_limits<amrex::Real>::min();
-      amrex::Real bhi = std::numeric_limits<amrex::Real>::max();
-
-      amrex::Real const bin_mp = get_diameters(a_bin);
-
-      if (a_bin > 0) { blo = 0.5*(get_diameters(a_bin-1) + bin_mp); }
-      if (a_bin < m_bins-1) { bhi = 0.5*(bin_mp + get_diameters(a_bin+1)); }
-
-      return {blo, bhi};
-    }
-#endif
 
     void report_distribution ( amrex::Real const a_scale = 1.0 ) const noexcept;
 

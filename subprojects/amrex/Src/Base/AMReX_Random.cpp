@@ -98,7 +98,6 @@ InitRandom (ULong cpu_seed, int nprocs, ULong gpu_seed)
 #endif
 
 #ifdef AMREX_USE_OMP
-#pragma omp parallel
 #endif
     {
         int tid = OpenMP::get_thread_num();
