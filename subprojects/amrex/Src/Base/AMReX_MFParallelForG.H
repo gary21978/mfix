@@ -80,7 +80,7 @@ ParallelFor (MF const& mf, IntVect const& nghost, int ncomp, IntVect const&, boo
         const int nblocks = nblocks_per_box * nboxes;
         const BoxIndexer* dp_boxes = parforinfo.getBoxes();
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#ifdef AMREX_USE_CUDA
 
         amrex::launch_global<MT>
             <<<nblocks, MT, 0, Gpu::gpuStream()>>>
@@ -88,16 +88,6 @@ ParallelFor (MF const& mf, IntVect const& nghost, int ncomp, IntVect const&, boo
              {
                  int ibox = int(blockIdx.x) / nblocks_per_box;
                  auto icell = std::uint64_t(blockIdx.x-ibox*nblocks_per_box)*MT + threadIdx.x;
-
-#elif defined(AMREX_USE_SYCL)
-
-        amrex::launch<MT>(nblocks, Gpu::gpuStream(),
-             [=] AMREX_GPU_DEVICE (sycl::nd_item<1> const& item) noexcept
-             {
-                 int blockIdxx = item.get_group_linear_id();
-                 int threadIdxx = item.get_local_linear_id();
-                 int ibox = int(blockIdxx) / nblocks_per_box;
-                 auto icell = std::uint64_t(blockIdxx-ibox*nblocks_per_box)*MT + threadIdxx;
 #endif
                  BoxIndexer const& indexer = dp_boxes[ibox];
                  if (icell < indexer.numPts()) {

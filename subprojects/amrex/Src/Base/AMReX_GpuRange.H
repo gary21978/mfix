@@ -61,10 +61,6 @@ struct range_impl
     AMREX_GPU_HOST_DEVICE
     explicit range_impl (T const& b) noexcept : m_b(b), m_n(range_detail::size(b)) {}
 
-#ifdef AMREX_USE_SYCL
-    range_impl (T const& b, Long gid, Long grange) noexcept
-        : m_b(b), m_n(range_detail::size(b)), m_gid(gid), m_grange(grange) {}
-#endif
 
     struct iterator
     {
@@ -106,19 +102,8 @@ struct range_impl
 private:
     T m_b;
     Long m_n;
-#ifdef AMREX_USE_SYCL
-    Long m_gid;
-    Long m_grange;
-#endif
 };
 }
-
-#ifdef AMREX_USE_SYCL
-template <typename T>
-range_detail::range_impl<T> Range (T const& b, Long gid, Long grange) noexcept {
-    return range_detail::range_impl<T>(b,gid,grange);
-}
-#endif
 
 template <typename T>
 AMREX_GPU_HOST_DEVICE

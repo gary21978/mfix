@@ -432,28 +432,6 @@ namespace amrex::Gpu {
             constexpr int nthreads_per_block = (sizeof(T) <= 64) ? 256 : 128;
             int nblocks = static_cast<int>((N+nthreads_per_block-1)/nthreads_per_block);
             std::size_t shared_mem_bytes = nthreads_per_block * sizeof(T);
-#ifdef AMREX_USE_SYCL
-            amrex::launch<nthreads_per_block>(nblocks, shared_mem_bytes, Gpu::gpuStream(),
-            [=] AMREX_GPU_DEVICE (Gpu::Handler const& handler) noexcept
-            {
-                Long i = handler.globalIdx();
-                Long blockDimx = handler.blockDim();
-                Long threadIdxx = handler.threadIdx();
-                Long blockIdxx = handler.blockIdx();
-                auto const shared_U = (U*)handler.sharedMemory();
-                auto const shared_T = (T*)shared_U;
-                if (i < N) {
-                    auto ga = new(shared_T+threadIdxx) T;
-                    f(*ga, i);
-                }
-                handler.sharedBarrier();
-                for (Long m = threadIdxx,
-                         mend = nU * amrex::min(blockDimx, N-blockDimx*blockIdxx);
-                     m < mend; m += blockDimx) {
-                    pu[blockDimx*blockIdxx*nU+m] = shared_U[m];
-                }
-            });
-#else
             amrex::launch<nthreads_per_block>(nblocks, shared_mem_bytes, Gpu::gpuStream(),
                           [=] AMREX_GPU_DEVICE () noexcept
             {
@@ -475,7 +453,6 @@ namespace amrex::Gpu {
                     pu[blockDimx*blockIdxx*nU+m] = shared_U[m];
                 }
             });
-#endif
         }
 #endif
     }

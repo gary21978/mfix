@@ -18,10 +18,6 @@
 #cmakedefine AMREX_MPI_THREAD_MULTIPLE
 #cmakedefine AMREX_USE_SIMD
 #cmakedefine BL_USE_OMP
-#cmakedefine AMREX_USE_SYCL
-#cmakedefine AMREX_USE_DPCPP
-#cmakedefine AMREX_SYCL_SUB_GROUP_SIZE @AMREX_SYCL_SUB_GROUP_SIZE@
-#cmakedefine AMREX_USE_ONEDPL
 #cmakedefine AMREX_USE_FLOAT
 #cmakedefine AMREX_SINGLE_PRECISION_PARTICLES
 #cmakedefine BL_USE_FLOAT
@@ -47,8 +43,6 @@
 #cmakedefine AMREX_USE_ASCENT
 #cmakedefine AMREX_USE_EB
 #cmakedefine AMREX_USE_CUDA
-#cmakedefine AMREX_USE_HIP
-#cmakedefine AMREX_AMDGCN_WAVEFRONT_SIZE @AMREX_AMDGCN_WAVEFRONT_SIZE@
 #cmakedefine AMREX_USE_NVML
 #cmakedefine AMREX_GPU_MAX_THREADS @AMREX_GPU_MAX_THREADS@
 #ifndef AMREX_GPU_MAX_THREADS
@@ -70,8 +64,4 @@
 #ifdef __cplusplus@COMP_DECLS@
 @OMP_DECLS@
 #endif
-/*
-  hipcc does not necessarily set the _OPENMP macro
-  https://rocmdocs.amd.com/en/latest/Programming_Guides/HIP-FAQ.html?highlight=_openmp#openmp-is-undefined-when-compiling-with-fopenmp
- */
 #endif /* AMREX_CONFIG_@D@D_H_ */

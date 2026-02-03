@@ -23,9 +23,6 @@
 #endif
 #endif
 
-#if defined(AMREX_USE_HIP) && defined(AMREX_USE_ROCTX)
-#include <rocprofiler-sdk-roctx/roctx.h>
-#endif
 
 #include <algorithm>
 #include <cmath>
@@ -113,9 +110,7 @@ TinyProfiler::start () noexcept
         in_parallel_region = false;
 
 #ifdef AMREX_USE_CUDA
-        nvtxRangePush(fname.c_str());
-#elif defined(AMREX_USE_HIP) && defined(AMREX_USE_ROCTX)
-        roctxRangePush(fname.c_str());
+    nvtxRangePush(fname.c_str());
 #endif
 
         for (auto const& region : regionstack)
@@ -184,8 +179,6 @@ TinyProfiler::stop () noexcept
 
 #ifdef AMREX_USE_CUDA
             nvtxRangePop();
-#elif defined(AMREX_USE_HIP) && defined(AMREX_USE_ROCTX)
-            roctxRangePop();
 #endif
         }
 

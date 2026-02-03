@@ -11,24 +11,18 @@
 #define AMREX_CUDA_GE_11_2 1
 #endif
 
-#if defined(AMREX_USE_HIP) || defined(AMREX_CUDA_GE_11_2)
+#if defined(AMREX_CUDA_GE_11_2)
 #define AMREX_GPU_STREAM_ALLOC_SUPPORT 1
 #endif
 
-#if defined(AMREX_USE_HIP)
-#define AMREX_HIP_OR_CUDA(a,b) a
-#elif defined(AMREX_USE_CUDA)
+#if defined(AMREX_USE_CUDA)
 #define AMREX_HIP_OR_CUDA(a,b) b
 #else
 #define AMREX_HIP_OR_CUDA(a,b) ((void)0);
 #endif
 
-#if defined(AMREX_USE_HIP)
-#define AMREX_HIP_OR_CUDA_OR_SYCL(a,b,c) a
-#elif defined(AMREX_USE_CUDA)
+#if defined(AMREX_USE_CUDA)
 #define AMREX_HIP_OR_CUDA_OR_SYCL(a,b,c) b
-#elif defined(AMREX_USE_SYCL)
-#define AMREX_HIP_OR_CUDA_OR_SYCL(a,b,c) c
 #else
 #define AMREX_HIP_OR_CUDA_OR_SYCL(a,b,c) ((void)0);
 #endif

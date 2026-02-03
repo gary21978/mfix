@@ -6,15 +6,7 @@
 
 #include <cassert>
 
-#ifdef AMREX_USE_SYCL
-#  include <sycl/sycl.hpp>
-#endif
-
-#if defined(AMREX_USE_SYCL)
-#  define AMREX_DEVICE_ASSERT(flag) assert(flag)
-#elif defined(AMREX_USE_CUDA)
-#  define AMREX_DEVICE_ASSERT(flag) assert(flag)
-#elif defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 #  define AMREX_DEVICE_ASSERT(flag) assert(flag)
 #endif
 

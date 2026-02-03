@@ -23,53 +23,8 @@ else
   USE_GPU := FALSE
 endif
 
-ifdef USE_SYCL
-  USE_SYCL := $(strip $(USE_SYCL))
-else ifdef USE_DPCPP
-  $(warning *** USE_DPCPP has been deprecated. Use USE_SYCL instead.)
-  USE_SYCL := $(strip $(USE_DPCPP))
-else
-  USE_SYCL := FALSE
-endif
-
-ifeq ($(USE_SYCL),TRUE)
-  override COMP = sycl
-  DEFINES += -DAMREX_USE_SYCL -DAMREX_USE_DPCPP
-  SYCL_SUB_GROUP_SIZE ?= 32
-  DEFINES += -DAMREX_SYCL_SUB_GROUP_SIZE=$(SYCL_SUB_GROUP_SIZE)
-  USE_GPU := TRUE
-  USE_CUDA := FALSE
-  USE_HIP := FALSE
-  # disable ccache for now
-  USE_CCACHE := FALSE
-  ifdef USE_ONEDPL
-    USE_ONEDPL := $(strip $(USE_ONEDPL))
-  else
-    USE_ONEDPL := FALSE
-  endif
-endif
-
-ifdef USE_HIP
-  USE_HIP := $(strip $(USE_HIP))
-else
-  USE_HIP := FALSE
-endif
-
-ifeq ($(USE_HIP),TRUE)
-  USE_CUDA := FALSE
-  override COMP = hip
-  ifneq ($(NO_CONFIG_CHECKING),TRUE)
-    HIP_COMPILER = $(shell hipconfig --compiler)
-    ifeq ($(HIP_COMPILER),nvcc)
-      $(error HIP_COMPILER=nvcc is not supported at this time. Use USE_CUDA to compile for NVIDIA platforms)
-    else ifeq ($(HIP_COMPILER),hcc)
-      $(error HIP_COMPILER=hcc is no longer supported)
-    else ifeq ($(HIP_COMPILER),clang)
-    else
-      $(error Unknown HIP_COMPILER=$(HIP_COMPILER))
-    endif
-  endif
-endif
+USE_SYCL := FALSE
+USE_HIP := FALSE
 
 ifdef USE_CUDA
   USE_CUDA := $(strip $(USE_CUDA))
@@ -753,36 +708,7 @@ ifeq ($(USE_CUPTI),TRUE)
   endif
 endif
 
-ifeq ($(USE_HIP),TRUE)
-
-    USE_GPU := TRUE
-
-    DEFINES += -DAMREX_USE_HIP
-
-    GPUSuffix := .HIP
-
-    ifeq ($(USE_MPI),TRUE)
-      # Make sure that the C/C++ MPI
-      # wrappers are calling hipcc to compile the code.
-      # Right now we handle OpenMPI, MPICH, and HPE MPT.
-      # Other MPI implementations could be added later.
-
-      export OMPI_CC := $(CXX)
-      export OMPI_CXX := $(CC)
-      export OMPI_F77 := $(FC)
-      export OMPI_FC  := $(F90)
-
-      export MPICH_CC  := $(CXX)
-      export MPICH_CXX := $(CC)
-      export MPICH_F77 := $(FC)
-      export MPICH_FC  := $(F90)
-
-      export MPICXX_CXX := $(CXX)
-      export MPICC_CC   := $(CXX)
-      export MPIF90_F90 := $(F90)
-    endif
-
-else ifeq ($(USE_CUDA),TRUE)
+ifeq ($(USE_CUDA),TRUE)
 
     USE_GPU := TRUE
 

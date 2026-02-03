@@ -53,24 +53,6 @@ add_amrex_define( AMREX_USE_SIMD NO_LEGACY IF AMReX_SIMD )
 # OpenMP -- This one has legacy definition only in Base/AMReX_omp_mod.F90
 add_amrex_define( AMREX_USE_OMP IF AMReX_OMP )
 
-# SYCL
-if (AMReX_SYCL)
-  add_amrex_define( AMREX_USE_SYCL NO_LEGACY )
-  add_amrex_define( AMREX_USE_DPCPP NO_LEGACY )
-  add_amrex_define( AMREX_SYCL_SUB_GROUP_SIZE=${AMReX_SYCL_SUB_GROUP_SIZE} NO_LEGACY )
-  add_amrex_define( AMREX_USE_ONEDPL NO_LEGACY IF AMReX_SYCL_ONEDPL )
-endif()
-
-# HIP
-if (AMReX_HIP)
-   add_amrex_define( AMREX_USE_HIP NO_LEGACY )
-   add_amrex_define( NDEBUG )  # This address a bug that causes slow build times
-   if (${AMReX_AMD_ARCH} MATCHES "gfx1[01].*")
-      add_amrex_define( AMREX_AMDGCN_WAVEFRONT_SIZE=32 NO_LEGACY )
-   else ()
-      add_amrex_define( AMREX_AMDGCN_WAVEFRONT_SIZE=64 NO_LEGACY )
-   endif ()
-endif()
 
 # Precision
 if (AMReX_PRECISION STREQUAL "SINGLE")
