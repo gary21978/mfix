@@ -84,7 +84,7 @@ namespace detail {
 
     // https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#atomicadd
     // https://rocmdocs.amd.com/en/latest/Programming_Guides/Kernel_language.html?#atomic-functions
-    // CUDA and HIP support int, unsigned int, and unsigned long long.
+    // CUDA supports int, unsigned int, and unsigned long long.
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     Long Add_device (Long* const sum, Long const value) noexcept

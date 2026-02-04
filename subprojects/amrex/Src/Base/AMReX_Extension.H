@@ -2,7 +2,7 @@
 #define AMREX_EXTENSION_H_
 #include <AMReX_Config.H>
 
-#if defined(__INTEL_COMPILER) || (defined(__INTEL_LLVM_COMPILER) && !defined(SYCL_LANGUAGE_VERSION))
+#if defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
 #define AMREX_CXX_INTEL
 #elif defined(_CRAYC) || defined(__cray__)
 #define AMREX_CXX_CRAY

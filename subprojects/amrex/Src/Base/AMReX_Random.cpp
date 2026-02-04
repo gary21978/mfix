@@ -230,7 +230,7 @@ void FillRandomNormal (Real* p, Long N, Real mean, Real stddev)
         Gpu::streamSynchronize();
         return;
     }
-    // The length passed to [cu|hip]randGenerateNormal must be even
+    // The length passed to curandGenerateNormal must be even
     Long Neven =  (N%2 == 0) ? N : N-1;
 #endif
 

@@ -84,16 +84,12 @@ struct range_impl
 
     [[nodiscard]] AMREX_GPU_HOST_DEVICE
     iterator begin () const noexcept {
-#if defined (__SYCL_DEVICE_ONLY__)
-        return iterator(m_b, m_gid, m_grange);
-#else
         AMREX_IF_ON_DEVICE((
             return iterator(m_b, blockDim.x*blockIdx.x+threadIdx.x, blockDim.x*gridDim.x);
         ))
         AMREX_IF_ON_HOST((
             return iterator(m_b,0,1);
         ))
-#endif
     }
 
     [[nodiscard]] AMREX_GPU_HOST_DEVICE

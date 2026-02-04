@@ -37,7 +37,7 @@ public:
     // To generate global ids for Hypre, we need to remove duplicates on
     // nodes shared by multiple Boxes.  So we need to use a type that
     // supports atomicAdd.  HYPRE_Int is either int or long long.  The
-    // latter does not have native atomicAdd support in CUDA/HIP.
+    // latter does not have native atomicAdd support in CUDA.
     using AtomicInt = std::conditional_t<sizeof(Int) == 4, unsigned int, unsigned long long>;
 
     void solve (MultiFab& soln, const MultiFab& rhs,

@@ -59,7 +59,7 @@ More information is available at the [AMReX website](https://amrex-codes.github.
 - Support for particles
 - Embedded boundary description of irregular geometry
 - Parallelization via flat MPI, OpenMP, hybrid MPI/OpenMP, or MPI/MPI
-- GPU Acceleration with CUDA (NVidia), HIP (AMD) or SYCL (Intel) backends
+- GPU Acceleration with CUDA (NVIDIA)
 - Parallel I/O
 - Plotfile format supported by Amrvis, VisIt, ParaView and yt
 - Built-in profiling tools
