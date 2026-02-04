@@ -103,15 +103,7 @@ namespace amrex {
             static_assert(std::is_same_v<T_SIMD, uint64_t>, "make_invalid: forgot template on wrapper?");
             if (mask) { make_invalid(idcpu); }
         } else {
-#ifdef AMREX_USE_SIMD
-            // SIMD
-            static_assert(!std::is_same_v<T_SIMD, uint64_t>, "make_invalid: forgot template on wrapper?");
-            // cvt / .__cvt() because of: https://github.com/VcDevel/std-simd/issues/41#issuecomment-3185164952
-            // see also https://github.com/mattkretz/vir-simd/issues/45
-            simd::stdx::where(simd::stdx::cvt(mask), idcpu) &= ~(T_SIMD{1} << 63);
-#else
             AMREX_ALWAYS_ASSERT_WITH_MESSAGE(false, "make_invalid: AMReX_SIMD was not enabled!");
-#endif
         }
     }
 
@@ -130,15 +122,7 @@ namespace amrex {
             static_assert(std::is_same_v<T_SIMD, uint64_t>, "make_valid: forgot template on wrapper?");
             if (mask) { make_valid(idcpu); }
         } else {
-#ifdef AMREX_USE_SIMD
-            // SIMD
-            static_assert(!std::is_same_v<T_SIMD, uint64_t>, "make_valid: forgot template on wrapper?");
-            // cvt / .__cvt() because of: https://github.com/VcDevel/std-simd/issues/41#issuecomment-3185164952
-            // see also https://github.com/mattkretz/vir-simd/issues/45
-            simd::stdx::where(simd::stdx::cvt(mask), idcpu) |= T_SIMD{1} << 63;
-#else
             AMREX_ALWAYS_ASSERT_WITH_MESSAGE(false, "make_valid: AMReX_SIMD was not enabled!");
-#endif
         }
     }
 

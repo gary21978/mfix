@@ -5,14 +5,6 @@
 
 #include <AMReX_REAL.H>
 
-#ifdef AMREX_USE_SIMD
-// TODO make SIMD provider configurable: VIR (C++17 TS2) or C++26 (later)
-#   include <vir/simd.h>  // includes SIMD TS2 header <experimental/simd>
-#   if __cplusplus >= 202002L
-#       include <vir/simd_cvt.h>
-#   endif
-#endif
-
 #include <cstdint>
 #include <type_traits>
 
@@ -22,39 +14,11 @@ namespace amrex::simd
     // TODO make SIMD provider configurable: VIR (C++17 TS2) or C++26 (later)
     // for https://en.cppreference.com/w/cpp/experimental/simd/simd_cast.html
     namespace stdx {
-#ifdef AMREX_USE_SIMD
-        using namespace vir::stdx;
-#   if __cplusplus >= 202002L
-        using vir::cvt;
-#   endif
-#else
-        // fallback implementations for functions that are commonly used in portable code paths
-
         AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
         bool any_of (bool const v) { return v; }
-#endif
     }
 
     // TODO: move to AMReX_REAL.H?
-
-#ifdef AMREX_USE_SIMD
-    // TODO: not sure why std::experimental::simd_abi::native<T> does not work, so we use this long version
-    constexpr auto native_simd_size_real = stdx::native_simd<amrex::Real>::size();
-    constexpr auto native_simd_size_particlereal = stdx::native_simd<amrex::ParticleReal>::size();
-
-    // Note: to make use of not only vector registers but also ILP, user might want to use * 2 or more of the native size
-    //       for selected compute kernels.
-    // TODO Check if a default with * 2 or similar is sensible.
-    template<int SIMD_WIDTH = native_simd_size_real>
-    using SIMDReal = stdx::fixed_size_simd<amrex::Real, SIMD_WIDTH>;
-
-    template<int SIMD_WIDTH = native_simd_size_particlereal>
-    using SIMDParticleReal = stdx::fixed_size_simd<amrex::ParticleReal, SIMD_WIDTH>;
-
-    // Type that has the same amount of IdCpu SIMD elements as the SIMDParticleReal type
-    template<typename T_ParticleReal = SIMDParticleReal<>>
-    using SIMDIdCpu = stdx::rebind_simd_t<std::uint64_t, T_ParticleReal>;
-#else
     constexpr auto native_simd_size_real = 1;
     constexpr auto native_simd_size_particlereal = 1;
 
@@ -67,7 +31,6 @@ namespace amrex::simd
     // Type that has the same amount of IdCpu SIMD elements as the SIMDParticleReal type
     template<typename T_ParticleReal = SIMDParticleReal<>>
     using SIMDIdCpu = std::uint64_t;
-#endif
 
     namespace detail {
         struct InternalVectorized {};
