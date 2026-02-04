@@ -459,7 +459,6 @@ FabArray<FAB>::ParallelCopy_nowait (const FabArray<FAB>& src,
                     for (int n = 0; n < ncomp; ++n) {
                     for (int k = lo.z; k <= hi.z; ++k) {
                     for (int j = lo.y; j <= hi.y; ++j) {
-                    AMREX_PRAGMA_SIMD
                     for (int i = lo.x; i <= hi.x; ++i) {
                         da(i,j,k,n) = sa(i,j,k,n);
                     }}}}
@@ -482,7 +481,6 @@ FabArray<FAB>::ParallelCopy_nowait (const FabArray<FAB>& src,
                     for (int n = 0; n < ncomp; ++n) {
                     for (int k = lo.z; k <= hi.z; ++k) {
                     for (int j = lo.y; j <= hi.y; ++j) {
-                    AMREX_PRAGMA_SIMD
                     for (int i = lo.x; i <= hi.x; ++i) {
                         da(i,j,k,n) += sa(i,j,k,n);
                     }}}}

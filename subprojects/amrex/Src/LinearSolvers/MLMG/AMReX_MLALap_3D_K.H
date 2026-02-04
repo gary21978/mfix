@@ -22,7 +22,6 @@ void mlalap_adotx (Box const& box, Array4<RT> const& y,
     for (int n = 0; n < ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     y(i,j,k,n) = alpha*a(i,j,k,n)*x(i,j,k,n)
                         - dhx * (x(i-1,j,k,n) - RT(2.0)*x(i,j,k,n) + x(i+1,j,k,n))
@@ -52,7 +51,6 @@ void mlalap_normalize (Box const& box, Array4<RT> const& x,
     for (int n = 0; n < ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     x(i,j,k,n) /= alpha*a(i,j,k,n) + fac;
                 }
@@ -72,7 +70,6 @@ void mlalap_flux_x (Box const& box, Array4<RT> const& fx, Array4<RT const> const
     for (int n = 0; n < ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     fx(i,j,k,n) = -fac*(sol(i,j,k,n)-sol(i-1,j,k,n));
                 }
@@ -112,7 +109,6 @@ void mlalap_flux_y (Box const& box, Array4<RT> const& fy, Array4<RT const> const
     for (int n = 0; n < ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     fy(i,j,k,n) = -fac*(sol(i,j,k,n)-sol(i,j-1,k,n));
                 }
@@ -132,12 +128,10 @@ void mlalap_flux_yface (Box const& box, Array4<RT> const& fy, Array4<RT const> c
     for (int n = 0; n < ncomp; ++n) {
         for     (int k = lo.z; k <= hi.z; ++k) {
             int j = lo.y;
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fy(i,j,k,n) = -fac*(sol(i,j,k,n)-sol(i,j-1,k,n));
             }
             j += ylen;
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fy(i,j,k,n) = -fac*(sol(i,j,k,n)-sol(i,j-1,k,n));
             }
@@ -156,7 +150,6 @@ void mlalap_flux_z (Box const& box, Array4<RT> const& fz, Array4<RT const> const
     for (int n = 0; n < ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     fz(i,j,k,n) = -fac*(sol(i,j,k,n)-sol(i,j,k-1,n));
                 }
@@ -176,7 +169,6 @@ void mlalap_flux_zface (Box const& box, Array4<RT> const& fz, Array4<RT const> c
     for (int n = 0; n < ncomp; ++n) {
         int k = lo.z;
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fz(i,j,k,n) = -fac*(sol(i,j,k,n)-sol(i,j,k-1,n));
             }
@@ -184,7 +176,6 @@ void mlalap_flux_zface (Box const& box, Array4<RT> const& fz, Array4<RT const> c
 
         k += zlen;
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fz(i,j,k,n) = -fac*(sol(i,j,k,n)-sol(i,j,k-1,n));
             }
@@ -217,7 +208,6 @@ void mlalap_gsrb (Box const& box, Array4<RT> const& phi,
     for (int n = 0; n < ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     if ((i+j+k+redblack)%2 == 0) {
                         RT cf0 = (i == vlo.x && m0(vlo.x-1,j,k) > 0)

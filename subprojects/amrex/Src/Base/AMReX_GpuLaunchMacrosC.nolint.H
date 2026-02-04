@@ -41,7 +41,6 @@
         }
 
 #define AMREX_PARALLEL_FOR_1D_IMPL(n,i,block) \
-        AMREX_PRAGMA_SIMD \
         for (auto i = decltype(n){0}; i < n; ++i) {     \
             block \
         }
@@ -63,7 +62,6 @@
         const auto amrex_i_hi = amrex::ubound(box); \
         for (int k = amrex_i_lo.z; k <= amrex_i_hi.z; ++k) { \
         for (int j = amrex_i_lo.y; j <= amrex_i_hi.y; ++j) { \
-        AMREX_PRAGMA_SIMD \
         for (int i = amrex_i_lo.x; i <= amrex_i_hi.x; ++i) { \
             block \
         }}} \
@@ -88,7 +86,6 @@
         for (int n = 0; n < ncomp; ++n) { \
         for (int k = amrex_i_lo.z; k <= amrex_i_hi.z; ++k) { \
         for (int j = amrex_i_lo.y; j <= amrex_i_hi.y; ++j) { \
-        AMREX_PRAGMA_SIMD \
         for (int i = amrex_i_lo.x; i <= amrex_i_hi.x; ++i) { \
             block \
         }}}} \

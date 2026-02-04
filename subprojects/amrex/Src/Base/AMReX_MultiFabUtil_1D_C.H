@@ -261,7 +261,6 @@ void amrex_avgdown_nodes (Box const& bx, Array4<T> const& crse,
     const int facx = ratio[0];
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = clo.x; i <= chi.x; ++i) {
             crse(i,0,0,n+ccomp) = fine(i*facx,0,0,n+fcomp);
         }
@@ -288,7 +287,6 @@ void amrex_compute_divergence (Box const& bx, Array4<Real> const& divu,
     const Real dxi = dxinv[0];
 
     for     (int n = 0; n < divu.ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             divu(i,0,0,n) = dxi * (u(i+1,0,0,n)-u(i,0,0,n));
         }
@@ -305,7 +303,6 @@ void amrex_compute_gradient (Box const& bx, Array4<Real> const& grad,
     const auto hi = ubound(bx);
     const Real dxi = dxinv[0];
 
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         grad(i,0,0) = dxi * (u(i+1,0,0)-u(i,0,0));
     }

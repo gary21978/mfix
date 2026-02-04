@@ -18,7 +18,6 @@ void mlalap_adotx (Box const& box, Array4<RT> const& y,
     const auto hi = amrex::ubound(box);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             y(i,0,0,n) = alpha*a(i,0,0,n)*x(i,0,0,n)
                 - dhx * (x(i+1,0,0,n) - RT(2.)*x(i,0,0,n) + x(i-1,0,0,n));
@@ -41,7 +40,6 @@ void mlalap_adotx_m (Box const& box, Array4<RT> const& y,
     const auto hi = amrex::ubound(box);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             RT rel = (probxlo + i   *dx) * (probxlo + i   *dx);
             RT rer = (probxlo +(i+1)*dx) * (probxlo +(i+1)*dx);
@@ -66,7 +64,6 @@ void mlalap_normalize (Box const& box, Array4<RT> const& x,
     const auto hi = amrex::ubound(box);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             x(i,0,0,n) /= alpha*a(i,0,0,n) + dhx*RT(2.0);
         }
@@ -86,7 +83,6 @@ void mlalap_normalize_m (Box const& box, Array4<RT> const& x,
     const auto hi = amrex::ubound(box);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             RT rel = (probxlo + i   *dx) * (probxlo + i   *dx);
             RT rer = (probxlo +(i+1)*dx) * (probxlo +(i+1)*dx);
@@ -105,7 +101,6 @@ void mlalap_flux_x (Box const& box, Array4<RT> const& fx,
     const auto hi = amrex::ubound(box);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fx(i,0,0,n) = -fac*(sol(i,0,0,n)-sol(i-1,0,0,n));
         }
@@ -122,7 +117,6 @@ void mlalap_flux_x_m (Box const& box, Array4<RT> const& fx,
     const auto hi = amrex::ubound(box);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             RT re = (probxlo + i*dx) * (probxlo + i*dx);
             fx(i,0,0,n) = -fac*re*(sol(i,0,0,n)-sol(i-1,0,0,n));
@@ -178,7 +172,6 @@ void mlalap_gsrb (Box const& box, Array4<RT> const& phi,
     const auto vhi = amrex::ubound(vbox);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             if ((i+redblack)%2 == 0) {
                 RT cf0 = (i == vlo.x && m0(vlo.x-1,0,0) > 0)
@@ -215,7 +208,6 @@ void mlalap_gsrb_m (Box const& box, Array4<RT> const& phi,
     const auto vhi = amrex::ubound(vbox);
 
     for (int n = 0; n < ncomp; ++n) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             if ((i+redblack)%2 == 0) {
                 RT cf0 = (i == vlo.x && m0(vlo.x-1,0,0) > 0)

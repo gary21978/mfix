@@ -61,7 +61,6 @@ void amrex_fill_slice_interp (Box const& bx, Array4<Real> slice,
         const int nf = n + fcomp;
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     slice(i,j,k,ns) = (Real(1.0)-weight)*full(i+ilo,j+jlo,k+klo,nf)
                         +                  weight *full(i+ihi,j+jhi,k+khi,nf);

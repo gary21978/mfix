@@ -51,7 +51,6 @@
         ); \
     } \
     else { \
-        AMREX_PRAGMA_SIMD \
         for (amrex_i_inttype i = 0; i < n; ++i) { \
             block \
         } \
@@ -286,7 +285,6 @@
 #define AMREX_HOST_DEVICE_PARALLEL_FOR_1D_FLAG(where_to_run,n,i,block) \
     {  using amrex_i_inttype = std::remove_const_t<decltype(n)>; \
     amrex::ignore_unused(where_to_run); \
-    AMREX_PRAGMA_SIMD \
     for (amrex_i_inttype i = 0; i < n; ++i) { \
         block \
     }}

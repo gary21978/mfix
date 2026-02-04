@@ -955,7 +955,6 @@ StateDataPhysBCFunct::operator() (MultiFab& mf, int dest_comp, int num_comp, Int
                                     for (int n = 0; n < num_comp; ++n) {
                                         for         (int k = 0; k < len.z; ++k) {
                                             for     (int j = 0; j < len.y; ++j) {
-                                                AMREX_PRAGMA_SIMD
                                                 for (int i = 0; i < len.x; ++i) {
                                                     tmpa(i+tlo.x,j+tlo.y,k+tlo.z,n)
                                                         = desta(i+dlo.x,j+dlo.y,k+dlo.z,n+dest_comp);
@@ -979,7 +978,6 @@ StateDataPhysBCFunct::operator() (MultiFab& mf, int dest_comp, int num_comp, Int
                                     for (int n = 0; n < num_comp; ++n) {
                                         for         (int k = 0; k < len.z; ++k) {
                                             for     (int j = 0; j < len.y; ++j) {
-                                                AMREX_PRAGMA_SIMD
                                                 for (int i = 0; i < len.x; ++i) {
                                                     desta(i+dlo.x,j+dlo.y,k+dlo.z,n+dest_comp)
                                                         = tmpa(i+tlo.x,j+tlo.y,k+tlo.z,n);
@@ -1023,7 +1021,6 @@ StateDataPhysBCFunct::operator() (MultiFab& mf, int dest_comp, int num_comp, Int
                                     for (int n = 0; n < num_comp; ++n) {
                                         for         (int k = 0; k < len.z; ++k) {
                                             for     (int j = 0; j < len.y; ++j) {
-                                                AMREX_PRAGMA_SIMD
                                                 for (int i = 0; i < len.x; ++i) {
                                                     tmpa(i+tlo.x,j+tlo.y,k+tlo.z,n)
                                                         = desta(i+dlo.x,j+dlo.y,k+dlo.z,n+dest_comp);
@@ -1047,7 +1044,6 @@ StateDataPhysBCFunct::operator() (MultiFab& mf, int dest_comp, int num_comp, Int
                                     for (int n = 0; n < num_comp; ++n) {
                                         for         (int k = 0; k < len.z; ++k) {
                                             for     (int j = 0; j < len.y; ++j) {
-                                                AMREX_PRAGMA_SIMD
                                                 for (int i = 0; i < len.x; ++i) {
                                                     desta(i+dlo.x,j+dlo.y,k+dlo.z,n+dest_comp)
                                                         = tmpa(i+tlo.x,j+tlo.y,k+tlo.z,n);

@@ -38,45 +38,6 @@
 
 #endif
 
-// simd
-
-#if defined(AMREX_DEBUG)
-#define AMREX_PRAGMA_SIMD
-
-#elif defined(__CUDA_ARCH__) && defined(AMREX_USE_CUDA)
-#define AMREX_PRAGMA_SIMD
-
-//#elif defined(AMREX_USE_OMP) && defined(_OPENMP) && (_OPENMP >= 201307) && !defined(__PGI)
-//#define AMREX_PRAGMA_SIMD _Pragma("omp simd")
-
-#elif defined(AMREX_CXX_INTEL)
-#define AMREX_PRAGMA_SIMD _Pragma("ivdep")
-
-#elif defined(AMREX_CXX_CRAY)
-#define AMREX_PRAGMA_SIMD _Pragma("ivdep")
-
-#elif defined(AMREX_CXX_PGI)
-#define AMREX_PRAGMA_SIMD _Pragma("loop ivdep")
-
-#elif defined(AMREX_CXX_NVHPC)
-#define AMREX_PRAGMA_SIMD _Pragma("loop ivdep")
-
-#elif defined(AMREX_CXX_NEC)
-#define AMREX_PRAGMA_SIMD
-
-#elif defined(AMREX_CXX_IBM)
-#define AMREX_PRAGMA_SIMD _Pragma("ibm independent_loop")
-
-#elif defined(__clang__)
-#define AMREX_PRAGMA_SIMD
-
-#elif defined(__GNUC__)
-#define AMREX_PRAGMA_SIMD _Pragma("GCC ivdep")
-
-#else
-#define AMREX_PRAGMA_SIMD
-
-#endif /* simd */
 
 // force inline
 #if defined(__CUDA_ARCH__) && defined(AMREX_USE_CUDA)

@@ -413,7 +413,6 @@ ParallelFor_doit (TagVector<TagType> const& tv, F const& f)
 
             for (int k = lo.z; k <= hi.z; ++k) {
                 for (int j = lo.y; j <= hi.y; ++j) {
-                    AMREX_PRAGMA_SIMD
                     for (int i = lo.x; i <= hi.x; ++i) {
                         f(0, 1, i, j, k, t);
                     }
@@ -422,7 +421,6 @@ ParallelFor_doit (TagVector<TagType> const& tv, F const& f)
         } else {
             const auto size = t.size();
 
-            AMREX_PRAGMA_SIMD
             for (int i = 0; i < size; ++i) {
                 f(i, size, t);
             }

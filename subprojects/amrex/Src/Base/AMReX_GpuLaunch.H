@@ -275,7 +275,6 @@ void ParallelForOMP (Box const& box, L const& f) noexcept
     }
 #elif (AMREX_SPACEDIM == 2)
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             f(i,j,0);
         }
@@ -283,7 +282,6 @@ void ParallelForOMP (Box const& box, L const& f) noexcept
 #else
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 f(i,j,k);
             }
@@ -307,7 +305,6 @@ void ParallelForOMP (Box const& box, T ncomp, L const& f) noexcept
 #elif (AMREX_SPACEDIM == 2)
     for (T n = 0; n < ncomp; ++n) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 f(i,j,0,n);
             }
@@ -317,7 +314,6 @@ void ParallelForOMP (Box const& box, T ncomp, L const& f) noexcept
     for (T n = 0; n < ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     f(i,j,k,n);
                 }

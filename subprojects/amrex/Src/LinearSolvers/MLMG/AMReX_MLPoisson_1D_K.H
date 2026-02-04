@@ -46,7 +46,6 @@ void mlpoisson_flux_x (Box const& box, Array4<T> const& fx,
     const auto lo = amrex::lbound(box);
     const auto hi = amrex::ubound(box);
 
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         fx(i,0,0) = dxinv*(sol(i,0,0)-sol(i-1,0,0));
     }
@@ -61,7 +60,6 @@ void mlpoisson_flux_x_m (Box const& box, Array4<T> const& fx,
     const auto lo = amrex::lbound(box);
     const auto hi = amrex::ubound(box);
 
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         T re = (probxlo + i*dx) * (probxlo + i*dx);
         fx(i,0,0) = dxinv*re*(sol(i,0,0)-sol(i-1,0,0));

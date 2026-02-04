@@ -55,7 +55,6 @@ void mlpoisson_flux_x (Box const& box, Array4<T> const& fx,
     const auto hi = amrex::ubound(box);
 
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fx(i,j,0) = dxinv*(sol(i,j,0)-sol(i-1,j,0));
         }
@@ -72,7 +71,6 @@ void mlpoisson_flux_x_m (Box const& box, Array4<T> const& fx,
     const auto hi = amrex::ubound(box);
 
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             T re = probxlo + i*dx;
             fx(i,j,0) = dxinv*re*(sol(i,j,0)-sol(i-1,j,0));
@@ -124,7 +122,6 @@ void mlpoisson_flux_y (Box const& box, Array4<T> const& fy,
     const auto hi = amrex::ubound(box);
 
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fy(i,j,0) = dyinv*(sol(i,j,0)-sol(i,j-1,0));
         }
@@ -141,7 +138,6 @@ void mlpoisson_flux_y_m (Box const& box, Array4<T> const& fy,
     const auto hi = amrex::ubound(box);
 
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             T rc = probxlo + (i+T(0.5))*dx;
             fy(i,j,0) = dyinv*rc*(sol(i,j,0)-sol(i,j-1,0));
@@ -158,12 +154,10 @@ void mlpoisson_flux_yface (Box const& box, Array4<T> const& fy,
     const auto hi = amrex::ubound(box);
 
     int j = lo.y;
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         fy(i,j,0) = dyinv*(sol(i,j,0)-sol(i,j-1,0));
     }
     j += ylen;
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         fy(i,j,0) = dyinv*(sol(i,j,0)-sol(i,j-1,0));
     }
@@ -179,13 +173,11 @@ void mlpoisson_flux_yface_m (Box const& box, Array4<T> const& fy,
     const auto hi = amrex::ubound(box);
 
     int j = lo.y;
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         T rc = probxlo + (i+T(0.5))*dx;
         fy(i,j,0) = dyinv*rc*(sol(i,j,0)-sol(i,j-1,0));
     }
     j += ylen;
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         T rc = probxlo + (i+T(0.5))*dx;
         fy(i,j,0) = dyinv*rc*(sol(i,j,0)-sol(i,j-1,0));

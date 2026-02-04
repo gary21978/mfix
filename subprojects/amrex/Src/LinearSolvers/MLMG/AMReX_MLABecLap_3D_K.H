@@ -85,7 +85,6 @@ void mlabeclap_flux_x (Box const& box, Array4<T> const& fx, Array4<T const> cons
     for (int n = 0; n < ncomp; ++n) {
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fx(i,j,k,n) = -fac*bx(i,j,k,n)*(sol(i,j,k,n)-sol(i-1,j,k,n));
             }
@@ -125,7 +124,6 @@ void mlabeclap_flux_y (Box const& box, Array4<T> const& fy, Array4<T const> cons
     for (int n = 0; n < ncomp; ++n) {
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fy(i,j,k,n) = -fac*by(i,j,k,n)*(sol(i,j,k,n)-sol(i,j-1,k,n));
             }
@@ -145,12 +143,10 @@ void mlabeclap_flux_yface (Box const& box, Array4<T> const& fy, Array4<T const> 
     for (int n = 0; n < ncomp; ++n) {
     for     (int k = lo.z; k <= hi.z; ++k) {
         int j = lo.y;
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fy(i,j,k,n) = -fac*by(i,j,k,n)*(sol(i,j,k,n)-sol(i,j-1,k,n));
         }
         j += ylen;
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fy(i,j,k,n) = -fac*by(i,j,k,n)*(sol(i,j,k,n)-sol(i,j-1,k,n));
         }
@@ -169,7 +165,6 @@ void mlabeclap_flux_z (Box const& box, Array4<T> const& fz, Array4<T const> cons
     for (int n = 0; n < ncomp; ++n) {
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fz(i,j,k,n) = -fac*bz(i,j,k,n)*(sol(i,j,k,n)-sol(i,j,k-1,n));
             }
@@ -189,7 +184,6 @@ void mlabeclap_flux_zface (Box const& box, Array4<T> const& fz, Array4<T const> 
     for (int n = 0; n < ncomp; ++n) {
     int k = lo.z;
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fz(i,j,k,n) = -fac*bz(i,j,k,n)*(sol(i,j,k,n)-sol(i,j,k-1,n));
         }
@@ -197,7 +191,6 @@ void mlabeclap_flux_zface (Box const& box, Array4<T> const& fz, Array4<T const> 
 
     k += zlen;
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fz(i,j,k,n) = -fac*bz(i,j,k,n)*(sol(i,j,k,n)-sol(i,j,k-1,n));
         }
@@ -498,7 +491,6 @@ void abec_gsrb_with_line_solve (
     if (idir == 2) {
         for (int n = 0; n < nc; ++n) {
             for (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     if ((i+j+redblack)%2 == 0) {
 
@@ -578,7 +570,6 @@ void abec_gsrb_with_line_solve (
     } else if (idir == 1) {
         for (int n = 0; n < nc; ++n) {
             for (int i = lo.x; i <= hi.x; ++i) {
-                AMREX_PRAGMA_SIMD
                 for (int k = lo.z; k <= hi.z; ++k) {
                     if ((i+k+redblack)%2 == 0) {
 
@@ -657,7 +648,6 @@ void abec_gsrb_with_line_solve (
     } else if (idir == 0) {
         for (int n = 0; n < nc; ++n) {
             for (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int k = lo.z; k <= hi.z; ++k) {
                     if ((j+k+redblack)%2 == 0) {
 

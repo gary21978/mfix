@@ -21,7 +21,6 @@ pcinterp_interp (Box const& bx,
             const int kc = amrex::coarsen(k,ratio[2]);
             for (int j = lo.y; j <= hi.y; ++j) {
                 const int jc = amrex::coarsen(j,ratio[1]);
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     const int ic = amrex::coarsen(i,ratio[0]);
                     fine(i,j,k,n+fcomp) = crse(ic,jc,kc,n+ccomp);
@@ -62,7 +61,6 @@ nodebilin_slopes (Box const& bx, Array4<T> const& slope, Array4<T const> const& 
         const int nu = n + icomp;
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     T dx00 = u(i+1,j,k,nu) - u(i,j,k,nu);
                     T d0x0 = u(i,j+1,k,nu) - u(i,j,k,nu);
@@ -106,7 +104,6 @@ nodebilin_interp (Box const& bx, Array4<T> const& fine, const int fcomp, const i
             for (int j = lo.y; j <= hi.y; ++j) {
                 const int jc = amrex::min(amrex::coarsen(j,ratio[1]),chi.y);
                 const Real fy = j - jc*ratio[1];
-                AMREX_PRAGMA_SIMD
                 for (int i = lo.x; i <= hi.x; ++i) {
                     const int ic = amrex::min(amrex::coarsen(i,ratio[0]),chi.x);
                     const Real fx = i - ic*ratio[0];

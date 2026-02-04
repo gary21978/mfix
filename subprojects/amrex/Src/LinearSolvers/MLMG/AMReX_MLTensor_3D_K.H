@@ -1551,7 +1551,6 @@ void mltensor_cross_terms_fx (Box const& box, Array4<Real> const& fx,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 Real dudy = mltensor_dy_on_xface(i,j,k,0,vel,dyi);
                 Real dvdy = mltensor_dy_on_xface(i,j,k,1,vel,dyi);
@@ -1584,7 +1583,6 @@ void mltensor_cross_terms_fy (Box const& box, Array4<Real> const& fy,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 Real dudx = mltensor_dx_on_yface(i,j,k,0,vel,dxi);
                 Real dvdx = mltensor_dx_on_yface(i,j,k,1,vel,dxi);
@@ -1617,7 +1615,6 @@ void mltensor_cross_terms_fz (Box const& box, Array4<Real> const& fz,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 Real dudx = mltensor_dx_on_zface(i,j,k,0,vel,dxi);
                 Real dwdx = mltensor_dx_on_zface(i,j,k,2,vel,dxi);
@@ -1969,7 +1966,6 @@ void mltensor_cross_terms (Box const& box, Array4<Real> const& Ax,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 Ax(i,j,k,0) += dxi*(fx(i+1,j  ,k  ,0) - fx(i,j,k,0))
                     +          dyi*(fy(i  ,j+1,k  ,0) - fy(i,j,k,0))
@@ -2002,7 +1998,6 @@ void mltensor_cross_terms_os (Box const& box, Array4<Real> const& Ax,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (osm(i,j,k) == 0) {
                     Ax(i,j,k,0) = 0.0;
@@ -2037,7 +2032,6 @@ void mltensor_vel_grads_fx (Box const& box, Array4<Real> const& fx,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
 
                 Real dudx = (vel(i,j,k,0) - vel(i-1,j,k,0))*dxi;
@@ -2080,7 +2074,6 @@ void mltensor_vel_grads_fy (Box const& box, Array4<Real> const& fy,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
 
                 Real dudx = mltensor_dx_on_yface(i,j,k,0,vel,dxi);
@@ -2123,7 +2116,6 @@ void mltensor_vel_grads_fz (Box const& box, Array4<Real> const& fz,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
 
                 Real dudx = mltensor_dx_on_zface(i,j,k,0,vel,dxi);

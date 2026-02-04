@@ -232,7 +232,6 @@ void transposeCtoF (T const* pi, T* po, int nx, int ny, int nz)
                 auto      * AMREX_RESTRICT pdst = po + j*std::size_t(nx);
                 auto const* AMREX_RESTRICT psrc = pi + j*std::size_t(nz);
                 for (int i = i0; i < imax; ++i) {
-                    AMREX_PRAGMA_SIMD
                     for (int k = k0; k < kmax; ++k) {
                         pdst[i + k*nxy] = psrc[k + i*nyz];
                     }

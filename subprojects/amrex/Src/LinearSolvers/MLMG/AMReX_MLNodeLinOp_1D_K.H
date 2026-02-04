@@ -113,7 +113,6 @@ void mlndlap_set_dirichlet_mask (Box const& bx, Array4<int> const& dmsk,
 {
     const auto lo = bx.smallEnd(0);
     const auto hi = bx.bigEnd(0);
-    AMREX_PRAGMA_SIMD
     for (int i = lo; i <= hi; ++i) {
         if (!dmsk(i,0,0)) {
             dmsk(i,0,0) = (omsk(i-1,0,0) == 1 || omsk(i,0,0) == 1);
@@ -141,7 +140,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
     const auto lo = bx.smallEnd(0);
     const auto hi = bx.bigEnd(0);
 
-    AMREX_PRAGMA_SIMD
     for (int i = lo; i <= hi; ++i) {
         dmsk(i,0,0) = static_cast<Real>(omsk(i,0,0));
     }
@@ -172,7 +170,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
     const auto lo = bx.smallEnd(0);
     const auto hi = bx.bigEnd(0);
 
-    AMREX_PRAGMA_SIMD
     for (int i = lo; i <= hi; ++i) {
         if (fmsk(i,0,0) == 0) {
             dmsk(i,0,0) = static_cast<Real>(omsk(i,0,0));

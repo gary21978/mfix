@@ -729,7 +729,6 @@ OwnerMask (FabArrayBase const& mf, const Periodicity& period, const IntVect& ngr
                             const auto hi = amrex::ubound(obx);
                             for (int k = lo.z; k <= hi.z; ++k) {
                             for (int j = lo.y; j <= hi.y; ++j) {
-                            AMREX_PRAGMA_SIMD
                             for (int i = lo.x; i <= hi.x; ++i) {
                                 arr(i,j,k) = nonowner;
                             }}}

@@ -434,7 +434,6 @@ void amrex_avgdown_nodes (Box const& bx, Array4<T> const& crse,
             int kk = k*facz;
             for     (int j = clo.y; j <= chi.y; ++j) {
                 int jj = j*facy;
-                AMREX_PRAGMA_SIMD
                 for (int i = clo.x; i <= chi.x; ++i) {
                     crse(i,j,k,n+ccomp) = fine(i*facx,jj,kk,n+fcomp);
                 }
@@ -469,7 +468,6 @@ void amrex_compute_divergence (Box const& bx, Array4<Real> const& divu,
     for             (int n = 0; n <  divu.ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                     for (int i = lo.x; i <= hi.x; ++i) {
                         divu(i,j,k,n) = dxi * (u(i+1,j,k,n)-u(i,j,k,n))
                             +           dyi * (v(i,j+1,k,n)-v(i,j,k,n))
@@ -496,7 +494,6 @@ void amrex_compute_gradient (Box const& bx, Array4<Real> const& grad,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 grad(i,j,k,0) = dxi * (u(i+1,j,k,0)-u(i,j,k,0));
                 grad(i,j,k,1) = dyi * (v(i,j+1,k,0)-v(i,j,k,0));
@@ -526,7 +523,6 @@ void amrex_compute_convective_difference (Box const& bx, Array4<Real> const& dif
     for             (int n = 0; n <  diff.ncomp; ++n) {
         for         (int k = lo.z; k <= hi.z; ++k) {
             for     (int j = lo.y; j <= hi.y; ++j) {
-                AMREX_PRAGMA_SIMD
                     for (int i = lo.x; i <= hi.x; ++i) {
                         diff(i,j,k,n) = Real(0.5)*dxi * (u_face(i+1,j,k)+u_face(i,j,k)) *
                                                   (s_on_x_face(i+1,j,k,n)-s_on_x_face(i,j,k,n))

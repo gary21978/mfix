@@ -41,7 +41,6 @@ void mlpoisson_flux_x (Box const& box, Array4<T> const& fx,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fx(i,j,k) = dxinv*(sol(i,j,k)-sol(i-1,j,k));
             }
@@ -77,7 +76,6 @@ void mlpoisson_flux_y (Box const& box, Array4<T> const& fy,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fy(i,j,k) = dyinv*(sol(i,j,k)-sol(i,j-1,k));
             }
@@ -95,12 +93,10 @@ void mlpoisson_flux_yface (Box const& box, Array4<T> const& fy,
 
     for     (int k = lo.z; k <= hi.z; ++k) {
         int j = lo.y;
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fy(i,j,k) = dyinv*(sol(i,j,k)-sol(i,j-1,k));
         }
         j += ylen;
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fy(i,j,k) = dyinv*(sol(i,j,k)-sol(i,j-1,k));
         }
@@ -117,7 +113,6 @@ void mlpoisson_flux_z (Box const& box, Array4<T> const& fz,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 fz(i,j,k) = dzinv*(sol(i,j,k)-sol(i,j,k-1));
             }
@@ -135,7 +130,6 @@ void mlpoisson_flux_zface (Box const& box, Array4<T> const& fz,
 
     int k = lo.z;
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fz(i,j,k) = dzinv*(sol(i,j,k)-sol(i,j,k-1));
         }
@@ -143,7 +137,6 @@ void mlpoisson_flux_zface (Box const& box, Array4<T> const& fz,
 
     k += zlen;
     for     (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             fz(i,j,k) = dzinv*(sol(i,j,k)-sol(i,j,k-1));
         }

@@ -1475,7 +1475,6 @@ HostDeviceParallelFor (Gpu::KernelInfo const& info, T n, L&& f) noexcept
 #ifdef AMREX_USE_SYCL
         amrex::Abort("amrex:: HOST_DEVICE disabled for Intel.  It takes too long to compile");
 #else
-        AMREX_PRAGMA_SIMD
         for (T i = 0; i < n; ++i) { f(i); }
 #endif
     }
@@ -1491,7 +1490,6 @@ HostDeviceParallelFor (Gpu::KernelInfo const& info, T n, L&& f) noexcept
 #ifdef AMREX_USE_SYCL
         amrex::Abort("amrex:: HOST_DEVICE disabled for Intel.  It takes too long to compile");
 #else
-        AMREX_PRAGMA_SIMD
         for (T i = 0; i < n; ++i) { f(i); }
 #endif
     }

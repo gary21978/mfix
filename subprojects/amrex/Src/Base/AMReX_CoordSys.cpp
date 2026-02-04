@@ -292,7 +292,6 @@ CoordSys::GetEdgeLoc (Vector<Real>& loc,
     int len       = hi[dir] - lo[dir] + 2;
     Real off      = offset[dir] + dx[dir]*static_cast<Real>(lo[dir]);
     loc.resize(len);
-    AMREX_PRAGMA_SIMD
     for (int i = 0; i < len; i++)
     {
         loc[i] = off + dx[dir]*static_cast<Real>(i);
@@ -311,7 +310,6 @@ CoordSys::GetCellLoc (Vector<Real>& loc,
     int len       = hi[dir] - lo[dir] + 1;
     Real off = offset[dir] + dx[dir]*(0.5_rt + (Real)lo[dir]);
     loc.resize(len);
-    AMREX_PRAGMA_SIMD
     for (int i = 0; i < len; i++)
     {
         loc[i] = off + dx[dir]*static_cast<Real>(i);
@@ -337,7 +335,6 @@ CoordSys::GetEdgeVolCoord (Vector<Real>& vc,
     if (dir == 0 && c_sys == RZ)
     {
         int len = static_cast<int>(vc.size());
-        AMREX_PRAGMA_SIMD
         for (int i = 0; i < len; i++)
         {
             Real r = vc[i];
@@ -349,7 +346,6 @@ CoordSys::GetEdgeVolCoord (Vector<Real>& vc,
         if (dir == 0)
         {
             int len = static_cast<int>(vc.size());
-            AMREX_PRAGMA_SIMD
             for (int i = 0; i < len; i++)
             {
                 Real r = vc[i];
@@ -359,7 +355,6 @@ CoordSys::GetEdgeVolCoord (Vector<Real>& vc,
         else
         {
             int len = static_cast<int>(vc.size());
-            AMREX_PRAGMA_SIMD
             for (int i = 0; i < len; i++)
             {
                 Real theta = vc[i];
@@ -371,7 +366,6 @@ CoordSys::GetEdgeVolCoord (Vector<Real>& vc,
     if (c_sys == SPHERICAL)
     {
         int len = static_cast<int>(vc.size());
-        AMREX_PRAGMA_SIMD
         for (int i = 0; i < len; i++) {
             Real r = vc[i];
             vc[i] = static_cast<Real>(FOURPI/3.)*r*r*r;
@@ -400,7 +394,6 @@ CoordSys::GetCellVolCoord (Vector<Real>& vc,
     if (dir == 0 && c_sys == RZ)
     {
         int len = static_cast<int>(vc.size());
-        AMREX_PRAGMA_SIMD
         for (int i = 0; i < len; i++)
         {
             Real r = vc[i];
@@ -412,7 +405,6 @@ CoordSys::GetCellVolCoord (Vector<Real>& vc,
         if (dir == 0)
         {
             int len = static_cast<int>(vc.size());
-            AMREX_PRAGMA_SIMD
             for (int i = 0; i < len; i++)
             {
                 Real r = vc[i];
@@ -422,7 +414,6 @@ CoordSys::GetCellVolCoord (Vector<Real>& vc,
         else
         {
             int len = static_cast<int>(vc.size());
-            AMREX_PRAGMA_SIMD
             for (int i = 0; i < len; i++)
             {
                 Real theta = vc[i];
@@ -433,7 +424,6 @@ CoordSys::GetCellVolCoord (Vector<Real>& vc,
 #elif (AMREX_SPACEDIM == 1)
     if (c_sys == SPHERICAL) {
         int len = static_cast<int>(vc.size());
-        AMREX_PRAGMA_SIMD
         for (int i = 0; i < len; i++) {
             Real r = vc[i];
             vc[i] = static_cast<Real>(FOURPI/3.)*r*r*r;

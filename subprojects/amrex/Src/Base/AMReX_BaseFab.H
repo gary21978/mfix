@@ -1191,12 +1191,7 @@ BaseFab<T>::prefetchToHost () const noexcept
 {
 #ifdef AMREX_USE_GPU
     if (this->arena()->isManaged()) {
-#if defined(AMREX_USE_SYCL)
-        // xxxxx SYCL todo: prefetchToHost
-        // std::size_t s = sizeof(T)*this->nvar*this->domain.numPts();
-        // auto& q = Gpu::Device::streamQueue();
-        // q.submit([&] (sycl::handler& h) { h.prefetch(this->dptr, s); });
-#elif defined(AMREX_USE_CUDA) && !defined(_WIN32)
+#if defined(AMREX_USE_CUDA) && !defined(_WIN32)
         if (Gpu::Device::devicePropMajor() >= 6) {
             std::size_t s = sizeof(T)*this->nvar*this->domain.numPts();
 #if defined(__CUDACC__) && (__CUDACC_VER_MAJOR__ >= 13)
@@ -1211,8 +1206,6 @@ BaseFab<T>::prefetchToHost () const noexcept
                                                       Gpu::gpuStream()));
 #endif
         }
-#elif defined(AMREX_USE_HIP)
-        // xxxxx HIP FIX HERE after managed memory is supported
 #endif
     }
 #endif
@@ -1224,11 +1217,7 @@ BaseFab<T>::prefetchToDevice () const noexcept
 {
 #ifdef AMREX_USE_GPU
     if (this->arena()->isManaged()) {
-#if defined(AMREX_USE_SYCL)
-        std::size_t s = sizeof(T)*this->nvar*this->domain.numPts();
-        auto& q = Gpu::Device::streamQueue();
-        q.submit([&] (sycl::handler& h) { h.prefetch(this->dptr, s); });
-#elif defined(AMREX_USE_CUDA) && !defined(_WIN32)
+#if defined(AMREX_USE_CUDA) && !defined(_WIN32)
         if (Gpu::Device::devicePropMajor() >= 6) {
             std::size_t s = sizeof(T)*this->nvar*this->domain.numPts();
 #if defined(__CUDACC__) && (__CUDACC_VER_MAJOR__ >= 13)
@@ -1243,8 +1232,6 @@ BaseFab<T>::prefetchToDevice () const noexcept
                                                       Gpu::gpuStream()));
 #endif
         }
-#elif defined(AMREX_USE_HIP)
-        // xxxxx HIP FIX HERE after managed memory is supported
 #endif
     }
 #endif

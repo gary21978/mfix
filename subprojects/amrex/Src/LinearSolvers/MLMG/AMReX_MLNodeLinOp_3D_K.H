@@ -668,7 +668,6 @@ void mlndlap_set_dirichlet_mask (Box const& bx, Array4<int> const& dmsk,
     const auto hi = amrex::ubound(bx);
     for (int k = lo.z; k <= hi.z; ++k) {
     for (int j = lo.y; j <= hi.y; ++j) {
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         if (!dmsk(i,j,k)) {
             dmsk(i,j,k) = (omsk(i-1,j-1,k-1) == 1 || omsk(i,j-1,k-1) == 1 ||
@@ -697,7 +696,6 @@ void mlndlap_set_dirichlet_mask (Box const& bx, Array4<int> const& dmsk,
 
     if (bclo[1] == LinOpBCType::Dirichlet && lo.y == domlo.y) {
         for (int k = lo.z; k <= hi.z; ++k) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,lo.y,k) = 1;
         }}
@@ -705,7 +703,6 @@ void mlndlap_set_dirichlet_mask (Box const& bx, Array4<int> const& dmsk,
 
     if (bchi[1] == LinOpBCType::Dirichlet && hi.y == domhi.y) {
         for (int k = lo.z; k <= hi.z; ++k) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,hi.y,k) = 1;
         }}
@@ -713,7 +710,6 @@ void mlndlap_set_dirichlet_mask (Box const& bx, Array4<int> const& dmsk,
 
     if (bclo[2] == LinOpBCType::Dirichlet && lo.z == domlo.z) {
         for (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,j,lo.z) = 1;
         }}
@@ -721,7 +717,6 @@ void mlndlap_set_dirichlet_mask (Box const& bx, Array4<int> const& dmsk,
 
     if (bchi[2] == LinOpBCType::Dirichlet && hi.z == domhi.z) {
         for (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,j,hi.z) = 1;
         }}
@@ -738,7 +733,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
     const auto hi = amrex::ubound(bx);
     for (int k = lo.z; k <= hi.z; ++k) {
     for (int j = lo.y; j <= hi.y; ++j) {
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         dmsk(i,j,k) = static_cast<Real>(omsk(i,j,k));
     }}}
@@ -768,7 +762,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && lo.y == domlo.y)
     {
         for (int k = lo.z; k <= hi.z; ++k) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,lo.y,k) *= Real(0.5);
         }}
@@ -778,7 +771,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && hi.y == domhi.y)
     {
         for (int k = lo.z; k <= hi.z; ++k) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,hi.y,k) *= Real(0.5);
         }}
@@ -788,7 +780,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && lo.z == domlo.z)
     {
         for (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,j,lo.z) *= Real(0.5);
         }}
@@ -798,7 +789,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && hi.z == domhi.z)
     {
         for (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,j,hi.z) *= Real(0.5);
         }}
@@ -816,7 +806,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
     const auto hi = amrex::ubound(bx);
     for (int k = lo.z; k <= hi.z; ++k) {
     for (int j = lo.y; j <= hi.y; ++j) {
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         if (fmsk(i,j,k) == 0) {
             dmsk(i,j,k) = static_cast<Real>(omsk(i,j,k));
@@ -850,7 +839,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && lo.y == domlo.y)
     {
         for (int k = lo.z; k <= hi.z; ++k) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,lo.y,k) *= Real(0.5);
         }}
@@ -860,7 +848,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && hi.y == domhi.y)
     {
         for (int k = lo.z; k <= hi.z; ++k) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,hi.y,k) *= Real(0.5);
         }}
@@ -870,7 +857,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && lo.z == domlo.z)
     {
         for (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,j,lo.z) *= Real(0.5);
         }}
@@ -880,7 +866,6 @@ void mlndlap_set_dot_mask (Box const& bx, Array4<Real> const& dmsk,
         && hi.z == domhi.z)
     {
         for (int j = lo.y; j <= hi.y; ++j) {
-        AMREX_PRAGMA_SIMD
         for (int i = lo.x; i <= hi.x; ++i) {
             dmsk(i,j,hi.z) *= Real(0.5);
         }}

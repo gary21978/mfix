@@ -60,7 +60,6 @@ void mlabeclap_flux_x (Box const& box, Array4<T> const& fx, Array4<T const> cons
     const auto hi = amrex::ubound(box);
 
     for (int n = 0; n < ncomp; ++n) {
-    AMREX_PRAGMA_SIMD
     for (int i = lo.x; i <= hi.x; ++i) {
         fx(i,0,0,n) = -fac*bx(i,0,0,n)*(sol(i,0,0,n)-sol(i-1,0,0,n));
     }

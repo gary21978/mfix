@@ -180,7 +180,6 @@ template <typename T, typename L, typename M=std::enable_if_t<std::is_integral_v
 AMREX_ATTRIBUTE_FLATTEN_FOR
 void ParallelFor (T n, L const& f) noexcept
 {
-    AMREX_PRAGMA_SIMD
     for (T i = 0; i < n; ++i) {
         detail::call_f_scalar_handler(f,i);
     }
@@ -298,20 +297,17 @@ AMREX_FORCE_INLINE
 void ParallelFor_impND (L const& f, IntVectND<dim> const lo, IntVectND<dim> const hi, IntVectND<dim> iv) noexcept
 {
     if constexpr (idim == 1) {
-        AMREX_PRAGMA_SIMD
         for (int i0 = lo[0], h0 = hi[0]; i0 <= h0; ++i0) { iv[0] = i0;
             call_f_intvect_handler(f,iv);
         }
     } else if constexpr (idim == 2) {
         for (int i1 = lo[1], h1 = hi[1]; i1 <= h1; ++i1) { iv[1] = i1;
-        AMREX_PRAGMA_SIMD
         for (int i0 = lo[0], h0 = hi[0]; i0 <= h0; ++i0) { iv[0] = i0;
             call_f_intvect_handler(f,iv);
         }}
     } else if constexpr (idim == 3) {
         for (int i2 = lo[2], h2 = hi[2]; i2 <= h2; ++i2) { iv[2] = i2;
         for (int i1 = lo[1], h1 = hi[1]; i1 <= h1; ++i1) { iv[1] = i1;
-        AMREX_PRAGMA_SIMD
         for (int i0 = lo[0], h0 = hi[0]; i0 <= h0; ++i0) { iv[0] = i0;
             call_f_intvect_handler(f,iv);
         }}}
@@ -423,20 +419,17 @@ AMREX_FORCE_INLINE
 void ParallelFor_impND (L const& f, IntVectND<dim> const lo, IntVectND<dim> const hi, IntVectND<dim> iv, T n) noexcept
 {
     if constexpr (idim == 1) {
-        AMREX_PRAGMA_SIMD
         for (int i0 = lo[0], h0 = hi[0]; i0 <= h0; ++i0) { iv[0] = i0;
             call_f_intvect_ncomp_handler(f,iv,n);
         }
     } else if constexpr (idim == 2) {
         for (int i1 = lo[1], h1 = hi[1]; i1 <= h1; ++i1) { iv[1] = i1;
-        AMREX_PRAGMA_SIMD
         for (int i0 = lo[0], h0 = hi[0]; i0 <= h0; ++i0) { iv[0] = i0;
             call_f_intvect_ncomp_handler(f,iv,n);
         }}
     } else if constexpr (idim == 3) {
         for (int i2 = lo[2], h2 = hi[2]; i2 <= h2; ++i2) { iv[2] = i2;
         for (int i1 = lo[1], h1 = hi[1]; i1 <= h1; ++i1) { iv[1] = i1;
-        AMREX_PRAGMA_SIMD
         for (int i0 = lo[0], h0 = hi[0]; i0 <= h0; ++i0) { iv[0] = i0;
             call_f_intvect_ncomp_handler(f,iv,n);
         }}}

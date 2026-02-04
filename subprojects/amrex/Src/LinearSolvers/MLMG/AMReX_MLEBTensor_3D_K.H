@@ -63,7 +63,6 @@ void mlebtensor_cross_terms_fx (Box const& box, Array4<Real> const& fx,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apx(i,j,k) == Real(0.0))
                 {
@@ -123,7 +122,6 @@ void mlebtensor_cross_terms_fy (Box const& box, Array4<Real> const& fy,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apy(i,j,k) == Real(0.0))
                 {
@@ -183,7 +181,6 @@ void mlebtensor_cross_terms_fz (Box const& box, Array4<Real> const& fz,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apz(i,j,k) == Real(0.0))
                 {
@@ -472,7 +469,6 @@ void mlebtensor_cross_terms_fx (Box const& box, Array4<Real> const& fx,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apx(i,j,k) == Real(0.0))
                 {
@@ -542,7 +538,6 @@ void mlebtensor_cross_terms_fy (Box const& box, Array4<Real> const& fy,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apy(i,j,k) == Real(0.0))
                 {
@@ -612,7 +607,6 @@ void mlebtensor_cross_terms_fz (Box const& box, Array4<Real> const& fz,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apz(i,j,k) == Real(0.0))
                 {
@@ -691,7 +685,6 @@ void mlebtensor_cross_terms (Box const& box, Array4<Real> const& Ax,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (flag(i,j,k).isRegular())
                 {
@@ -977,7 +970,6 @@ void mlebtensor_flux_0 (Box const& box,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (ap(i,j,k) != Real(0.0)) {
                     for (int n=0; n<AMREX_SPACEDIM; n++) {
@@ -1147,7 +1139,6 @@ void mlebtensor_vel_grads_fx (Box const& box, Array4<Real> const& fx,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apx(i,j,k) == Real(0.0))
                 {
@@ -1222,7 +1213,6 @@ void mlebtensor_vel_grads_fy (Box const& box, Array4<Real> const& fy,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apy(i,j,k) == Real(0.0))
                 {
@@ -1297,7 +1287,6 @@ void mlebtensor_vel_grads_fz (Box const& box, Array4<Real> const& fz,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apz(i,j,k) == Real(0.0))
                 {
@@ -1635,7 +1624,6 @@ void mlebtensor_vel_grads_fx (Box const& box, Array4<Real> const& fx,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apx(i,j,k) == Real(0.0))
                 {
@@ -1730,7 +1718,6 @@ void mlebtensor_vel_grads_fy (Box const& box, Array4<Real> const& fy,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apy(i,j,k) == Real(0.0))
                 {
@@ -1825,7 +1812,6 @@ void mlebtensor_vel_grads_fz (Box const& box, Array4<Real> const& fz,
 
     for         (int k = lo.z; k <= hi.z; ++k) {
         for     (int j = lo.y; j <= hi.y; ++j) {
-            AMREX_PRAGMA_SIMD
             for (int i = lo.x; i <= hi.x; ++i) {
                 if (apz(i,j,k) == Real(0.0))
                 {
