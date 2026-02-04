@@ -44,28 +44,6 @@ void fill (BaseFab<STRUCT>& aos_fab, F const& f)
         auto nblocks = int(nblocks_long);
         std::size_t shared_mem_bytes = nthreads_per_block * sizeof(STRUCT);
         T* p = (T*)aos_fab.dataPtr();
-#ifdef AMREX_USE_SYCL
-        amrex::launch<nthreads_per_block>(nblocks, shared_mem_bytes, Gpu::gpuStream(),
-        [=] AMREX_GPU_DEVICE (Gpu::Handler const& handler) noexcept
-        {
-            auto const icell = std::uint64_t(handler.globalIdx());
-            std::uint64_t const blockDimx = handler.blockDim();
-            std::uint64_t const threadIdxx = handler.threadIdx();
-            std::uint64_t const blockIdxx = handler.blockIdx();
-            auto const shared = (T*)handler.sharedMemory();
-            if (icell < indexer.numPts()) {
-                auto ga = new(shared+threadIdxx*STRUCTSIZE) STRUCT;
-                auto [i, j, k] = indexer(icell);
-                f(*ga, i, j, k);
-            }
-            handler.sharedBarrier();
-            for (std::uint64_t m = threadIdxx,
-                     mend = amrex::min<std::uint64_t>(blockDimx, indexer.numPts()-blockDimx*blockIdxx) * STRUCTSIZE;
-                 m < mend; m += blockDimx) {
-                p[blockDimx*blockIdxx*STRUCTSIZE+m] = shared[m];
-            }
-        });
-#else
         amrex::launch<nthreads_per_block>(nblocks, shared_mem_bytes, Gpu::gpuStream(),
         [=] AMREX_GPU_DEVICE () noexcept
         {
@@ -84,7 +62,6 @@ void fill (BaseFab<STRUCT>& aos_fab, F const& f)
                 p[std::uint64_t(blockDim.x)*blockIdx.x*STRUCTSIZE+m] = shared[m];
             }
         });
-#endif
     } else
 #endif
     {
@@ -151,70 +128,6 @@ void transposeCtoF (T const* pi, T* po, int nx, int ny, int nz)
             }
         }
     });
-
-#elif defined(AMREX_USE_SYCL)
-
-    constexpr int tile_dim = 32;
-    constexpr int block_rows = 8;
-
-    // Each block has tile_dim x block_rows threads. They work on a tile_dim
-    // x tile_dim tile.
-
-    sycl::range<3> block{std::size_t(1), std::size_t(block_rows), std::size_t(tile_dim)};
-    sycl::range<3> grid{std::size_t(ny), std::size_t((nz+tile_dim-1)/tile_dim),
-                                         std::size_t((nx+tile_dim-1)/tile_dim)};
-    sycl::range<3> global_size{grid[0]*block[0],
-                               grid[1]*block[1],
-                               grid[2]*block[2]};
-
-    auto& q = *(Gpu::gpuStream().queue);
-    try {
-      q.submit([&] (sycl::handler& h)
-      {
-        auto tile = sycl::local_accessor<T,2>(sycl::range<2>(tile_dim,tile_dim+1),h);
-
-        h.parallel_for(sycl::nd_range<3>(global_size, block),
-        [=] (sycl::nd_item<3> item)
-        {
-            auto group = item.get_group();
-            dim3 blockIdx{unsigned(group.get_group_id(2)),
-                          unsigned(group.get_group_id(1)),
-                          unsigned(group.get_group_id(0))};
-            dim3 threadIdx{unsigned(item.get_local_id(2)),
-                           unsigned(item.get_local_id(1)),
-                           unsigned(item.get_local_id(0))};
-
-            int k = blockIdx.y * tile_dim + threadIdx.x; // for loading z-direction
-            int i = blockIdx.x * tile_dim + threadIdx.y; // for loading x-direction
-
-            int j = blockIdx.z; // for y-direction
-
-            if (k < nz) {
-                for (int it = 0; it < tile_dim; it += block_rows, i += block_rows) {
-                    if (i < nx) {
-                        //      x               z
-                        tile[threadIdx.y+it][threadIdx.x] = pi[k + (j+i*std::size_t(ny))*nz];
-                    }
-                }
-            }
-
-            item.barrier(sycl::access::fence_space::local_space);
-
-            i = blockIdx.x * tile_dim + threadIdx.x; // for storing x-direction
-            k = blockIdx.y * tile_dim + threadIdx.y; // for storing z-direction
-
-            if (i < nx) {
-                for (int it = 0; it < tile_dim; it += block_rows, k += block_rows) {
-                    if (k < nz) {
-                        po[i + (j+k*std::size_t(ny))*nx] = tile[threadIdx.x][threadIdx.y+it];
-                    }
-                }
-            }
-        });
-      });
-    } catch (sycl::exception const& ex) {
-        amrex::Abort(std::string("transposeCtoF: ")+ex.what()+"!!!!!");
-    }
 
 #else
 

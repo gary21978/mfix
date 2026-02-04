@@ -833,22 +833,11 @@ namespace amrex
                 }
                 int n2dblocks = (n2d+AMREX_GPU_MAX_THREADS-1)/AMREX_GPU_MAX_THREADS;
                 int nblocks = n2dblocks * b.length(direction);
-#ifdef AMREX_USE_SYCL
-                std::size_t shared_mem_byte = sizeof(Real)*Gpu::Device::warp_size;
-                amrex::launch<AMREX_GPU_MAX_THREADS>(nblocks, shared_mem_byte, Gpu::gpuStream(),
-                              [=] AMREX_GPU_DEVICE (Gpu::Handler const& h) noexcept
-#else
                 amrex::launch<AMREX_GPU_MAX_THREADS>(nblocks, Gpu::gpuStream(),
                               [=] AMREX_GPU_DEVICE () noexcept
-#endif
                 {
-#ifdef AMREX_USE_SYCL
-                    int i1d = h.blockIdx() / n2dblocks;
-                    int i2d = h.threadIdx() + AMREX_GPU_MAX_THREADS*(h.blockIdx()-i1d*n2dblocks);
-#else
                     int i1d = blockIdx.x / n2dblocks;
                     int i2d = threadIdx.x + AMREX_GPU_MAX_THREADS*(blockIdx.x-i1d*n2dblocks);
-#endif
                     int i2dy = i2d / n2dx;
                     int i2dx = i2d - i2dy*n2dx;
                     int i, j, k, idir;
@@ -870,11 +859,7 @@ namespace amrex
                     }
                     for (int n = 0; n < ncomp; ++n) {
                         Real r = (i2d < n2d) ? fab(i,j,k,n+icomp) : Real(0.0);
-#ifdef AMREX_USE_SYCL
-                        Gpu::deviceReduceSum_full(p+n+ncomp*idir, r, h);
-#else
                         Gpu::deviceReduceSum_full(p+n+ncomp*idir, r);
-#endif
                     }
                 });
             }

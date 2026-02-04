@@ -236,29 +236,19 @@ namespace parser_detail
         short argc = ((ParserExeUserFn*)p)->argc;
         if (argc == 1) {
             AMREX_IF_ON_HOST  (( pstack.top() = ParserUserFn1(((ParserExeUserFn*)p)->fh)(pstack.top()); ))
-#if !defined(AMREX_USE_SYCL)
             AMREX_IF_ON_DEVICE(( pstack.top() = ParserUserFn1(((ParserExeUserFn*)p)->fd)(pstack.top()); ))
-#endif
         } else if (argc == 2) {
             T a1 = pstack.top(); // NOLINT
             pstack.pop();
             AMREX_IF_ON_HOST  (( pstack.top() = ParserUserFn2(((ParserExeUserFn*)p)->fh)(pstack.top(),a1); ))
-#if defined(AMREX_USE_SYCL)
-            amrex::ignore_unused(a1);
-#else
             AMREX_IF_ON_DEVICE(( pstack.top() = ParserUserFn2(((ParserExeUserFn*)p)->fd)(pstack.top(),a1); ))
-#endif
         } else if (argc == 3) {
             T a2 = pstack.top(); // NOLINT
             pstack.pop();
             T a1 = pstack.top(); // NOLINT
             pstack.pop();
             AMREX_IF_ON_HOST  (( pstack.top() = ParserUserFn3(((ParserExeUserFn*)p)->fh)(pstack.top(),a1,a2); ))
-#if defined(AMREX_USE_SYCL)
-            amrex::ignore_unused(a1,a2);
-#else
             AMREX_IF_ON_DEVICE(( pstack.top() = ParserUserFn3(((ParserExeUserFn*)p)->fd)(pstack.top(),a1,a2); ))
-#endif
         } else if (argc == 4) {
             T a3 = pstack.top(); // NOLINT
             pstack.pop();
@@ -267,11 +257,7 @@ namespace parser_detail
             T a1 = pstack.top(); // NOLINT
             pstack.pop();
             AMREX_IF_ON_HOST  (( pstack.top() = ParserUserFn4(((ParserExeUserFn*)p)->fh)(pstack.top(),a1,a2,a3); ))
-#if defined(AMREX_USE_SYCL)
-            amrex::ignore_unused(a1,a2,a3);
-#else
             AMREX_IF_ON_DEVICE(( pstack.top() = ParserUserFn4(((ParserExeUserFn*)p)->fd)(pstack.top(),a1,a2,a3); ))
-#endif
         }
     }
 }

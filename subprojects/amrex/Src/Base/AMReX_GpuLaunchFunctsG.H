@@ -1654,12 +1654,8 @@ HostDeviceParallelFor (Gpu::KernelInfo const& info,
     if (Gpu::inLaunchRegion()) {
         ParallelFor<MT>(info,box1,ncomp1,std::forward<L1>(f1),box2,ncomp2,std::forward<L2>(f2));
     } else {
-#ifdef AMREX_USE_SYCL
-        amrex::Abort("amrex:: HOST_DEVICE disabled for Intel.  It takes too long to compile");
-#else
         LoopConcurrentOnCpu(box1,ncomp1,std::forward<L1>(f1));
         LoopConcurrentOnCpu(box2,ncomp2,std::forward<L2>(f2));
-#endif
     }
 }
 

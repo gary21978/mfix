@@ -395,11 +395,6 @@ void OpenBCSolver::compute_moments (Gpu::DeviceVector<openbc::Moments>& moments)
         int const* pnblks = m_ngpublocks_d.data();
         std::size_t shared_mem_bytes = m_nthreads_momtag * sizeof(openbc::Moments::array_type);
 
-#ifdef AMREX_USE_SYCL
-        amrex::ignore_unused(problo,probhi,dx,crse_ratio,ntags,pm,ptag,pnblks,
-                             shared_mem_bytes);
-        amrex::Abort("xxxx SYCL todo: openbc compute_moments");
-#else
         amrex::launch(m_ngpublocks_h.back(), m_nthreads_momtag, shared_mem_bytes, Gpu::gpuStream(),
         [=] AMREX_GPU_DEVICE () noexcept
         {
@@ -528,7 +523,6 @@ void OpenBCSolver::compute_moments (Gpu::DeviceVector<openbc::Moments>& moments)
                 }
             }
         });
-#endif
     }
 #else
     for (auto const& tag : m_momtags_h) {

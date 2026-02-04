@@ -95,26 +95,14 @@ fab_to_fab_other (Vector<TagType> const& tags, int scomp, int dcomp, int ncomp, 
         int* m = &(tag.mask(i,j,k));
         bool my_turn = false;
         do {
-#if defined(AMREX_USE_SYCL)
-            my_turn = (Gpu::Atomic::Exch(m, 1) == 0);
-#else
             my_turn = (Gpu::Atomic::CAS(m, 0, 1) == 0);
-#endif
             if (my_turn) {
-#if defined(AMREX_USE_SYCL)
-                sycl::atomic_fence(sycl::memory_order::acq_rel, sycl::memory_scope::device);
-#else
                 __threadfence();
-#endif
                 for (int n = 0; n < ncomp; ++n) {
                     f(&(tag.dfab(i,j,k,n+dcomp)),
                       tag.sfab(i+tag.offset.x,j+tag.offset.y,k+tag.offset.z,n+scomp));
                 }
-#if defined(AMREX_USE_SYCL)
-                sycl::atomic_fence(sycl::memory_order::acq_rel, sycl::memory_scope::device);
-#else
                 __threadfence(); // It appears that we need this fence too if a GPU is shared.
-#endif
                 Gpu::Atomic::Exch(m, 0);
             }
             else {
@@ -138,12 +126,6 @@ fab_to_fab_other (Vector<TagType> const& tags, int scomp, int dcomp, int ncomp, 
 #elif defined(AMREX_USE_HIP)
 
                 __builtin_amdgcn_s_sleep(1);
-
-#elif defined(AMREX_USE_SYCL)
-
-                for (int c = 0; c < 2; ++c) {
-                    __asm__ volatile(""); // prevent optimization
-                }
 
 #endif
             }
@@ -293,18 +275,8 @@ void deterministic_fab_to_fab (Vector<Array4CopyTag<T0,T1>> const& a_tags, int s
     auto const nblocks = int(h_ntags.size()-1);
     constexpr auto nthreads = 256;
     amrex::launch<nthreads>(nblocks, Gpu::gpuStream(),
-#ifdef AMREX_USE_SYCL
-        [=] AMREX_GPU_DEVICE (sycl::nd_item<1> const& item) noexcept
-        [[sycl::reqd_work_group_size(nthreads)]]
-#else
         [=] AMREX_GPU_DEVICE () noexcept
-#endif
     {
-#ifdef AMREX_USE_SYCL
-        Dim1 blockIdx{item.get_group_linear_id()};
-        Dim1 threadIdx{item.get_local_linear_id()};
-#endif
-
         for (unsigned int itag = pntags[blockIdx.x]; itag < pntags[blockIdx.x+1]; ++itag) {
             auto const tag = ptag[itag];
             auto ncells = int(tag.dbox.numPts());
@@ -326,11 +298,7 @@ void deterministic_fab_to_fab (Vector<Array4CopyTag<T0,T1>> const& a_tags, int s
             }
 
             if (itag+1 < pntags[blockIdx.x+1]) {
-#ifdef AMREX_USE_SYCL
-                sycl::group_barrier(item.get_group());
-#else
                 __syncthreads();
-#endif
             }
         }
     });

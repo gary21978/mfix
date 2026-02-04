@@ -200,7 +200,7 @@ using Gpu::isinf;
         amrex::The_Pinned_Arena()->free(amrex_i_hp); \
         return amrex_i_r; \
     } ()
-#elif !defined(AMREX_USE_SYCL)
+#else
 #define AMREX_GET_DEVICE_FUNC_PTR(FP_t, sym) sym
 #endif
 

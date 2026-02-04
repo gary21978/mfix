@@ -5,17 +5,12 @@ namespace amrex {
 #ifdef AMREX_USE_GPU
 
 void BlockMutex::init_states (state_t* state, int N) noexcept {
-#ifdef AMREX_USE_SYCL
-    amrex::ignore_unused(state,N);
-    amrex::Abort("xxxxx SYCL todo");
-#else
     amrex::launch<256>((N+255)/256, Gpu::gpuStream(),
     [=] AMREX_GPU_DEVICE () noexcept
     {
         int i = threadIdx.x + blockIdx.x*blockDim.x;
         if (i < N) { state[i] = FreeState(); }
     });
-#endif
 }
 
 BlockMutex::BlockMutex (int N) noexcept

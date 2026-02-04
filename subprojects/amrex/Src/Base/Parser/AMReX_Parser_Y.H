@@ -445,11 +445,9 @@ template <typename T>
 AMREX_GPU_HOST_DEVICE AMREX_NO_INLINE
 T parser_math_jn (int a, T b)
 {
-#if defined AMREX_USE_SYCL || defined __MINGW32__
+#if defined __MINGW32__
     amrex::ignore_unused(a,b);
-    // neither jn(f) nor std::cyl_bessel_j work yet
-    // https://github.com/oneapi-src/oneAPI-spec/issues/308
-    AMREX_ALWAYS_ASSERT_WITH_MESSAGE(false, "parser: jn in SYCL not supported yet");
+    AMREX_ALWAYS_ASSERT_WITH_MESSAGE(false, "parser: jn not supported yet");
     return 0.0;
 #else
     return jn(a, b);
@@ -460,11 +458,9 @@ template <typename T>
 AMREX_GPU_HOST_DEVICE AMREX_NO_INLINE
 T parser_math_yn (int a, T b)
 {
-#if defined AMREX_USE_SYCL || defined __MINGW32__
+#if defined __MINGW32__
     amrex::ignore_unused(a,b);
-    // neither yn(f) nor std::cyl_bessel_y work yet
-    // https://github.com/oneapi-src/oneAPI-spec/issues/308
-    AMREX_ALWAYS_ASSERT_WITH_MESSAGE(false, "parser: yn in SYCL not supported yet");
+    AMREX_ALWAYS_ASSERT_WITH_MESSAGE(false, "parser: yn not supported yet");
     return 0.0;
 #else
     return yn(a, b);

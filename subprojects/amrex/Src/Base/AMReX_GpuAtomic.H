@@ -23,64 +23,7 @@ namespace Gpu::Atomic {
 
 namespace detail {
 
-#ifdef AMREX_USE_SYCL
-
-    template <typename R, typename I, typename F>
-    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-    R atomic_op (R* const address, R const val, F const f) noexcept
-    {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        static_assert(sizeof(R) == sizeof(I), "sizeof R != sizeof I");
-        I* const add_as_I = reinterpret_cast<I*>(address);
-        sycl::atomic_ref<I,mo,ms,as> a{*add_as_I};
-        I old_I = a.load(), new_I;
-        do {
-            R const new_R = f(*(reinterpret_cast<R const*>(&old_I)), val);
-            new_I = *(reinterpret_cast<I const*>(&new_R));
-        } while (! a.compare_exchange_strong(old_I, new_I));
-        return *(reinterpret_cast<R const*>(&old_I));
-#else
-        R old = *address;
-        *address = f(*address, val);
-        return old;
-#endif
-    }
-
-    template <typename R, typename I, typename Op, typename Cond>
-    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-    bool atomic_op_if (R* const address, R const val, Op&& op, Cond&& cond) noexcept
-    {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        static_assert(sizeof(R) == sizeof(I), "sizeof R != sizeof I");
-        I* const add_as_I = reinterpret_cast<I*>(address);
-        sycl::atomic_ref<I,mo,ms,as> a{*add_as_I};
-        I old_I = a.load(), new_I;
-        bool test_success;
-        do {
-            R const tmp = op(*(reinterpret_cast<R const*>(&old_I)), val);
-            new_I = *(reinterpret_cast<I const*>(&tmp));
-            test_success = cond(tmp);
-        } while (test_success && ! a.compare_exchange_strong(old_I, new_I));
-        return test_success;
-#else
-        R old = *address;
-        R const tmp = op(*(reinterpret_cast<R const*>(&old)), val);
-        if (cond(tmp)) {
-            *address = tmp;
-            return true;
-        } else {
-            return false;
-        }
-#endif
-    }
-
-#elif defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
 
     template <typename R, typename I, typename F>
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -126,26 +69,15 @@ namespace detail {
 
 #ifdef AMREX_USE_GPU
 
-#ifdef AMREX_USE_SYCL
-    template<class T, sycl::access::address_space AS = sycl::access::address_space::global_space>
-#else
     template<class T>
-#endif
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     T Add_device (T* const sum, T const value) noexcept
     {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        sycl::atomic_ref<T,mo,ms,AS> a{*sum};
-        return a.fetch_add(value);
-#else
         AMREX_IF_ON_DEVICE(( return atomicAdd(sum, value); ))
         AMREX_IF_ON_HOST((
             amrex::ignore_unused(sum, value);
             return T(); // should never get here, but have to return something
         ))
-#endif
     }
 
 #if defined(AMREX_USE_HIP) && defined(__gfx90a__)
@@ -189,19 +121,11 @@ namespace detail {
 
 #endif
 
-#ifdef AMREX_USE_SYCL
-    template<class T, sycl::access::address_space AS = sycl::access::address_space::global_space>
-#else
     template<class T>
-#endif
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     T Add (T* sum, T value) noexcept
     {
-#ifdef AMREX_USE_SYCL
-        AMREX_IF_ON_DEVICE((return Add_device<T,AS>(sum, value);))
-#else
         AMREX_IF_ON_DEVICE((return Add_device(sum, value);))
-#endif
         AMREX_IF_ON_HOST((
             auto old = *sum;
             *sum += value;
@@ -213,7 +137,7 @@ namespace detail {
 //  If
 ////////////////////////////////////////////////////////////////////////
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP) || defined(AMREX_USE_SYCL)
+#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
     template <typename T, typename Op, typename Cond,
               std::enable_if_t<sizeof(T) == sizeof(unsigned int), int> foo = 0>
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -272,20 +196,12 @@ namespace detail {
 //  AddNoRet
 ////////////////////////////////////////////////////////////////////////
 
-#ifdef AMREX_USE_SYCL
-    template<class T, sycl::access::address_space AS = sycl::access::address_space::global_space>
-#else
     template<class T>
-#endif
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     void AddNoRet (T* sum, T value) noexcept
     {
-#if defined(__SYCL_DEVICE_ONLY__)
-        Add_device<T,AS>(sum, value);
-#else
         AMREX_IF_ON_DEVICE((Add_device(sum, value);))
         AMREX_IF_ON_HOST((*sum += value;))
-#endif
     }
 
 #if defined(AMREX_USE_HIP) && defined(HIP_VERSION_MAJOR) && (HIP_VERSION_MAJOR < 5)
@@ -310,19 +226,11 @@ namespace detail {
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     T Min_device (T* const m, T const value) noexcept
     {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        sycl::atomic_ref<T,mo,ms,as> a{*m};
-        return a.fetch_min(value);
-#else
         AMREX_IF_ON_DEVICE(( return atomicMin(m, value); ))
         AMREX_IF_ON_HOST((
             amrex::ignore_unused(m,value);
             return T(); // should never get here, but have to return something
         ))
-#endif
     }
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -373,19 +281,11 @@ namespace detail {
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     T Max_device (T* const m, T const value) noexcept
     {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        sycl::atomic_ref<T,mo,ms,as> a{*m};
-        return a.fetch_max(value);
-#else
         AMREX_IF_ON_DEVICE(( return atomicMax(m, value); ))
         AMREX_IF_ON_HOST((
             amrex::ignore_unused(m,value);
             return T(); // should never get here, but have to return something
         ))
-#endif
     }
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -433,13 +333,6 @@ namespace detail {
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     int LogicalOr (int* const m, int const value) noexcept
     {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        sycl::atomic_ref<int,mo,ms,as> a{*m};
-        return a.fetch_or(value);
-#else
         AMREX_IF_ON_DEVICE((
             return atomicOr(m, value);
         ))
@@ -448,7 +341,6 @@ namespace detail {
             *m = (*m) || value;
             return old;
         ))
-#endif
     }
 
 ////////////////////////////////////////////////////////////////////////
@@ -458,13 +350,6 @@ namespace detail {
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     int LogicalAnd (int* const m, int const value) noexcept
     {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        sycl::atomic_ref<int,mo,ms,as> a{*m};
-        return a.fetch_and(value ? ~0x0 : 0);
-#else
         AMREX_IF_ON_DEVICE((
             return atomicAnd(m, value ? ~0x0 : 0);
         ))
@@ -473,7 +358,6 @@ namespace detail {
             *m = (*m) && value;
             return old;
         ))
-#endif
     }
 
 ////////////////////////////////////////////////////////////////////////
@@ -484,13 +368,6 @@ namespace detail {
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     T Exch (T* address, T val) noexcept
     {
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        sycl::atomic_ref<T,mo,ms,as> a{*address};
-        return a.exchange(val);
-#else
         AMREX_IF_ON_DEVICE((
             return atomicExch(address, val);
         ))
@@ -499,7 +376,6 @@ namespace detail {
             *address = val;
             return old;
         ))
-#endif
     }
 
 ////////////////////////////////////////////////////////////////////////
@@ -510,14 +386,6 @@ namespace detail {
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     T CAS (T* const address, T compare, T const val) noexcept
     {           // cannot be T const compare because of compare_exchange_strong
-#if defined(__SYCL_DEVICE_ONLY__)
-        constexpr auto mo = sycl::memory_order::relaxed;
-        constexpr auto ms = sycl::memory_scope::device;
-        constexpr auto as = sycl::access::address_space::global_space;
-        sycl::atomic_ref<T,mo,ms,as> a{*address};
-        a.compare_exchange_strong(compare, val);
-        return compare;
-#else
         AMREX_IF_ON_DEVICE((
             return atomicCAS(address, compare, val);
         ))
@@ -526,7 +394,6 @@ namespace detail {
             *address = (old == compare ? val : old);
             return old;
         ))
-#endif
     }
 
 ////////////////////////////////////////////////////////////////////////
