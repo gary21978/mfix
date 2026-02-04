@@ -516,15 +516,6 @@ amrex::Initialize (int& argc, char**& argv, bool build_parm_parse,
         pp.query("call_addr2line", system::call_addr2line);
         pp.queryAdd("abort_on_unused_inputs", system::abort_on_unused_inputs);
 
-#ifdef AMREX_USE_SYCL
-        // Disable SIGSEGV handling by default for Intel GPUs, because it is
-        // currently used by their managed memory implementation with discrete
-        // GPUs
-        if (Gpu::Device::deviceVendor().find("Intel") != std::string::npos) {
-            system::handle_sigsegv = 0;
-        }
-#endif
-
         if (system::signal_handling)
         {
             pp.queryAdd("handle_sigsegv", system::handle_sigsegv);

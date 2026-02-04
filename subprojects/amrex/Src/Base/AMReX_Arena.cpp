@@ -186,23 +186,13 @@ Arena::allocate_system (std::size_t nbytes) // NOLINT(readability-make-member-fu
     }
     else if (arena_info.device_use_hostalloc)
     {
-        AMREX_HIP_OR_CUDA_OR_SYCL(
-            auto ret = hipHostMalloc(&p, nbytes, hipHostMallocMapped | hipHostMallocNonCoherent);
-            if (ret != hipSuccess) { p = nullptr; },
-            auto ret = cudaHostAlloc(&p, nbytes, cudaHostAllocMapped);
-            if (ret != cudaSuccess) { p = nullptr; },
-            p = sycl::malloc_host(nbytes, Gpu::Device::syclContext())
-        );
+        auto ret = cudaHostAlloc(&p, nbytes, cudaHostAllocMapped);
+        if (ret != cudaSuccess) { p = nullptr; }
 
         if (!p) {
             freeUnused_protected();
-            AMREX_HIP_OR_CUDA_OR_SYCL(
-                ret = hipHostMalloc(&p, nbytes, hipHostMallocMapped | hipHostMallocNonCoherent);
-                if (ret != hipSuccess) { p = nullptr; },
-                ret = cudaHostAlloc(&p, nbytes, cudaHostAllocMapped);
-                if (ret != cudaSuccess) { p = nullptr; },
-                p = sycl::malloc_host(nbytes, Gpu::Device::syclContext())
-            );
+            ret = cudaHostAlloc(&p, nbytes, cudaHostAllocMapped);
+            if (ret != cudaSuccess) { p = nullptr; }
         }
 
         if (!p) {
@@ -211,13 +201,8 @@ Arena::allocate_system (std::size_t nbytes) // NOLINT(readability-make-member-fu
             amrex::ErrorStream() <<
                 "Out of CPU pinned memory: got nullptr from host malloc, aborting...\n";
             std::string msg = "";
-            AMREX_HIP_OR_CUDA_OR_SYCL(
-                msg = "hipHostMalloc returned " + std::to_string(ret) +
-                      ": " + hipGetErrorString(ret),
-                msg = "cudaHostAlloc returned " + std::to_string(ret) +
-                      ": " + cudaGetErrorString(ret),
-                msg = "sycl::malloc_host returned nullptr"
-            );
+            msg = "cudaHostAlloc returned " + std::to_string(ret) +
+                  ": " + cudaGetErrorString(ret);
             out_of_memory_abort("CPU pinned memory", nbytes, msg);
         }
     }
@@ -235,14 +220,8 @@ Arena::allocate_system (std::size_t nbytes) // NOLINT(readability-make-member-fu
 
         if (arena_info.device_use_managed_memory)
         {
-            AMREX_HIP_OR_CUDA_OR_SYCL(
-                auto ret = hipMallocManaged(&p, nbytes);
-                if (ret != hipSuccess) { p = nullptr; },
-                auto ret = cudaMallocManaged(&p, nbytes);
-                if (ret != cudaSuccess) { p = nullptr; },
-                p = sycl::malloc_shared(nbytes, Gpu::Device::syclDevice(),
-                                        Gpu::Device::syclContext())
-            );
+            auto ret = cudaMallocManaged(&p, nbytes);
+            if (ret != cudaSuccess) { p = nullptr; }
 
             if (!p) {
                 freeUnused_protected();
@@ -303,17 +282,11 @@ Arena::deallocate_system (void* p, std::size_t nbytes) // NOLINT(readability-mak
     }
     else if (arena_info.device_use_hostalloc)
     {
-        AMREX_HIP_OR_CUDA_OR_SYCL
-            (AMREX_HIP_SAFE_CALL ( hipHostFree(p));,
-             AMREX_CUDA_SAFE_CALL(cudaFreeHost(p));,
-             sycl::free(p,Gpu::Device::syclContext()));
+        AMREX_CUDA_SAFE_CALL(cudaFreeHost(p));
     }
     else
     {
-        AMREX_HIP_OR_CUDA_OR_SYCL
-            (AMREX_HIP_SAFE_CALL ( hipFree(p));,
-             AMREX_CUDA_SAFE_CALL(cudaFree(p));,
-             sycl::free(p,Gpu::Device::syclContext()));
+        AMREX_CUDA_SAFE_CALL(cudaFree(p));
     }
 #endif
 }

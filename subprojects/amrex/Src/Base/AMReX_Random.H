@@ -24,10 +24,6 @@ namespace amrex
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     Real Random (RandomEngine const& random_engine)
     {
-#if defined (__SYCL_DEVICE_ONLY__)
-        mkl::rng::device::uniform<Real> distr;
-        return mkl::rng::device::generate(distr, *random_engine.engine);
-#else
 #ifdef BL_USE_FLOAT
         AMREX_IF_ON_DEVICE((
                 AMREX_HIP_OR_CUDA(
@@ -47,7 +43,6 @@ namespace amrex
                 amrex::ignore_unused(random_engine);
                 return Random();
         ))
-#endif
     }
 
     /**
@@ -62,10 +57,6 @@ namespace amrex
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     Real RandomNormal (Real mean, Real stddev, RandomEngine const& random_engine)
     {
-#if defined (__SYCL_DEVICE_ONLY__)
-        mkl::rng::device::gaussian<Real> distr(mean, stddev);
-        return mkl::rng::device::generate(distr, *random_engine.engine);
-#else
 #ifdef BL_USE_FLOAT
         AMREX_IF_ON_DEVICE((
                 AMREX_HIP_OR_CUDA(
@@ -85,7 +76,6 @@ namespace amrex
                 amrex::ignore_unused(random_engine);
                 return RandomNormal(mean, stddev);
         ))
-#endif
     }
 
     /**
@@ -102,10 +92,6 @@ namespace amrex
     AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
     unsigned int RandomPoisson (Real lambda, RandomEngine const& random_engine)
     {
-#if defined (__SYCL_DEVICE_ONLY__)
-        mkl::rng::device::poisson<unsigned int> distr(lambda);
-        return mkl::rng::device::generate(distr, *random_engine.engine);
-#else
         AMREX_IF_ON_DEVICE((
                 AMREX_HIP_OR_CUDA(
                         return hiprand_poisson(random_engine.rand_state, lambda); ,
@@ -116,7 +102,6 @@ namespace amrex
                 amrex::ignore_unused(random_engine);
                 return RandomPoisson(lambda);
         ))
-#endif
     }
 
     namespace random_util {
@@ -223,8 +208,7 @@ namespace amrex
     */
     ULong Random_long (ULong n); // [0,n-1]
 
-    //! Fill random numbers from uniform distribution.  The range is [0,1)
-    //! for CPU and SYCl, and (0,1] for CUADA and HIP.
+    //! Fill random numbers from uniform distribution.  The range is (0,1] for CUDA.
     void FillRandom (Real* p, Long N);
 
     //! Fill random numbers from normal distribution
