@@ -10,24 +10,11 @@ PArena::PArena (Long release_threshold)
 {
 #ifdef AMREX_GPU_STREAM_ALLOC_SUPPORT
     if (Gpu::Device::memoryPoolsSupported()) {
-        AMREX_HIP_OR_CUDA(
-            AMREX_HIP_SAFE_CALL(hipDeviceGetMemPool(&m_pool, Gpu::Device::deviceId()));,
             AMREX_CUDA_SAFE_CALL(cudaDeviceGetMemPool(&m_pool, Gpu::Device::deviceId()));
-        )
-        AMREX_HIP_OR_CUDA(
-            AMREX_HIP_SAFE_CALL(hipMemPoolGetAttribute(m_pool, hipMemPoolAttrReleaseThreshold,
-                                                       &m_old_release_threshold));,
             AMREX_CUDA_SAFE_CALL(cudaMemPoolGetAttribute(m_pool, cudaMemPoolAttrReleaseThreshold,
                                                          &m_old_release_threshold));
-        )
-        AMREX_HIP_OR_CUDA(
-            uint64_t value = release_threshold;,
             cuuint64_t value = release_threshold;
-        )
-        AMREX_HIP_OR_CUDA(
-            AMREX_HIP_SAFE_CALL(hipMemPoolSetAttribute(m_pool, hipMemPoolAttrReleaseThreshold, &value));,
             AMREX_CUDA_SAFE_CALL(cudaMemPoolSetAttribute(m_pool, cudaMemPoolAttrReleaseThreshold, &value));
-        )
     }
 #endif
     amrex::ignore_unused(release_threshold);
@@ -37,12 +24,8 @@ PArena::~PArena () // NOLINT(modernize-use-equals-default)
 {
 #ifdef AMREX_GPU_STREAM_ALLOC_SUPPORT
     if (Gpu::Device::memoryPoolsSupported()) {
-        AMREX_HIP_OR_CUDA(
-            AMREX_HIP_SAFE_CALL(hipMemPoolSetAttribute(m_pool, hipMemPoolAttrReleaseThreshold,
-                                                        &m_old_release_threshold));,
             AMREX_CUDA_SAFE_CALL(cudaMemPoolSetAttribute(m_pool, cudaMemPoolAttrReleaseThreshold,
                                                         &m_old_release_threshold));
-        )
     }
 #endif
 }
@@ -55,10 +38,7 @@ PArena::alloc (std::size_t nbytes)
 #if defined(AMREX_GPU_STREAM_ALLOC_SUPPORT)
     if (Gpu::Device::memoryPoolsSupported()) {
         void* p;
-        AMREX_HIP_OR_CUDA(
-            AMREX_HIP_SAFE_CALL(hipMallocAsync(&p, nbytes, m_pool, Gpu::gpuStream()));,
-            AMREX_CUDA_SAFE_CALL(cudaMallocAsync(&p, nbytes, m_pool, Gpu::gpuStream()));
-        )
+        AMREX_CUDA_SAFE_CALL(cudaMallocAsync(&p, nbytes, m_pool, Gpu::gpuStream()));
         m_profiler.profile_alloc(p, nbytes);
         return p;
     } else
@@ -92,10 +72,7 @@ PArena::free (void* p)
 #if defined (AMREX_GPU_STREAM_ALLOC_SUPPORT)
     if (Gpu::Device::memoryPoolsSupported()) {
         m_profiler.profile_free(p);
-        AMREX_HIP_OR_CUDA(
-            AMREX_HIP_SAFE_CALL(hipFreeAsync(p, Gpu::gpuStream()));,
-            AMREX_CUDA_SAFE_CALL(cudaFreeAsync(p, Gpu::gpuStream()));
-        )
+        AMREX_CUDA_SAFE_CALL(cudaFreeAsync(p, Gpu::gpuStream()));
     } else
 #endif
     {

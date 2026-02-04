@@ -23,7 +23,7 @@ namespace Gpu::Atomic {
 
 namespace detail {
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 
     template <typename R, typename I, typename F>
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -80,22 +80,7 @@ namespace detail {
         ))
     }
 
-#if defined(AMREX_USE_HIP) && defined(__gfx90a__)
-    // https://github.com/ROCm-Developer-Tools/hipamd/blob/rocm-4.5.x/include/hip/amd_detail/amd_hip_unsafe_atomics.h
-    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-    float Add_device (float* const sum, float const value) noexcept
-    {
-        return unsafeAtomicAdd(sum, value);
-    }
-
-    AMREX_GPU_DEVICE AMREX_FORCE_INLINE
-    double Add_device (double* const sum, double const value) noexcept
-    {
-        return unsafeAtomicAdd(sum, value);
-    }
-#endif
-
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 
     // https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#atomicadd
     // https://rocmdocs.amd.com/en/latest/Programming_Guides/Kernel_language.html?#atomic-functions
@@ -137,7 +122,7 @@ namespace detail {
 //  If
 ////////////////////////////////////////////////////////////////////////
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
     template <typename T, typename Op, typename Cond,
               std::enable_if_t<sizeof(T) == sizeof(unsigned int), int> foo = 0>
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
@@ -204,18 +189,6 @@ namespace detail {
         AMREX_IF_ON_HOST((*sum += value;))
     }
 
-#if defined(AMREX_USE_HIP) && defined(HIP_VERSION_MAJOR) && (HIP_VERSION_MAJOR < 5)
-    AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
-    void AddNoRet (float* const sum, float const value) noexcept
-    {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        AMREX_IF_ON_DEVICE((atomicAddNoRet(sum, value);))
-#pragma clang diagnostic pop
-        AMREX_IF_ON_HOST((*sum += value;))
-    }
-#endif
-
 ////////////////////////////////////////////////////////////////////////
 //  Min
 ////////////////////////////////////////////////////////////////////////
@@ -245,7 +218,7 @@ namespace detail {
         return detail::atomic_op<double, unsigned long long int>(m,value,amrex::Minimum<double>());
     }
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     Long Min_device (Long* const m, Long const value) noexcept
@@ -300,7 +273,7 @@ namespace detail {
         return detail::atomic_op<double, unsigned long long int>(m,value,amrex::Maximum<double>());
     }
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 
     AMREX_GPU_DEVICE AMREX_FORCE_INLINE
     Long Max_device (Long* const m, Long const value) noexcept

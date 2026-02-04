@@ -15,18 +15,6 @@
 #define AMREX_GPU_STREAM_ALLOC_SUPPORT 1
 #endif
 
-#if defined(AMREX_USE_CUDA)
-#define AMREX_HIP_OR_CUDA(a,b) b
-#else
-#define AMREX_HIP_OR_CUDA(a,b) ((void)0);
-#endif
-
-#if defined(AMREX_USE_CUDA)
-#define AMREX_HIP_OR_CUDA_OR_SYCL(a,b,c) b
-#else
-#define AMREX_HIP_OR_CUDA_OR_SYCL(a,b,c) ((void)0);
-#endif
-
 #ifdef AMREX_USE_GPU
 #define AMREX_GPU_OR_CPU(a,b) a
 #else

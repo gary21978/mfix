@@ -107,7 +107,6 @@ fab_to_fab_other (Vector<TagType> const& tags, int scomp, int dcomp, int ncomp, 
             }
             else {
 #if defined(AMREX_USE_CUDA)
-
 #if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ < 700)
 #if defined(_WIN32)
                 volatile int tmp; // prevent optimization
@@ -122,11 +121,6 @@ fab_to_fab_other (Vector<TagType> const& tags, int scomp, int dcomp, int ncomp, 
 #else
                 __nanosleep(1);
 #endif
-
-#elif defined(AMREX_USE_HIP)
-
-                __builtin_amdgcn_s_sleep(1);
-
 #endif
             }
         } while (!my_turn);

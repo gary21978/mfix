@@ -171,11 +171,7 @@ namespace Gpu {
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE
 void* memcpy (void* dest, const void* src, std::size_t count)
 {
-#if defined(__HIP_DEVICE_COMPILE__) && defined(AMREX_USE_HIP)
-    return ::memcpy(dest, src, count);
-#else
     return std::memcpy(dest, src, count);
-#endif
 }
 
 } // namespace Gpu
@@ -189,7 +185,7 @@ using Gpu::isinf;
 
 } // namespace amrex
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 /* Somehow I cannot get cudaMemcpyFromSymbol to work. */
 #define AMREX_GET_DEVICE_FUNC_PTR(FP_t, sym) \
     [] () { \

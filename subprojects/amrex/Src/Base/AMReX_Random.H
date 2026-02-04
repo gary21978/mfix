@@ -26,17 +26,11 @@ namespace amrex
     {
 #ifdef BL_USE_FLOAT
         AMREX_IF_ON_DEVICE((
-                AMREX_HIP_OR_CUDA(
-                        return 1.0f - hiprand_uniform(random_engine.rand_state); ,
                         return 1.0f - curand_uniform(random_engine.rand_state);
-                )
         ))
 #else
         AMREX_IF_ON_DEVICE((
-                AMREX_HIP_OR_CUDA(
-                        return 1.0 - hiprand_uniform_double(random_engine.rand_state); ,
                         return 1.0 - curand_uniform_double(random_engine.rand_state);
-                )
         ))
 #endif
         AMREX_IF_ON_HOST((
@@ -59,17 +53,11 @@ namespace amrex
     {
 #ifdef BL_USE_FLOAT
         AMREX_IF_ON_DEVICE((
-                AMREX_HIP_OR_CUDA(
-                        return stddev * hiprand_normal(random_engine.rand_state) + mean; ,
                         return stddev * curand_normal(random_engine.rand_state) + mean;
-                )
         ))
 #else
         AMREX_IF_ON_DEVICE((
-                AMREX_HIP_OR_CUDA(
-                        return stddev * hiprand_normal_double(random_engine.rand_state) + mean; ,
                         return stddev * curand_normal_double(random_engine.rand_state) + mean;
-                )
         ))
 #endif
         AMREX_IF_ON_HOST((
@@ -93,10 +81,7 @@ namespace amrex
     unsigned int RandomPoisson (Real lambda, RandomEngine const& random_engine)
     {
         AMREX_IF_ON_DEVICE((
-                AMREX_HIP_OR_CUDA(
-                        return hiprand_poisson(random_engine.rand_state, lambda); ,
                         return curand_poisson(random_engine.rand_state, lambda);
-                )
         ))
         AMREX_IF_ON_HOST((
                 amrex::ignore_unused(random_engine);
@@ -188,8 +173,7 @@ namespace amrex
                 unsigned int rand;
                 constexpr unsigned int RAND_M = 4294967295; // 2**32-1
                 do {
-                AMREX_HIP_OR_CUDA( rand = hiprand(random_engine.rand_state);,
-                                rand =  curand(random_engine.rand_state) );
+                      rand = curand(random_engine.rand_state);
                 } while (rand > (RAND_M - RAND_M % n));
                 return rand % n;
         ))

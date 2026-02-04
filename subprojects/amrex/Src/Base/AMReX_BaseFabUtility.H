@@ -83,7 +83,7 @@ void transposeCtoF (T const* pi, T* po, int nx, int ny, int nz)
 {
     AMREX_ALWAYS_ASSERT(pi != po);
 
-#if defined(AMREX_USE_CUDA) || defined(AMREX_USE_HIP)
+#if defined(AMREX_USE_CUDA)
 
     constexpr int tile_dim = 32;
     constexpr int block_rows = 16;
