@@ -23,7 +23,7 @@ macro( get_git_info ) # EXTRA ARGS: branch commit
     endif()
   endif()
 
-  get_hash(${PROJECT_SOURCE_DIR}/subprojects/AMReX-Hydro)
+  #get_hash(${PROJECT_SOURCE_DIR}/subprojects/AMReX-Hydro)
   set(HYDRO_GIT_HASH ${GIT_HASH})
 
   configure_file(

@@ -64,33 +64,8 @@ else ()
 
    message(STATUS "No AMReX installation found: cloning AMReX repo")
 
-   if (NOT EXISTS  "${PROJECT_SOURCE_DIR}/.git")
-      message(FATAL_ERROR
-         "${PROJECT_SOURCE_DIR} is not a Git repo: missing .git")
-   endif ()
-
    set(AMREX_SRC_DIR "${PROJECT_SOURCE_DIR}/subprojects/amrex"
      CACHE INTERNAL "Path to AMReX source (submodule)")
-
-   if (NOT EXISTS "${AMREX_SRC_DIR}/.git")
-      message(STATUS "Initializing git submodule for AMReX")
-
-      find_package(Git REQUIRED)
-
-      execute_process(
-         COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive subprojects/amrex
-         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-         RESULT_VARIABLE GIT_SUBMOD_RESULT
-         )
-
-      if ( NOT GIT_SUBMOD_RESULT EQUAL "0")
-         message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-      endif()
-
-      unset(GIT_SUBMOD_RESULT)
-
-   endif ()
-
 
    set(AMReX_SPACEDIM              3)
    set(AMReX_PRECISION             DOUBLE)
