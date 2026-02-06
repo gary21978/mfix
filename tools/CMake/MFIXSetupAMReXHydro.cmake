@@ -8,8 +8,7 @@ set(AMREX_HYDRO_SRC_DIR "${PROJECT_SOURCE_DIR}/subprojects/AMReX-Hydro"
 # Options
 set(HYDRO_SPACEDIM              3)
 set(HYDRO_MPI                   ${MFIX_MPI})
-set(HYDRO_OMP                   OFF)
-set(HYDRO_GPU_BACKEND           NONE CACHE STRING "" FORCE)
+set(HYDRO_GPU_BACKEND           ${MFIX_GPU_BACKEND} CACHE STRING "" FORCE)
 set(HYDRO_EB                    ON)
 
 # Append -w to AMREX_HYDRO flags (but not MFIX flags)

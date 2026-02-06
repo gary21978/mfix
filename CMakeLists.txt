@@ -62,8 +62,12 @@ cmake_dependent_option( MFIX_MPI_THREAD_MULTIPLE
 option( MFIX_HYPRE  "Enable HYPRE"  NO )
 option( MFIX_FPE    "Enable Floating Point Exceptions checks" NO )
 
-set(MFIX_OMP OFF)
-set(MFIX_GPU_BACKEND NONE)
+if (NOT MFIX_GPU_BACKEND STREQUAL NONE)
+   message( STATUS "   MFIX_GPU_BACKEND = ${MFIX_GPU_BACKEND}")
+endif ()
+if (MFIX_GPU_BACKEND STREQUAL CUDA)
+   set(MFIX_CUDA  ON  )
+endif()
 
 # CSG support
 option( MFIX_CSG "Build with CSG support" OFF)
@@ -79,6 +83,10 @@ option( VODE_JACOBIAN_CACHING "Build VODE integrator with Jacobian caching suppo
 
 if (VODE_JACOBIAN_CACHING)
   add_compile_definitions(VODE_JACOBIAN_CACHING)
+endif()
+
+if (MFIX_CUDA)
+   enable_language(CUDA)
 endif()
 
 # Setup AMReX
@@ -111,6 +119,9 @@ target_include_directories( mfixcore PRIVATE ${PROJECT_BINARY_DIR})
 # We should check what this line does
 file( GLOB USR_OVERRIDES ${CMAKE_CURRENT_BINARY_DIR}/*.cpp)
 add_udfs_to_target(mfix ${USR_OVERRIDES})
+if (MFIX_CUDA)
+   setup_target_for_cuda_compilation(mfix)
+endif ()
 
 # Tools
 add_subdirectory(tools)
