@@ -54,27 +54,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
           )
     endif ()
 
-    if (AMReX_LINEAR_SOLVERS_EM)
-       target_sources(amrex_${D}d
-          PRIVATE
-          MLMG/AMReX_MLCurlCurl.H
-          MLMG/AMReX_MLCurlCurl.cpp
-          MLMG/AMReX_MLCurlCurl_K.H
-          )
-
-       target_sources(amrex_${D}d
-          PRIVATE
-          MLMG/AMReX_MLEBNodeFDLaplacian.H
-          MLMG/AMReX_MLEBNodeFDLaplacian.cpp
-          MLMG/AMReX_MLEBNodeFDLap_K.H
-          MLMG/AMReX_MLEBNodeFDLap_${D}D_K.H
-          MLMG/AMReX_MLNodeTensorLaplacian.H
-          MLMG/AMReX_MLNodeTensorLaplacian.cpp
-          MLMG/AMReX_MLNodeTensorLap_K.H
-          MLMG/AMReX_MLNodeTensorLap_${D}D_K.H
-       )
-    endif ()
-
     if (AMReX_LINEAR_SOLVERS_INCFLO)
        target_sources(amrex_${D}d
           PRIVATE
