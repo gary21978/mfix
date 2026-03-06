@@ -23,7 +23,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        MLMG/AMReX_MLCellABecLap_K.H
        MLMG/AMReX_MLCellABecLap_${D}D_K.H
        MLMG/AMReX_MLCGSolver.H
-       MLMG/AMReX_PCGSolver.H
        MLMG/AMReX_MLABecLaplacian.H
        MLMG/AMReX_MLABecLap_K.H
        MLMG/AMReX_MLABecLap_${D}D_K.H
@@ -33,16 +32,8 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        MLMG/AMReX_MLPoisson.H
        MLMG/AMReX_MLPoisson_K.H
        MLMG/AMReX_MLPoisson_${D}D_K.H
-       AMReX_GMRES.H
-       AMReX_GMRES_MLMG.H
-       AMReX_GMRES_MV.H
-       AMReX_Smoother_MV.H
-       AMReX_Algebra.H
        AMReX_AlgPartition.H
        AMReX_AlgPartition.cpp
-       AMReX_AlgVector.H
-       AMReX_SpMatrix.H
-       AMReX_SpMV.H
        )
 
     if (D EQUAL 3)
@@ -97,14 +88,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
              MLMG/AMReX_MLEBTensor_${D}D_K.H
              )
        endif ()
-    endif ()
-
-    if (AMReX_FORTRAN)
-       target_sources(amrex_${D}d
-          PRIVATE
-          MLMG/AMReX_MLLinOp_F.H
-          MLMG/AMReX_MLLinOp_nd.F90
-          )
     endif ()
 
     if (AMReX_HYPRE AND AMReX_LINEAR_SOLVERS_INCFLO)
