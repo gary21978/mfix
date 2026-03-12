@@ -15,10 +15,8 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        AMReX_Enum.H
        AMReX_GpuComplex.H
        AMReX_Order.H
-       AMReX_SmallMatrix.H
        AMReX_ConstexprFor.H
        AMReX_Vector.H
-       AMReX_TableData.H
        AMReX_Tuple.H
        AMReX_TypeList.H
        AMReX.cpp
@@ -44,7 +42,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        AMReX_ValLocPair.H
        AMReX_Reduce.H
        AMReX_Scan.H
-       AMReX_Partition.H
        AMReX_Morton.H
        AMReX_Random.H
        AMReX_RandomEngine.H
@@ -53,7 +50,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        AMReX_ArrayLim.H
        AMReX_REAL.H
        AMReX_INT.H
-       AMReX_CONSTANTS.H
        AMReX_SPACE.H
        AMReX_DistributionMapping.H
        AMReX_DistributionMapping.cpp
@@ -201,10 +197,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        AMReX_PlotFileDataImpl.H
        AMReX_PlotFileDataImpl.cpp
        # Time Integration
-       AMReX_FEIntegrator.H
-       AMReX_IntegratorBase.H
-       AMReX_RKIntegrator.H
-       AMReX_TimeIntegrator.H
        AMReX_RungeKutta.H
        # GPU --------------------------------------------------------------------
        AMReX_Gpu.H
@@ -220,10 +212,7 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        AMReX_GpuLaunchGlobal.H
        AMReX_GpuLaunchMacrosG.H
        AMReX_GpuLaunchMacrosG.nolint.H
-       AMReX_GpuLaunchMacrosC.H
-       AMReX_GpuLaunchMacrosC.nolint.H
        AMReX_GpuLaunchFunctsG.H
-       AMReX_GpuLaunchFunctsC.H
        AMReX_GpuError.H
        AMReX_GpuDevice.H
        AMReX_GpuDevice.cpp
@@ -241,7 +230,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        AMReX_GpuAllocators.H
        AMReX_GpuContainers.H
        AMReX_MFParallelFor.H
-       AMReX_MFParallelForC.H
        AMReX_MFParallelForG.H
        AMReX_SIMD.H
        AMReX_TagParallelFor.H
@@ -285,24 +273,12 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        # AMReX Hydro -----------------------------------------------------
        AMReX_Slopes_K.H
        # Forward declaration -----------------------------------------------------
-       AMReX_BaseFwd.H
        )
-
-    # Profiling
-    #   this source file has zero symbols in default conditions, which creates
-    #   ranlib warnings, e.g., on macOS
-    if(AMReX_BASE_PROFILE OR AMReX_TINY_PROFILE OR AMReX_FORTRAN)
-       target_sources(amrex_${D}d
-         PRIVATE
-           AMReX_BLProfiler.cpp
-       )
-    endif()
 
     # Fortran stuff
     if (AMReX_FORTRAN)
        target_sources(amrex_${D}d
           PRIVATE
-          AMReX_filcc_f.H
           AMReX_BLutil_F.F90
           AMReX_BLProfiler_F.F90
           AMReX_filcc_mod.F90
@@ -330,10 +306,6 @@ foreach(D IN LISTS AMReX_SPACEDIM)
        target_sources(amrex_${D}d PRIVATE AMReX_MemProfiler.cpp AMReX_MemProfiler.H )
     endif ()
 
-    # Tiny Profiler
-    if (AMReX_TINY_PROFILE)
-       target_sources(amrex_${D}d PRIVATE AMReX_TinyProfiler.cpp AMReX_TinyProfiler.H )
-    endif ()
 
     # MPMD
     if (AMReX_MPI)
